@@ -39,20 +39,23 @@
     </style>
 </head>
 <body>
-    <div class="msg hide">
+    <% if( typeof error == 'object' ){ %>
+    <div class="notice-error">
         <div class="msg-inner">
             (￣﹏￣) hey，有错误了。
             <ul>
-                <li>工厅无可奈何地</li>
-                <li>工厅无可奈何地</li>
+                <% for(var i = 0, len = error.length; i < len; i++){ %>
+                <li><%= error[i] %></li>
+                <% } %>
             </ul>
         </div>
     </div>
+    <% } %>
     <div class="container fn-mt10">
-        <form class="form-signin">
+        <form class="form-signin" method="post">
             <h2 class="form-signin-heading">欢迎回家。</h2>
-            <input type="text" class="input-block-level" placeholder="用户名或Email">
-            <input type="password" class="input-block-level" placeholder="密码">
+            <input type="text" class="input-block-level" name="email" placeholder="用户名或Email">
+            <input type="password" class="input-block-level" name="password" placeholder="密码">
             <label class="checkbox">
                 <input type="checkbox" value="remember-me"> 记住我
             </label>

@@ -18,13 +18,13 @@ exports.index = function(req, res){
     //console.log(info);
     //req.session.handa = null;
     console.log(req.session);
-    var user = null;
+    /*var user = null;
     if(req.session && req.session.user ){
         user = req.session.user;
     }
-    console.log(res.local);
+    console.log(res.local);*/
     res.locals.hhmm = 8;
-    res.locals.user = user;
+    //res.locals.user = user;
     res.render('index',
         {
             title: 'nodejs',

@@ -9,8 +9,10 @@
   </head>
   <body>
     <h1><%= title %> <%= config.version %></h1>
-    <% if(locals.user){ %>
-    <p><%= locals.user %>，欢迎你。</p>
+    <% if(locals.current_user){ %>
+    <p><%= locals.current_user %>，欢迎你。<a href="/logout">登出</a></p>
+    <% }else{ %>
+    <p><a href="/login">登录</a><a href="/reg">注册</a></p>
     <% } %>
     <p><%= config.description %></p>
   </body>

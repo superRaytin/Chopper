@@ -29,6 +29,10 @@ app.configure(function(){
           url: config.db
       })
   }));
+
+  // 检查当前用户状态
+  app.use(require('./controllers/sign').checkCurrentUser);
+
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
 });
