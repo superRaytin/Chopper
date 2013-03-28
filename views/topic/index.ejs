@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+<body>
+<% if(locals.current_user){ %>
+<p><%= locals.current_user %>，欢迎你。<a href="/logout">登出</a></p>
+<form name="form-addTopic" method="post">
+    <textarea name='content' placeholder="说点儿什么..."></textarea>
+    <input type="submit" value="发 表" />
+</form>
+<% }else{ %>
+<p>登录后才可发表话题，目前尚未登录，<a href="/login">点击登录</a></p>
+<% } %>
+<hr />
+最新吐槽：<br />
+<% if(topics){ %>
+    <% for(var i = 0, len = topics.length; i < len; i++){ %>
+    <p><%= topics[i].content %><br />
+    作者：<%= topics[i].author_name %> 时间：<%= topics[i].create_time %>
+    </p>
+    <% } %>
+<% }else{ %>
+<p>暂无信息。</p>
+<% } %>
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -21,9 +21,8 @@ exports.index = function(req, res){
     /*var user = null;
     if(req.session && req.session.user ){
         user = req.session.user;
-    }
-    console.log(res.local);*/
-    res.locals.hhmm = 8;
+    }*/
+    //console.log(res.locals);
     //res.locals.user = user;
     res.render('index',
         {

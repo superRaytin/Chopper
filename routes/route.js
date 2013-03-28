@@ -5,7 +5,8 @@
  */
 var index = require('../controllers/index'),
     sign = require('../controllers/sign'),
-    user = require('../controllers/user');
+    user = require('../controllers/user'),
+    topic = require('../controllers/topic');
 
 module.exports = function(app){
     app.get('/', index.index);
@@ -20,4 +21,8 @@ module.exports = function(app){
     app.get('/login', sign.login);
     app.post('/login', sign.doLogin);
     app.get('/logout', sign.logout);
+
+    // 话题首页、发表话题
+    app.get('/topic', topic.index);
+    app.post('/topic', topic.addTopic);
 };

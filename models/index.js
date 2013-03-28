@@ -1,5 +1,5 @@
 /**
- * index.
+ * 数据模型池
  * User: raytin
  * Date: 13-3-27
  * Time: 下午6:05
@@ -15,5 +15,7 @@ mongoose.connect(config.db, function(err){
 });
 
 require('./user');
+require('./topic');
 
 exports.User = mongoose.model('User');
+exports.Topic = mongoose.model('Topic');

@@ -48,22 +48,19 @@ exports.doReg = function(req, res, next){
     }
     // 注册信息验证通过
     else{
-        console.log('info: 注册信息通过验证，开始查询是否已注册');
         User.getUserByName(userName, function(err, user){
             if(err){
                 return next(err);
             };
             // 用户名已存在
             if(user){
-                console.log('info: 用户名已存在');
                 res.render('reg', {
                     title: '用户注册',
                     error: [userName +'已被注册，换一个呗~']
                 })
             }
-            // 保存用户信息
+            // 注册成功，保存用户信息
             else{
-                console.log('info: 注册成功，开始保存信息');
                 var userModel = new models.User();
                 userModel.name = userName;
                 userModel.pass = passWord;
@@ -73,13 +70,6 @@ exports.doReg = function(req, res, next){
                     }
                     req.session.user = userName;
                     res.redirect('/');
-                    /*res.render('reg',
-                        {
-                            title: '用户注册',
-                            error: 0
-                        }
-                    );*/
-                    return;
                 })
             }
         });
@@ -128,30 +118,28 @@ exports.doLogin = function(req, res, next){
     }
     // 登录验证通过
     else{
-        console.log('info: 登录信息通过验证，开始查询账户');
         User.getUserByName(userName, function(err, user){
             if(err){
                 return next(err)
             }
             if(user){
-                console.log('info: 开始校验【'+ userName +'】账户密码');
+                // 开始校验账户密码
                 if(passWord === user.pass){
-                    console.log('info: 【'+ userName +'】登录成功');
+                    // 登录成功
                     req.session.user = userName;
                     return res.redirect('/');
                 }else{
-                    console.log('info: 【'+ userName +'】账户密码错误');
+                    // 密码错误
                     res.render('login',
                         {
                             title: '用户登录',
                             error: ['账户【'+ userName +'】密码错误']
                         }
                     );
-                    return;
                 }
             }
             else{
-                console.log('info: 【'+ userName +'】不存在此账户');
+                // 不存在此账户
                 return res.render('login',
                     {
                         title: '用户登录',

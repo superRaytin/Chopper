@@ -1,5 +1,5 @@
 /**
- * user.
+ * model - user.
  * User: raytin
  * Date: 13-3-27
  * Time: 下午2:08

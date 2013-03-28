@@ -31,3 +31,15 @@ exports.getUserList = function(callback){
     UserModel.find({}, 'name pass', {limit: 5}, callback);
     //UserModel.find({ name: { $in: names } }, callback);
 };
+
+/**
+ * 根据用户名查找用户ID
+ * Callback:
+ * - err, 数据库异常
+ * - user, 用户
+ * @param {String} name 用户名
+ * @param {Function} callback 回调函数
+ */
+exports.getUserIdByName = function(name, callback){
+    UserModel.findOne({name : name}, callback);
+};

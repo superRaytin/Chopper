@@ -4,3 +4,4 @@
  * Date: 13-3-27
  */
 exports.User = require('./user');
+exports.Topic = require('./topic');
