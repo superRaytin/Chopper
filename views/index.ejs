@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= config.name %></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Bootstrap -->
+    <link href="css/base.css" rel="stylesheet" media="screen">
+    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <h1><%= title %> <%= config.version %></h1>
+    <% if(locals.user){ %>
+    <p><%= locals.user %>，欢迎你。</p>
+    <% } %>
+    <p><%= config.description %></p>
+  </body>
+</html>

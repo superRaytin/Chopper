@@ -1,0 +1,27 @@
+.fn-mt10{
+    margin-top: 10px;
+}
+.fn-mt20{
+    margin-top: 20px;
+}
+
+.notice-normal{
+    background: #bbf893;
+}
+.notice-error{
+    background: #f8d7bf;
+}
+.msg-inner{
+    width:300px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px 0 5px;
+}
+.msg-inner ul{
+    margin-top: 5px;
+}
+.msg-inner ul li{
+    color:#e9322d;
+    list-style: square;
+    line-height: 26px;
+}
