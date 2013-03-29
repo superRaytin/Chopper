@@ -18,16 +18,14 @@ hello world  <input type="button" onclick="ajaxTest()" value='ajax'>
             url: '/getUserList.json',
             type: 'GET',
             success: function(data){
-                //console.log('success!')
-                //console.log(data.toString());
                 if(data){
-                    //data = $.trim(data);
-                    data = data.replace(/&quot;/g, '\"');
-                    var json = $.parseJSON(data);
+                    var users = data;
+                    //data = data.replace(/&quot;/g, '\"');
+                    //var json = $.parseJSON(data);
                     var user, arr = [];
 
-                    for(var i = 0, len = json.length; i < len; i++){
-                        user = json[i];
+                    for(var i = 0, len = users.length; i < len; i++){
+                        user = users[i];
                         arr.push('<p>'+ user.name +'</p>');
                     };
 

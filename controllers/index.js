@@ -1,5 +1,5 @@
 /**
- * index.
+ * controller - index.
  * User: raytin
  * Date: 13-3-27
  * Time: 上午10:56
@@ -44,11 +44,7 @@ exports.ajaxTest = function(req, res, next){
         if(err) return next(err);
         //console.log(JSON.stringify(users));
         if(users && users.length){
-            res.render('json', {
-                title: 'test!!!!!!!',
-                json: JSON.stringify(users)
-                //json: users
-            })
+            res.json(users)
         }
     });
 };

@@ -1,8 +1,17 @@
 /**
- * util.
+ * 公用方法.
  * User: raytin
  * Date: 13-3-28
  */
-exports.formatDate = function(now){
-    return now.getFullYear() + '/' + now.getMonth() + '/' + now.getDate() + ' ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+
+/**
+ * 日期时间格式化
+ * @date {Date} date 日期对象
+ */
+function formatDate(date){
+    return date.getFullYear() + '/' + date.getMonth() + '/' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+};
+
+module.exports = {
+    formatDate: formatDate
 };
