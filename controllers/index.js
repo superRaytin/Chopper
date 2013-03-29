@@ -31,3 +31,24 @@ exports.index = function(req, res){
         }
     );
 };
+
+// 以下代码仅为测试之用
+exports.test = function(req, res, next){
+    res.render('test', {
+        title: 'test'
+    });
+};
+var userProxy = require('../proxy').User;
+exports.ajaxTest = function(req, res, next){
+    userProxy.getUserList(function(err, users){
+        if(err) return next(err);
+        //console.log(JSON.stringify(users));
+        if(users && users.length){
+            res.render('json', {
+                title: 'test!!!!!!!',
+                json: JSON.stringify(users)
+                //json: users
+            })
+        }
+    });
+};

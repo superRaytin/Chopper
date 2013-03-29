@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+<body>
+hello world  <input type="button" onclick="ajaxTest()" value='ajax'>
+<div id="test"></div>
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    function ajaxTest(){
+        $.ajax({
+            url: '/getUserList.json',
+            type: 'GET',
+            success: function(data){
+                //console.log('success!')
+                //console.log(data.toString());
+                if(data){
+                    //data = $.trim(data);
+                    data = data.replace(/&quot;/g, '\"');
+                    var json = $.parseJSON(data);
+                    var user, arr = [];
+
+                    for(var i = 0, len = json.length; i < len; i++){
+                        user = json[i];
+                        arr.push('<p>'+ user.name +'</p>');
+                    };
+
+                    $('#test').append(arr.join(''));
+                };
+            },
+            error: function(xmlHTTPRequest, status, error){
+                console.log(status);
+                alert('cuowu!');
+            }
+        })
+    }
+</script>
+</body>
+</html>

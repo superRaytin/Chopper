@@ -25,4 +25,8 @@ module.exports = function(app){
     // 话题首页、发表话题
     app.get('/topic', topic.index);
     app.post('/topic', topic.addTopic);
+
+    // test
+    app.get('/test', index.test);
+    app.get('/getUserList.json', index.ajaxTest);
 };
