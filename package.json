@@ -17,6 +17,7 @@
     "mongoose": "3.6.0",
     "connect-flash": "0.1.0",
     "connect-mongo": "0.3.2",
-    "express-partials": "0.1.1"
+    "express-partials": "0.1.1",
+    "eventproxy": "0.2.2"
   }
 }

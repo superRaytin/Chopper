@@ -48,7 +48,7 @@ exports.doReg = function(req, res, next){
     }
     // 注册信息验证通过
     else{
-        User.getUserByName(userName, function(err, user){
+        User.getUserInfoByName(userName, 'name', function(err, user){
             if(err){
                 return next(err);
             };
@@ -118,7 +118,7 @@ exports.doLogin = function(req, res, next){
     }
     // 登录验证通过
     else{
-        User.getUserByName(userName, function(err, user){
+        User.getUserInfoByName(userName, 'pass', function(err, user){
             if(err){
                 return next(err)
             }

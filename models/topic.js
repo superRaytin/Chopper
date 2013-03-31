@@ -11,9 +11,13 @@ var topicSchema = new Schema({
     content: {type: String},
     top: {type: Boolean, default: false},
     create_time: {type: String},
-    reply_count: {type: Number, default: 0},
     author_id: {type: ObjectId},
-    author_name: {type: String}
+    author_name: {type: String},
+
+    reply_count: {type: Number, default: 0},
+    support: {type: String, default: 0},
+    down: {type: String, default: 0},
+    topic_Type: {type: String}
 });
 
 mongoose.model('Topic', topicSchema);

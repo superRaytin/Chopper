@@ -8,7 +8,8 @@ var proxy = require('../proxy'),
     topicModel = require('../models').Topic,
     userModel = require('../models').User,
     topicProxy = proxy.Topic,
-    userProxy = proxy.User;
+    userProxy = proxy.User,
+    EventProxy = require("eventproxy");
 
 // 话题广场首页
 exports.index = function(req, res, next){
@@ -36,27 +37,34 @@ exports.index = function(req, res, next){
 exports.addTopic = function(req, res, next){
     //var session = req.session;
     var currentUser = res.locals.current_user,
-        content = req.body['content'];
+        content = req.body['content'],
+        desc;
 
-    if(!currentUser || content == '') return;
+    if(!currentUser || content == ''){
+        desc = !currentUser ? '请先登录，才能发表话题。' : '话题内容不能为空。';
+        res.render('notice/normal', {
+            title: '出错了',
+            desc: desc
+        })
+        return;
+    };
 
-    var newTopic = new topicModel();
+    var ep = new EventProxy(),
+        newTopic = new topicModel();
 
     newTopic.content = content;
     newTopic.author_name = currentUser;
     newTopic.create_time = util.formatDate(new Date());
-    userProxy.getUserIdByName(currentUser, function(err, user){
-        if(err) return next(err);
+
+    ep.all('getUserId', function(user){
+        user.topic_count += 1;
+        user.save();
+        res.redirect('/');
+    }).fail(next);
+
+    userProxy.getOneUserInfo({name: currentUser}, '_id topic_count', ep.done(function(user){
         newTopic.author_id = user._id;
-        newTopic.save(function(err){
-            if(err) return next(err);
-            console.log('INFO: 话题保存成功');
-
-            // 更新用户话题数 topic_count
-            //userModel.update({_id: user._id}, {topic_count: });
-
-            res.redirect('/topic');
-        });
-    });
-
+        newTopic.save();
+        ep.emit('getUserId', user);
+    }));
 };

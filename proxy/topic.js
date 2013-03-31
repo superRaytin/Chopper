@@ -14,5 +14,5 @@ var models = require('../models'),
  * @param {Function} callback 回调函数
  */
 exports.getTopicList = function(callback){
-    modelTopic.find({}, '', {limit: 20}, callback);
+    modelTopic.find({}, '', {limit: 20, sort: [['_id', 'desc']]}, callback);
 };

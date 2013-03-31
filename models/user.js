@@ -10,8 +10,16 @@ var mongoose = require('mongoose'),
 var userSchema = new Schema({
     name: {type: String, index: true},
     pass: {type: String},
+    email: {type: String},
+    sign: {type: String},
+    //pic: {type: String},
+    lastLogin_time: {type: String, default: Date.now},
 
-    topic_count: {type: Number, default: 0}
+    topic_count: {type: Number, default: 0},
+    collecting: [String],
+    followed: [String],
+    follower: [String]
+
 });
 
 mongoose.model('User', userSchema);
