@@ -4,16 +4,91 @@
     <title><%= config.name %></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Bootstrap -->
-    <link href="css/base.css" rel="stylesheet" media="screen">
     <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="css/base.css" rel="stylesheet" media="screen">
   </head>
   <body>
-    <h1><%= title %> <%= config.version %></h1>
-    <% if(locals.current_user){ %>
-    <p><%= locals.current_user %>，欢迎你。<a href="/logout">登出</a></p>
-    <% }else{ %>
-    <p><a href="/login">登录</a><a href="/reg">注册</a></p>
-    <% } %>
-    <p><%= config.description %></p>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+          <div class="container">
+              <a class="brand" href="/"><%= config.name %><i>v <%= config.version %></i></a>
+              <div class="nav-collapse collapse">
+                  <div class="navbar-text pull-right">
+                      <% if(locals.current_user){ %>
+                      <%= locals.current_user %>，欢迎你。<a href="/logout" class="navbar-link fn-ml10">登出</a>
+                      <% }else{ %>
+                      <a href="/login" class="navbar-link">登录</a><a href="/reg" class="navbar-link fn-ml10">注册</a>
+                      <% } %>
+                  </div>
+                  <div class="navbar-text navbar-dec pull-left">
+                      <%= config.description %>
+                  </div>
+                  <!--<ul class="nav">
+                      <li class="active">
+                          <a href="#this">首页</a>
+                      </li>
+                      <li>
+                          <a href="#this">吐槽</a>
+                      </li>
+                  </ul>-->
+              </div>
+          </div>
+      </div>
+  </div>
+  <!-- navbar end -->
+  <div class="container">
+      <div class="row">
+          <div class="span9">
+              <div class="media">
+                  <a class="pull-left">
+                      <span class="media-object" alt="img" style="width: 64px; height: 64px; background: #ccc;"></span>
+                  </a>
+                  <div class="media-body">
+                      <h4 class="media-heading">aaaaa</h4>
+                      工一模压 模压 要要工工工工工工要工工工工工工
+                  </div>
+              </div>
+              <div class="media">
+                  <a class="pull-left">
+                      <span class="media-object" alt="img" style="width: 64px; height: 64px; background: #ccc;"></span>
+                  </a>
+                  <div class="media-body">
+                      <h4 class="media-heading">aaaaa</h4>
+                      工一模压 模压 要要工工工工工工要工工工工工工
+                  </div>
+              </div>
+              <div class="media">
+                  <a class="pull-left">
+                      <span class="media-object" alt="img" style="width: 64px; height: 64px; background: #ccc;"></span>
+                  </a>
+                  <div class="media-body">
+                      <h4 class="media-heading">aaaaa</h4>
+                      工一模压 模压 要要工工工工工工要工工工工工工
+                  </div>
+              </div>
+              <div class="media">
+                  <a class="pull-left">
+                      <img class="media-object">
+                  </a>
+                  <div class="media-body">
+                      <h4 class="media-heading">aaaaa</h4>
+                      工一模压 模压 要要工工工工工工
+                  </div>
+              </div>
+          </div>
+          <div class="span3">
+              <div class="widget-list">
+                  <h5 class="widget-head">最新用户</h5>
+                  <ul>
+                      <li>sdf</li>
+                      <li>sdf</li>
+                      <li>sdf</li>
+                      <li>sdf</li>
+                      <li>sdf</li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+  </div>
   </body>
 </html>

@@ -1,8 +1,17 @@
+body{
+    padding-top: 60px;
+}
+li{
+    list-style: none;
+}
 .fn-mt10{
     margin-top: 10px;
 }
 .fn-mt20{
     margin-top: 20px;
+}
+.fn-ml10{
+    margin-left: 10px;
 }
 
 .notice-normal{
@@ -24,4 +33,30 @@
     color:#e9322d;
     list-style: square;
     line-height: 26px;
+}
+.container{
+    width: 950px;
+}
+.brand i{
+    color: #bbb;
+    font-size: 11px;
+    line-height: 12px;
+    padding-left: 10px;
+}
+.navbar-dec{
+    color: #999;
+    margin-left: 20px;
+}
+/*.navbar-inverse .navbar-inner{
+    background-image: -moz-linear-gradient(center top , #444, #222);
+}*/
+.widget-list .widget-head{
+    border-bottom: 1px solid #ddd;
+    padding: 8px 0px;
+}
+.widget-list ul{
+    margin-left: 0px;
+}
+.widget-list li{
+
 }
