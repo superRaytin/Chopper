@@ -54,7 +54,7 @@ li{
     margin-top: 0px;
 }
 .navbar-text{
-    color: #ddd;
+    color: #F1d115;
 }
 .navbar-link{
     color: #ddd;
@@ -198,4 +198,17 @@ li{
     height: 80px;
     font-size: 12px;
     line-height: 18px;
+}
+.navbar-text .caret{
+    margin-top: 19px;
+    margin-left: 10px;
+    border-top: 4px solid #fff;
+}
+.navbar-text .dropdown-toggle{
+    color: #ddd;
+    margin-left: 20px;
+}
+.navbar-text .dropdown-toggle:hover, .navbar-text .dropdown-toggle:focus{
+    color: #fff;
+    text-decoration: none;
 }
