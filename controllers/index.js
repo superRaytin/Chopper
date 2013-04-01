@@ -36,9 +36,10 @@ exports.index = function(req, res, next){
             follower: current_user.follower,
             //collecting: current_user.collecting,
             topic_count: current_user.topic_count,
-            sign: current_user.sign != '-' && current_user.sign != 'undefined' ? current_user.sign : '这家伙很懒，还没有签名'
+            sign: current_user.sign != '-' && current_user.sign != 'undefined' ? current_user.sign : '这家伙很懒，还没有签名',
+            lastLogin_time: current_user.lastLogin_time
         };
-
+        console.log(current_user)
         res.render('index',
             {
                 title: config.name,
@@ -53,7 +54,7 @@ exports.index = function(req, res, next){
     ep.fail(next);
     userProxy.getUserList('name', ep.done('userList'));
     topicProxy.getTopicList(ep.done('topicList'));
-    userProxy.getUserInfoByName(res.locals.current_user, 'name follower followed collecting topic_count sign', ep.done('current_user'));
+    userProxy.getUserInfoByName(res.locals.current_user, 'name follower followed topic_count sign lastLogin_time', ep.done('current_user'));
     userProxy.getUserListBy({}, 'name topic_count', {limit: 10, sort: [['topic_count', 'desc']]}, ep.done('userListByCount'))
 
 };

@@ -5,7 +5,7 @@
  * Time: 上午10:45
  */
 var proxy = require('../proxy'),
-    User = proxy.User,
+    userProxy = proxy.User,
     models = require('../models'),
     config = require('../config').config;
 
@@ -16,7 +16,11 @@ exports.reg = function(req, res){
         res.redirect('/');
         return;
     }
-    res.render('sign/reg', {title: '用户注册', error: false});
+    res.render('sign/reg', {
+        title: '用户注册',
+        error: false,
+        layout: null
+    });
 };
 
 // 处理用户注册信息
@@ -42,13 +46,14 @@ exports.doReg = function(req, res, next){
         return res.render('sign/reg',
             {
                 title: '用户注册',
-                error: error
+                error: error,
+                layout: null
             }
         );
     }
     // 注册信息验证通过
     else{
-        User.getUserInfoByName(userName, 'name', function(err, user){
+        userProxy.getUserInfoByName(userName, 'name', function(err, user){
             if(err){
                 return next(err);
             };
@@ -56,7 +61,8 @@ exports.doReg = function(req, res, next){
             if(user){
                 res.render('sign/reg', {
                     title: '用户注册',
-                    error: [userName +'已被注册，换一个呗~']
+                    error: [userName +'已被注册，换一个呗~'],
+                    layout: null
                 })
             }
             // 注册成功，保存用户信息
@@ -80,7 +86,10 @@ exports.doReg = function(req, res, next){
 exports.logout = function(req, res){
     if(res.locals.current_user){
         req.session.user = null;
-        return res.redirect('/');
+        userProxy.updateLastLogin(res.locals.current_user, new Date(), function(err){
+            if(err) return next(err);
+            return res.redirect('/');
+        });
     }
 };
 
@@ -91,7 +100,11 @@ exports.login = function(req, res){
         res.redirect('/');
         return;
     }
-    res.render('sign/login', {title: '用户登录', error: false});
+    res.render('sign/login', {
+        title: '用户登录',
+        error: false,
+        layout: null
+    });
 };
 
 // 处理用户登录
@@ -112,13 +125,14 @@ exports.doLogin = function(req, res, next){
         return res.render('sign/login',
             {
                 title: '用户登录',
-                error: error
+                error: error,
+                layout: null
             }
         );
     }
     // 登录验证通过
     else{
-        User.getUserInfoByName(userName, 'pass', function(err, user){
+        userProxy.getUserInfoByName(userName, 'pass', function(err, user){
             if(err){
                 return next(err)
             }
@@ -133,7 +147,8 @@ exports.doLogin = function(req, res, next){
                     res.render('sign/login',
                         {
                             title: '用户登录',
-                            error: ['账户【'+ userName +'】密码错误']
+                            error: ['账户【'+ userName +'】密码错误'],
+                            layout: null
                         }
                     );
                 }
@@ -143,7 +158,8 @@ exports.doLogin = function(req, res, next){
                 return res.render('sign/login',
                     {
                         title: '用户登录',
-                        error: ['【'+ userName +'】账户不存在']
+                        error: ['【'+ userName +'】账户不存在'],
+                        layout: null
                     }
                 );
             }
