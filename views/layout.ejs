@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= config.name %></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="css/base.css" rel="stylesheet" media="screen">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="/"><%= config.name %><i>v <%= config.version %></i></a>
+            <div class="nav-collapse collapse">
+                <div class="navbar-text pull-right">
+                    <% if(locals.current_user){ %>
+                    <%= locals.current_user %>，欢迎你。<a href="/logout" class="btn btn-warning fn-ml10">登出</a>
+                    <% }else{ %>
+                    <a href="/login" class="navbar-link">登录</a><a href="/reg" class="navbar-link fn-ml10">注册</a>
+                    <% } %>
+                </div>
+                <div class="navbar-text navbar-dec pull-left">
+                    <%= config.description %>
+                </div>
+                <!--<ul class="nav">
+                    <li class="active">
+                        <a href="#this">首页</a>
+                    </li>
+                    <li>
+                        <a href="#this">吐槽</a>
+                    </li>
+                </ul>-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- navbar end -->
+<%- body %>
+<hr>
+<footer class="container">
+    <p>&copy; xiaoweitucao 2013</p>
+</footer>
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/common.js"></script>
+</body>
+</html>

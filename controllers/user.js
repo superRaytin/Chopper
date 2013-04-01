@@ -6,7 +6,12 @@
 var proxy = require('../proxy'),
     UserProxy = proxy.User;
 
-exports.list = function(req, res, next){
+// 个人首页
+function index(req, res, next){
+
+};
+
+function list(req, res, next){
     UserProxy.getUserList(function(err, users){
         console.log(users);
         if(err){
@@ -25,4 +30,9 @@ exports.list = function(req, res, next){
             });
         };
     });
+};
+
+module.exports = {
+    index: index,
+    list: list
 };

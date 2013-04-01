@@ -1,48 +1,10 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= config.name %></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
-    <link href="css/base.css" rel="stylesheet" media="screen">
-  </head>
-  <body>
-  <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-          <div class="container">
-              <a class="brand" href="/"><%= config.name %><i>v <%= config.version %></i></a>
-              <div class="nav-collapse collapse">
-                  <div class="navbar-text pull-right">
-                      <% if(locals.current_user){ %>
-                      <%= locals.current_user %>，欢迎你。<a href="/logout" class="btn btn-warning fn-ml10">登出</a>
-                      <% }else{ %>
-                      <a href="/login" class="navbar-link">登录</a><a href="/reg" class="navbar-link fn-ml10">注册</a>
-                      <% } %>
-                  </div>
-                  <div class="navbar-text navbar-dec pull-left">
-                      <%= config.description %>
-                  </div>
-                  <!--<ul class="nav">
-                      <li class="active">
-                          <a href="#this">首页</a>
-                      </li>
-                      <li>
-                          <a href="#this">吐槽</a>
-                      </li>
-                  </ul>-->
-              </div>
-          </div>
-      </div>
-  </div>
-  <!-- navbar end -->
   <div class="container">
       <div class="row">
           <div class="span8">
               <div class="push clearfix">
                   <div class="push-mostDiscuss">目前有&nbsp;<i>2323</i>&nbsp;人在讨论&nbsp;<a href="#this">#有没有人告诉你#</a></div>
-                  <textarea rows="2" placeholder="说点儿什么..."></textarea>
-                  <div class="text-left"><input type="button" class="btn btn-primary" value="&nbsp;&nbsp;发 布&nbsp;&nbsp;"> Ctrl+Enter快速发布 </div>
+                  <textarea id="J-topic-content" rows="2" placeholder="说点儿什么..."></textarea>
+                  <div class="text-left"><input type="button" class="btn btn-primary" id="J-fabu" value="&nbsp;&nbsp;发 布&nbsp;&nbsp;"> Ctrl+Enter快速发布 </div>
               </div>
               <hr>
               <h3 class="fn-mt20">最新吐槽</h3>
@@ -74,28 +36,33 @@
                       <a href="#this">踩(-19)</a>
                   </div>
               </div>
-              <% if(topics && topics.length){ %>
-              <% for(var i = 0, len = topics.length; i < len; i++){ %>
-              <div class="media">
-                  <a class="pull-left">
-                      <img class="media-object img-rounded" src="img/nopic.gif" />
-                  </a>
-                  <div class="media-body">
-                      <h4 class="media-heading">
-                          <span class="reply"><%= topics[i].create_time %><a class="fn-ml10" href="#this">回复</a></span>
-                          <%= topics[i].author_name %>
-                      </h4>
-                      <%= topics[i].content %>
+              <div id="J-topic-wrap">
+                  <% if(topics && topics.length){ %>
+                  <% for(var i = 0, len = topics.length; i < len; i++){ %>
+                  <div class="media">
+                      <a class="pull-left">
+                          <img class="media-object img-rounded J-topic-img" src="img/nopic.gif" />
+                      </a>
+                      <div class="media-body">
+                          <h4 class="media-heading">
+                              <span class="reply">
+                                  <em class="J-topic-time"><%= topics[i].create_time %></em>
+                                  <a class="fn-ml10 J-topic-replyLink" href="#this">回复</a>
+                              </span>
+                              <span class="J-topic-authorName"><%= topics[i].author_name %></span>
+                          </h4>
+                          <div class="J-topic-content"><%= topics[i].content %></div>
+                      </div>
+                      <div class="media-updown">
+                          <a href="#this">顶(+<span class="J-topic-ding">12</span>)</a>&nbsp;
+                          <a href="#this">踩(-<span class="J-topic-cai">29</span>)</a>
+                      </div>
                   </div>
-                  <div class="media-updown">
-                      <a href="#this">顶(+12)</a>&nbsp;
-                      <a href="#this">踩(-19)</a>
-                  </div>
+                  <% } %>
+                  <% }else{ %>
+                  <div>暂无吐槽信息。</div>
+                  <% } %>
               </div>
-              <% } %>
-              <% }else{ %>
-              <div>暂无吐槽信息。</div>
-              <% } %>
           </div>
           <div class="span4">
               <% if(userInfo){ %>
@@ -120,22 +87,22 @@
                           </li>
                           <li>
                               <a href="#this">
-                                  <span><strong><%= userInfo.topic_count %></strong></span>
-                                  <span>我的吐槽</span>
+                                  <span><strong id="J-userInfor-topicCount"><%= userInfo.topic_count %></strong></span>
+                                  <span>吐槽</span>
                               </a>
                           </li>
                           <li>
                               <a href="#this">
                                   <span><strong><%= userInfo.followed %></strong></span>
-                                  <span>我的关注</span>
+                                  <span>关注</span>
                               </a>
                           </li>
-                          <li>
+                          <!--<li>
                               <a href="#this">
                                   <span><strong><%= userInfo.collecting %></strong></span>
                                   <span>收藏</span>
                               </a>
-                          </li>
+                          </li>-->
                       </ul>
                   </div>
               </div>
@@ -201,9 +168,3 @@
           </div>
       </div>
   </div>
-  <hr>
-  <footer class="container">
-      <p>&copy; xiaoweitucao 2013</p>
-  </footer>
-  </body>
-</html>
