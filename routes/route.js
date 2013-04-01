@@ -25,6 +25,10 @@ module.exports = function(app){
     // 话题首页、发表话题
     app.get('/topic', topic.index);
     app.post('/topic', topic.addTopic);
+    app.post('/newTopic', topic.newTopic);
+
+    // 个人中心
+    app.get('/account', user.index);
 
     // test
     app.get('/test', index.test);
