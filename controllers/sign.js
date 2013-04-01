@@ -16,7 +16,7 @@ exports.reg = function(req, res){
         res.redirect('/');
         return;
     }
-    res.render('reg', {title: '用户注册', error: false});
+    res.render('sign/reg', {title: '用户注册', error: false});
 };
 
 // 处理用户注册信息
@@ -39,7 +39,7 @@ exports.doReg = function(req, res, next){
 
     if(error.length){
         console.log(error);
-        return res.render('reg',
+        return res.render('sign/reg',
             {
                 title: '用户注册',
                 error: error
@@ -54,7 +54,7 @@ exports.doReg = function(req, res, next){
             };
             // 用户名已存在
             if(user){
-                res.render('reg', {
+                res.render('sign/reg', {
                     title: '用户注册',
                     error: [userName +'已被注册，换一个呗~']
                 })
@@ -91,7 +91,7 @@ exports.login = function(req, res){
         res.redirect('/');
         return;
     }
-    res.render('login', {title: '用户登录', error: false});
+    res.render('sign/login', {title: '用户登录', error: false});
 };
 
 // 处理用户登录
@@ -109,7 +109,7 @@ exports.doLogin = function(req, res, next){
 
     if(error.length){
         console.log(error);
-        return res.render('login',
+        return res.render('sign/login',
             {
                 title: '用户登录',
                 error: error
@@ -130,7 +130,7 @@ exports.doLogin = function(req, res, next){
                     return res.redirect('/');
                 }else{
                     // 密码错误
-                    res.render('login',
+                    res.render('sign/login',
                         {
                             title: '用户登录',
                             error: ['账户【'+ userName +'】密码错误']
@@ -140,7 +140,7 @@ exports.doLogin = function(req, res, next){
             }
             else{
                 // 不存在此账户
-                return res.render('login',
+                return res.render('sign/login',
                     {
                         title: '用户登录',
                         error: ['【'+ userName +'】账户不存在']

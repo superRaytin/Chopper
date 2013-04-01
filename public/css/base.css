@@ -112,6 +112,9 @@ li{
     color: #f90;
 }
 
+.widget-list{
+    margin-bottom: 10px;
+}
 .widget-list .widget-head{
     border-bottom: 1px solid #ddd;
     padding: 8px 0px 8px 5px;

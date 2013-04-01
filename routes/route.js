@@ -11,8 +11,6 @@ var index = require('../controllers/index'),
 module.exports = function(app){
     app.get('/', index.index);
 
-    app.get('/users', user.list);
-
     // 注册
     app.get('/reg', sign.reg);
     app.post('/reg', sign.doReg);
@@ -28,7 +26,10 @@ module.exports = function(app){
     app.post('/newTopic', topic.newTopic);
 
     // 个人中心
-    app.get('/account', user.index);
+    app.get('/account', user.account);
+    app.post('/account', user.account_save);
+    app.get('/pass', user.pass);
+    app.post('/pass', user.pass_save);
 
     // test
     app.get('/test', index.test);
