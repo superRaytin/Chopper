@@ -8,18 +8,6 @@
               </div>
               <hr>
               <h3 class="fn-mt20">最新吐槽</h3>
-              <!--<div class="media">
-                  <a class="pull-left">
-                      <img src="img/nopic.gif" class="media-object">
-                  </a>
-                  <div class="media-body">
-                      <h4 class="media-heading">
-                          <div class="reply">2012/12/12 12:12:12<a class="fn-ml10" href="#this">回复</a></div>
-                          aaa
-                      </h4>
-                      这是一段长文章，内容通常很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长很长啊
-                  </div>
-              </div>-->
               <div class="media">
                   <a class="pull-left">
                       <img src="img/nopic.gif" class="media-object img-rounded">
@@ -64,107 +52,6 @@
                   <% } %>
               </div>
           </div>
-          <div class="span4">
-              <% if(userInfo){ %>
-              <div class="widget-list">
-                  <div class="media">
-                      <a href="#this" class="fn-posi-re pull-left">
-                          <img class="media-object img-rounded" src="img/nopic.gif" style="width: 80px; height: 80px" />
-                          <span class="media-text fn-posi-ab">更换头像</span>
-                      </a>
-                      <div class="media-body user-infor-sign">
-                          <h4 class="media-heading"><%= userInfo.name %></h4>
-                          <%= userInfo.sign %>
-                      </div>
-                  </div>
-                  <div class="user-infor fn-mt10">
-                      <ul class="clearfix">
-                          <li>
-                              <a href="#this">
-                                  <span><strong><%= userInfo.follower %></strong></span>
-                                  <span>粉丝</span>
-                              </a>
-                          </li>
-                          <li>
-                              <a href="#this">
-                                  <span><strong id="J-userInfor-topicCount"><%= userInfo.topic_count %></strong></span>
-                                  <span>吐槽</span>
-                              </a>
-                          </li>
-                          <li>
-                              <a href="#this">
-                                  <span><strong><%= userInfo.followed %></strong></span>
-                                  <span>关注</span>
-                              </a>
-                          </li>
-                          <!--<li>
-                              <a href="#this">
-                                  <span><strong><%= userInfo.collecting %></strong></span>
-                                  <span>收藏</span>
-                              </a>
-                          </li>-->
-                      </ul>
-                  </div>
-              </div>
-              <% }else{ %>
-              <div>
-                  <p>与其在别处并肩，不如在这里吐槽 <(￣︶￣)><p>
-                  <form method="post" class="form-signin" action="/login">
-                      <input type="text" placeholder="用户名或Email" name="email" class="input-block-level">
-                      <input type="password" placeholder="密码" name="password" class="input-block-level">
-                      <label class="checkbox">
-                          <input type="checkbox" value="remember-me"> 记住我
-                      </label>
-                      <button type="submit" class="btn btn-primary">登 录</button>
-                      <input type="button" onclick="location.href='/reg'" value="注册一个账号" class="btn">
-                  </form>
-              </div>
-              <% } %>
-
-              <div class="widget-list">
-                  <h5 class="widget-head">最新加入 | New</h5>
-                  <% if(users && users.length){ %>
-                  <div class="list-users">
-                      <ul class="clearfix">
-                          <% for(var j = 0, len = users.length; j < len; j++){ %>
-                          <li>
-                              <a href='#this'><img class="media-object img-rounded" src="img/nopic.gif" />
-                              <span><%= users[j].name %></span></a>
-                          </li>
-                          <% } %>
-                      </ul>
-                  </div>
-                  <% }else{ %>
-                  <div>暂无用户。</div>
-                  <% } %>
-              </div>
-              <div class="widget-list">
-                  <h5 class="widget-head">吐槽之星 | Top10</h5>
-                  <% if(usersByCount && usersByCount.length){ %>
-                  <div class="list-users">
-                      <ul class="clearfix">
-                          <% for(var j = 0, len = usersByCount.length; j < len; j++){ %>
-                          <li>
-                              <a href='#this' title="<%= usersByCount[j].topic_count %> 个吐槽"><img class="media-object img-rounded" src="img/nopic.gif" />
-                                  <span><%= usersByCount[j].name %></span></a>
-                          </li>
-                          <% } %>
-                      </ul>
-                  </div>
-                  <% }else{ %>
-                  <div>暂无用户。</div>
-                  <% } %>
-              </div>
-              <div class="widget-list">
-                  <h5 class="widget-head">最热话题 | Hot</h5>
-                  <div class="media-body">
-                      <ul>
-                          <li><a href="#this">#工要工工工工工工要工工工#</a>&nbsp;(87)</li>
-                          <li><a href="#this">#工一模压要工工工工工工要工工工#</a>&nbsp;(87)</li>
-                          <li><a href="#this">#工一模要工工工工工工要工工工#</a>&nbsp;(87)</li>
-                      </ul>
-                  </div>
-              </div>
-          </div>
+          <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>
       </div>
   </div>

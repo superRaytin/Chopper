@@ -1,0 +1,40 @@
+<div class="container">
+    <div class="row">
+        <div class="span8">
+            <form class="form-horizontal fn-mt20">
+                <div class="control-group">
+                    <label for="J-userName" class="control-label">用户名：</label>
+                    <div class="controls">
+                        <input type="text" id="J-userName" name="userName" disabled>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="J-nickName" class="control-label">昵称：</label>
+                    <div class="controls">
+                        <input type="text" id="J-nickName" name="nickName">
+                        <span class="help-inline">Something may have gone wrong</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="J-email" class="control-label">Email：</label>
+                    <div class="controls">
+                        <input type="text" id="J-email" name="email">
+                        <span class="help-inline">Something</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="J-sign" class="control-label">签名：</label>
+                    <div class="controls">
+                        <textarea id="J-sign" rows="2" name="sign"></textarea>
+                        <span class="help-inline">Something</span>
+                    </div>
+                </div>
+            </form>
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit">保 存</button>
+                <button class="btn" type="button">取 消</button>
+            </div>
+        </div>
+        <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>
+    </div>
+</div>

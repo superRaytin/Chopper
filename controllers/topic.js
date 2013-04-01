@@ -83,7 +83,8 @@ function addTopic(req, res, next){
         desc = !currentUser ? '请先登录，才能发表话题。' : '话题内容不能为空。';
         res.render('notice/normal', {
             title: '出错了',
-            desc: desc
+            desc: desc,
+            layout: null
         })
         return;
     };

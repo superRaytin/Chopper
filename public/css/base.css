@@ -215,3 +215,6 @@ li{
     color: #fff;
     text-decoration: none;
 }
+.form-actions{
+    padding-left: 120px;
+}

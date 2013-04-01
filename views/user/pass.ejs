@@ -1,0 +1,40 @@
+<div class="container">
+    <div class="row">
+        <div class="span8">
+            <form class="form-horizontal fn-mt20">
+                <div class="control-group">
+                    <label for="J-userName" class="control-label">用户名：</label>
+                    <div class="controls">
+                        <input type="text" id="J-userName" name="userName" disabled>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="J-pass" class="control-label">原密码：</label>
+                    <div class="controls">
+                        <input type="text" id="J-pass" name="pass">
+                        <span class="help-inline">Something may have gone wrong</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="J-newPass" class="control-label">新密码：</label>
+                    <div class="controls">
+                        <input type="text" id="J-newPass" name="newPass">
+                        <span class="help-inline">Something</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="J-newPassOnce" class="control-label">确认新密码：</label>
+                    <div class="controls">
+                        <input type="text" id="J-newPassOnce" name="newPassOnce">
+                        <span class="help-inline">Something</span>
+                    </div>
+                </div>
+            </form>
+            <div class="form-actions">
+                <button class="btn btn-primary" type="submit">保 存</button>
+                <button class="btn" type="button">取 消</button>
+            </div>
+        </div>
+        <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>
+    </div>
+</div>
