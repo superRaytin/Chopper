@@ -8,7 +8,7 @@ define(['jquery', 'alertify'], function($, alertify){
         doAsync : function(url, type, params, callback){
             $.ajax({
                 url: url,
-                data: params ? params : {},
+                data: params,
                 type: type,
                 success: function(res){
                     if(res.success){
@@ -35,7 +35,7 @@ define(['jquery', 'alertify'], function($, alertify){
                     return;
                 };
 
-                _util.doAsync('/newTopic', 'POST', '', function(data){
+                _util.doAsync('/newTopic', 'POST', {content: con.val()}, function(data){
                     var topic = data,
                         topic_wrap = $('#J-topic-wrap'),
                         newTopic = topic_wrap.find('.media').eq(0).clone(true),
