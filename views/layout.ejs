@@ -35,7 +35,7 @@
             <div class="nav-collapse collapse">
                 <div class="navbar-text pull-right dropdown">
                     <% if(locals.current_user){ %>
-                    欢迎你，<%= locals.current_user %>。上次登录：<%= userInfo.lastLogin_time %> <a class="dropdown-toggle" data-toggle="dropdown" role="button" href="#">个人中心<b class="caret"></b></a>
+                    欢迎你，<i class="theCurrentName"><% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= locals.current_user %><% } %></i>。<% if(userInfo.lastLogin_time != '0'){ %>上次登录：<%= userInfo.lastLogin_time %><% }else{ %>新人登录，速报三围~<% } %> <a class="dropdown-toggle" data-toggle="dropdown" role="button" href="#">个人中心<b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
                         <li role="presentation"><a role="menuitem" tabindex="-1" href="/account">资料设置</a></li>
                         <li role="presentation"><a role="menuitem" tabindex="-1" href="/pass">修改密码</a></li>

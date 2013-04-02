@@ -222,3 +222,17 @@ hr{
 .form-actions{
     padding-left: 120px;
 }
+.error span.help-inline{
+    display: none;
+}
+.error span.hide{
+    display: inline-block;
+}
+.theCurrentName{
+    font-style: normal;
+}
+.redStar{
+    color: #ff0000;
+    font-style: normal;
+    padding-right: 5px;
+}

@@ -7,8 +7,8 @@
                 <span class="media-text fn-posi-ab">更换头像</span>
             </a>
             <div class="media-body user-infor-sign">
-                <h4 class="media-heading"><%= userInfo.name %></h4>
-                <%= userInfo.sign %>
+                <h4 class="media-heading"><i class="theCurrentName"><% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %></i></h4>
+                <div class="theCurrentSign"><%= userInfo.sign %></div>
             </div>
         </div>
         <div class="user-infor fn-mt10">

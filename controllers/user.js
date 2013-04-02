@@ -7,33 +7,18 @@ var proxy = require('../proxy'),
     userProxy = proxy.User,
     topicProxy = proxy.Topic,
     config = require('../config').config,
-    EventProxy = require('eventproxy');
+    EventProxy = require('eventproxy'),
+    util = require('../util');
 
 // 个人资料
 function accountPage(req, res, next, setting){
-    var currentUser = res.locals.current_user,
-        desc;
-
-    if(!currentUser){
-        desc = '请先登录。';
-        res.render('notice/normal', {
-            title: '出错了',
-            desc: desc,
-            layout: null
-        })
-        return;
-    };
+    if( !util.checkUserStatus(res, '请先登录。') ) return;
 
     var ep = new EventProxy();
 
     ep.all('userList', 'current_user', 'userListByCount', function(userList, current_user, userListByCount){
-        current_user = {
-            name: current_user.name,
-            followed: current_user.followed,
-            follower: current_user.follower,
-            topic_count: current_user.topic_count,
-            sign: current_user.sign != '-' ? current_user.sign : '这家伙很懒，还没有签名'
-        };
+        current_user.sign = current_user.sign != '-' ? current_user.sign : '这家伙很懒，还没有签名';
+
         res.render(setting.page,
             {
                 title: setting.title,
@@ -56,18 +41,58 @@ function accountPage(req, res, next, setting){
     userProxy.getUserListBy({}, 'name topic_count', {limit: 10, sort: [['topic_count', 'desc']]}, ep.done('userListByCount'));
 };
 function account(req, res, next){
-    accountPage(req, res, next, {page: 'user/account', title: '资料设置', fields: 'name follower followed topic_count sign email'});
+    accountPage(req, res, next, {page: 'user/account', title: '资料设置', fields: 'name nickName follower followed topic_count sign lastLogin_time email'});
 };
+
+// 保存资料
 function account_save(req, res, next){
-    //
+    if( !util.checkUserStatusAsync(res, '先登录啊亲 (╯_╰)') ) return;
+
+    var username = res.locals.current_user,
+        ep = new EventProxy();
+
+    // 删除时间戳
+    delete req.body.random;
+
+    ep.all('updateUserInfo', 'getUserInfo', function(update, user){
+        res.json({
+            success: true,
+            data: user
+        });
+    }).fail(next);
+
+    userProxy.updateUserInfoByName(username, req.body, ep.done('updateUserInfo'));
+    userProxy.getUserInfoByName(username, 'sign nickName', ep.done('getUserInfo'));
+
 };
 
 //修改密码
 function pass(req, res, next){
-    accountPage(req, res, next, {page: 'user/pass', title: '修改密码', fields: 'name follower followed topic_count sign email pass'});
+    accountPage(req, res, next, {page: 'user/pass', title: '修改密码', fields: 'name nickName follower followed topic_count sign lastLogin_time email pass'});
 };
 function pass_save(req, res, next){
-    //
+    if( !util.checkUserStatusAsync(res, '先登录啊亲 (╯_╰)') ) return;
+
+    var username = res.locals.current_user,
+        ep = new EventProxy();
+
+    ep.fail(next);
+
+    userProxy.getUserInfoByName(username, 'pass', ep.done(function(user){
+        var param = {
+            success: true,
+            data: 'ok'
+        };
+        if(req.body.pass !== user.pass){
+            param.data = 'no';
+            res.json(param);
+        }else{
+            userProxy.updateUserInfoByName(username, {pass: req.body.newPass}, ep.done(function(){
+                res.json(param);
+            }));
+        }
+    }));
+
 };
 
 function list(req, res, next){

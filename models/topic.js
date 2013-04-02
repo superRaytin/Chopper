@@ -9,15 +9,15 @@ var mongoose = require('mongoose'),
 
 var topicSchema = new Schema({
     content: {type: String},
-    top: {type: Boolean, default: false},
     create_time: {type: String},
     author_id: {type: ObjectId},
     author_name: {type: String},
 
+    top: {type: Boolean, default: false},
     reply_count: {type: Number, default: 0},
-    support: {type: String, default: 0},
-    down: {type: String, default: 0},
-    topic_Type: {type: String}
+    support: {type: Number, default: 0},
+    down: {type: Number, default: 0},
+    topic_Type: {type: String, default: '0'}
 });
 
 mongoose.model('Topic', topicSchema);

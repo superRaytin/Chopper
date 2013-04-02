@@ -10,12 +10,12 @@ var mongoose = require('mongoose'),
 
 var userSchema = new Schema({
     name: {type: String, index: true},
-    nickName: {type: String, default:'-'},
+    nickName: {type: String},
     pass: {type: String},
     email: {type: String},
     sign: {type: String, default: '-'},
     //pic: {type: String},
-    lastLogin_time: {type: String, default: util.formatDate(new Date())},
+    lastLogin_time: {type: String, default: '0'},
 
     topic_count: {type: Number, default: 0},
     collecting: [String],

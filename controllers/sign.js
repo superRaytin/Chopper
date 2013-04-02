@@ -7,7 +7,8 @@
 var proxy = require('../proxy'),
     userProxy = proxy.User,
     models = require('../models'),
-    config = require('../config').config;
+    config = require('../config').config,
+    util = require('../util');
 
 // 注册
 exports.reg = function(req, res){
@@ -88,7 +89,7 @@ exports.logout = function(req, res){
         req.session.user = null;
 
         // 更新最后登出时间
-        userProxy.updateLastLogin(res.locals.current_user, new Date(), function(err){
+        userProxy.updateUserInfoByName(res.locals.current_user, {lastLogin_time: util.formatDate(new Date())}, function(err){
             if(err) return next(err);
             return res.redirect('/');
         });

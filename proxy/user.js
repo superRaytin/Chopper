@@ -5,8 +5,7 @@
  */
 var models = require('../models');
 
-var UserModel = models.User,
-    util = require('../util');
+var UserModel = models.User;
 
 /**
  * 根据查询条件查询单个用户信息
@@ -14,7 +13,7 @@ var UserModel = models.User,
  * - err, 数据库异常
  * - user, 用户
  * @param {Object} query 查询条件
- * @param {Object} fields 返回字段
+ * @param {String} fields 返回字段
  * @param {Function} callback 回调函数
  */
 function getOneUserInfo(query, fields, callback){
@@ -28,6 +27,7 @@ function getOneUserInfo(query, fields, callback){
  * - err, 数据库异常
  * - user, 用户
  * @param {String} name 用户名
+ * @param {String} fields 返回字段
  * @param {Function} callback 回调函数
  */
 function getUserInfoByName(name, fields, callback){
@@ -89,15 +89,15 @@ function updateUserInfo(query, opt, callback){
 };
 
 /**
- * 更新最后登录状态
+ * 更新用户信息
  * Callback:
  * - err, 数据库异常
  * @param {Object} userName 用户名
- * @param {Object} time 登出时间
+ * @param {Object} opt 更新内容
  * @param {Function} callback 回调函数
  */
-function updateLastLogin(userName, time, callback){
-    UserModel.update({name: userName}, {$set: {lastLogin_time: util.formatDate(time)}}, callback);
+function updateUserInfoByName(userName, opt, callback){
+    UserModel.update({name: userName}, {$set: opt}, callback);
 };
 
 module.exports = {
@@ -107,5 +107,5 @@ module.exports = {
     getUserListBy: getUserListBy,
     getUserList: getUserList,
     updateUserInfo: updateUserInfo,
-    updateLastLogin: updateLastLogin
+    updateUserInfoByName: updateUserInfoByName
 };
