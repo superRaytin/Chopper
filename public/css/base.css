@@ -4,6 +4,9 @@ body{
 li{
     list-style: none;
 }
+hr{
+    border-color: #DDDDDD -moz-use-text-color #FFFFFF;
+}
 .fn-mt10{
     margin-top: 10px;
 }

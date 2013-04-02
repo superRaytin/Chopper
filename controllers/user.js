@@ -50,13 +50,13 @@ function accountPage(req, res, next, setting){
     userProxy.getUserList('name', ep.done('userList'));
 
     // 用户信息
-    userProxy.getUserInfoByName(res.locals.current_user, setting.userInfo, ep.done('current_user'));
+    userProxy.getUserInfoByName(res.locals.current_user, setting.fields, ep.done('current_user'));
 
     // 吐槽之星
     userProxy.getUserListBy({}, 'name topic_count', {limit: 10, sort: [['topic_count', 'desc']]}, ep.done('userListByCount'));
 };
 function account(req, res, next){
-    accountPage(req, res, next, {page: 'user/account', title: '资料设置', userInfo: 'name follower followed topic_count sign email'});
+    accountPage(req, res, next, {page: 'user/account', title: '资料设置', fields: 'name follower followed topic_count sign email'});
 };
 function account_save(req, res, next){
     //
@@ -64,7 +64,7 @@ function account_save(req, res, next){
 
 //修改密码
 function pass(req, res, next){
-    accountPage(req, res, next, {page: 'user/pass', title: '修改密码', userInfo: 'name follower followed topic_count sign email pass'});
+    accountPage(req, res, next, {page: 'user/pass', title: '修改密码', fields: 'name follower followed topic_count sign email pass'});
 };
 function pass_save(req, res, next){
     //

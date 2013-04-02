@@ -3,7 +3,7 @@
  * User: raytin
  * Date: 13-4-1
  */
-$(function(){
+define(['jquery'], function($){
     var indexObj = {
         fabu: function(){
             var btn = $('#J-fabu'),
@@ -56,5 +56,10 @@ $(function(){
             this.fabu();
         }
     };
-    indexObj.init();
+
+    var common = {
+        indexObj: indexObj
+    }
+
+    return common;
 });

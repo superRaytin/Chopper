@@ -6,6 +6,22 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.css" rel="stylesheet" media="screen">
     <link href="css/base.css" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="js/duck.dev.js"></script>
+    <script type="text/javascript">
+        D.config({
+            alias : {
+                'jquery' : 'jquery-1.9.1.min.js',
+                'bootstrap' : 'bootstrap.min.js',
+                'common' : 'common.js'
+            }
+        });
+
+        D.use(['jquery', 'bootstrap', 'common'], function($, boot, common){
+            $(function(){
+                common.indexObj.init();
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="navbar navbar-fixed-top">
@@ -47,8 +63,5 @@
 <footer class="container">
     <p>&copy; xiaoweitucao 2013</p>
 </footer>
-<script src="js/jquery-1.9.1.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/common.js"></script>
 </body>
 </html>

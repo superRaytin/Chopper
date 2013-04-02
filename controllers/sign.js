@@ -86,6 +86,8 @@ exports.doReg = function(req, res, next){
 exports.logout = function(req, res){
     if(res.locals.current_user){
         req.session.user = null;
+
+        // 更新最后登出时间
         userProxy.updateLastLogin(res.locals.current_user, new Date(), function(err){
             if(err) return next(err);
             return res.redirect('/');
