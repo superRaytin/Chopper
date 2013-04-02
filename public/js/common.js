@@ -3,7 +3,7 @@
  * User: raytin
  * Date: 13-4-1
  */
-define(['jquery'], function($){
+define(['jquery', 'alertify'], function($, alertify){
     var indexObj = {
         fabu: function(){
             var btn = $('#J-fabu'),
@@ -11,7 +11,7 @@ define(['jquery'], function($){
 
             btn.on('click', function(){
                 if($.trim(con.val()) == ''){
-                    alert('亲，总得说点什么吧~');
+                    alertify.alert('亲，总得说点什么吧~');
                     return;
                 };
 
@@ -57,9 +57,9 @@ define(['jquery'], function($){
         }
     };
 
-    var common = {
+    var exports = {
         indexObj: indexObj
-    }
+    };
 
-    return common;
+    return exports;
 });

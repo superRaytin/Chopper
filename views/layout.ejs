@@ -12,10 +12,14 @@
             alias : {
                 'jquery' : 'jquery-1.9.1.min.js',
                 'bootstrap' : 'bootstrap.min.js',
+                'alertify' : 'alertify.min.js',
+                'alertify-core' : '/css/alertify/alertify.core.css',
+                'alertify-default' : '/css/alertify/alertify.default.css',
                 'common' : 'common.js'
             }
         });
 
+        D.use(['alertify-core', 'alertify-default']);
         D.use(['jquery', 'bootstrap', 'common'], function($, boot, common){
             $(function(){
                 common.indexObj.init();
