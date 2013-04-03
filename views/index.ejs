@@ -27,6 +27,7 @@
               <div id="J-topic-wrap">
                   <% if(topics && topics.length){ %>
                   <% for(var i = 0, len = topics.length; i < len; i++){ %>
+                  <% var curTopic = topics[i] %>
                   <div class="media">
                       <a class="pull-left">
                           <img class="media-object img-rounded J-topic-img" src="img/nopic.gif" />
@@ -34,12 +35,12 @@
                       <div class="media-body">
                           <h4 class="media-heading">
                               <span class="reply">
-                                  <em class="J-topic-time"><%= topics[i].create_time %></em>
+                                  <em class="J-topic-time"><%= curTopic.create_time %></em>
                                   <a class="fn-ml10 J-topic-replyLink" href="#this">回复</a>
                               </span>
-                              <span class="J-topic-authorName"><%= topics[i].author_name %></span>
+                              <span class="J-topic-authorName"><%= curTopic.author_name %></span>
                           </h4>
-                          <div class="J-topic-content"><%= topics[i].content %></div>
+                          <div class="J-topic-content"><%= curTopic.content %></div>
                       </div>
                       <div class="media-updown">
                           <a href="#this">顶(+<span class="J-topic-ding">12</span>)</a>&nbsp;

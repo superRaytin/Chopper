@@ -28,15 +28,25 @@ exports.index = function(req, res, next){
     }*/
     //console.log(res.locals);
     //res.locals.user = user;
+    /*res.locals.testfun = function(str){
+        return '['+str+']';
+    };*/
     var ep = new EventProxy();
     ep.all('userList', 'topicList', 'current_user', 'userListByCount', function(userList, topicList, current_user, userListByCount){
         if(!current_user){
             current_user = null;
         }else{
+            //current_user.nickName && ( current_user.name = current_user.nickName );
             current_user.sign = current_user.sign != '-' ? current_user.sign : '这家伙很懒，还没有签名';
         };
 
-        console.log(current_user)
+        /*var user_nickName = {}, curTopic;
+        for(var i = 0, len = topics.length; i < len; i++){
+            curTopic = topics[i];
+
+        };*/
+
+        console.log(current_user);
         res.render('index',
             {
                 title: config.name,
