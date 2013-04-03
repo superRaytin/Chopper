@@ -76,6 +76,18 @@ function getUserIdByName(name, callback){
 };
 
 /**
+ * 根据用户ID查找用户昵称
+ * Callback:
+ * - err, 数据库异常
+ * - user, 用户
+ * @param {String} name 用户名
+ * @param {Function} callback 回调函数
+ */
+function getNickNameById(id, callback){
+    getOneUserInfo({_id : id}, '_id nickName', callback);
+};
+
+/**
  * 根据查询条件更新用户信息
  * Callback:
  * - err, 数据库异常
@@ -104,6 +116,7 @@ module.exports = {
     getOneUserInfo: getOneUserInfo,
     getUserInfoByName: getUserInfoByName,
     getUserIdByName: getUserIdByName,
+    getNickNameById: getNickNameById,
     getUserListBy: getUserListBy,
     getUserList: getUserList,
     updateUserInfo: updateUserInfo,

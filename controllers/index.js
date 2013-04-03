@@ -36,17 +36,9 @@ exports.index = function(req, res, next){
         if(!current_user){
             current_user = null;
         }else{
-            //current_user.nickName && ( current_user.name = current_user.nickName );
             current_user.sign = current_user.sign != '-' ? current_user.sign : '这家伙很懒，还没有签名';
         };
 
-        /*var user_nickName = {}, curTopic;
-        for(var i = 0, len = topics.length; i < len; i++){
-            curTopic = topics[i];
-
-        };*/
-
-        console.log(current_user);
         res.render('index',
             {
                 title: config.name,
@@ -60,7 +52,24 @@ exports.index = function(req, res, next){
     });
     ep.fail(next);
     userProxy.getUserList('name', ep.done('userList'));
-    topicProxy.getTopicList(ep.done('topicList'));
+    topicProxy.getTopicList(ep.done(function(topicList){
+        var topicLen = topicList.length, hash = {};
+
+        // 如果用户设置了昵称，则优先显示昵称
+        ep.after('toAll', topicLen, function(){
+            topicList.forEach(function(cur, i){
+                hash[cur.author_id] && ( cur.author_name = hash[cur.author_id] );
+            });
+            ep.emit('topicList', topicList);
+        });
+
+        topicList.forEach(function(cur, i){
+            userProxy.getNickNameById(cur.author_id, ep.done(function(user){
+                hash[user._id] = user.nickName;
+                ep.emit('toAll');
+            }));
+        });
+    }));
     userProxy.getUserInfoByName(res.locals.current_user, 'name nickName follower followed topic_count sign lastLogin_time', ep.done('current_user'));
     userProxy.getUserListBy({}, 'name topic_count', {limit: 10, sort: [['topic_count', 'desc']]}, ep.done('userListByCount'))
 
