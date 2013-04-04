@@ -1,6 +1,7 @@
 body{
     padding-top: 60px;
     font-family: 'microsoft Yahei';
+    background: #d1d8de;
 }
 li{
     list-style: none;
@@ -30,6 +31,8 @@ hr{
 .row{
     background: #f5f5f5;
     padding: 20px 0px;
+    box-shadow: 1px 1px 10px #444;
+    border-radius: 5px;
 }
 .notice-normal{
     background: #bbf893;
@@ -58,7 +61,8 @@ hr{
     margin-top: 0px;
 }
 .navbar-text{
-    color: #F1d115;
+    /*color: #F1d115;*/
+    color: #FAe171;
 }
 .navbar-link{
     color: #ddd;
@@ -98,6 +102,8 @@ hr{
 .navbar-dec{
     color: #ddd;
     margin-left: 20px;
+    text-shadow: 1px 1px 0px #000;
+    font-size: 16px;
 }
 /*.navbar-inverse .navbar-inner{
     background-image: -moz-linear-gradient(center top , #444, #222);
@@ -123,6 +129,7 @@ hr{
     border-bottom: 1px solid #ddd;
     padding: 8px 0px 8px 5px;
     background: #eee;
+    text-shadow: 1px 1px 1px #FFFFFF;
 }
 .widget-list ul{
     margin-left: 0px;

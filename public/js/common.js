@@ -143,7 +143,7 @@ define(['jquery', 'alertify'], function($, alertify){
                     newPassOnceWrap.addClass('error');
                     error++;
                 }else{
-                    passWrap.removeClass('error');
+                    newPassOnceWrap.removeClass('error');
                     params.newPass = newPassVal;
                 }
 

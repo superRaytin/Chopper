@@ -235,7 +235,7 @@
             queueNames = queue.names,
             queueUrls = queue.urls,
             STATUS = duckJS.STATUS,
-            dep, lastDepMod, parseResult, depModName, depModUrl, isLast;
+            dep, lastDepMod, parseResult, depModName, depModUrl, depMod, isLast;
 
         // define(function(){...})
         if( typeof deps === 'function' ){
