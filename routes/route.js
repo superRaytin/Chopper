@@ -3,13 +3,14 @@
  * User: raytin
  * Date: 13-3-27
  */
-var index = require('../controllers/index'),
-    sign = require('../controllers/sign'),
-    user = require('../controllers/user'),
-    topic = require('../controllers/topic');
+var controllers = require('../controllers'),
+    sign = controllers.sign,
+    user = controllers.user,
+    topic = controllers.topic,
+    home = controllers.home;
 
 module.exports = function(app){
-    app.get('/', index.index);
+    app.get('/', home.index);
 
     // 注册
     app.get('/reg', sign.reg);
@@ -32,6 +33,6 @@ module.exports = function(app){
     app.post('/pass', user.pass_save);
 
     // test
-    app.get('/test', index.test);
-    app.get('/getUserList.json', index.ajaxTest);
+    app.get('/test', home.test);
+    app.get('/getUserList.json', home.ajaxTest);
 };

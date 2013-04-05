@@ -13,7 +13,7 @@ var userSchema = new Schema({
     nickName: {type: String},
     pass: {type: String},
     email: {type: String},
-    sign: {type: String, default: '-'},
+    sign: {type: String},
     //pic: {type: String},
     lastLogin_time: {type: String, default: '0'},
 

@@ -4,6 +4,7 @@
  * Date: 13-3-27
  */
 var proxy = require('../proxy'),
+    common = proxy.common,
     userProxy = proxy.User,
     topicProxy = proxy.Topic,
     config = require('../config').config,
@@ -16,29 +17,23 @@ function accountPage(req, res, next, setting){
 
     var ep = new EventProxy();
 
-    ep.all('userList', 'current_user', 'userListByCount', function(userList, current_user, userListByCount){
-        current_user.sign = current_user.sign != '-' ? current_user.sign : '这家伙很懒，还没有签名';
-
+    ep.all('sidebar', function(sidebar){
         res.render(setting.page,
             {
                 title: setting.title,
                 config: config,
-                users: userList,
-                userInfo: current_user,
-                usersByCount: userListByCount
+                users: sidebar.users,
+                userInfo: sidebar.userInfo,
+                usersByCount: sidebar.usersByCount
             }
         );
     });
     ep.fail(next);
 
-    // 最新加入
-    userProxy.getUserList('name nickName', ep.done('userList'));
-
-    // 用户信息
-    userProxy.getUserInfoByName(res.locals.current_user, setting.fields, ep.done('current_user'));
-
-    // 吐槽之星
-    userProxy.getUserListBy({}, 'name nickName topic_count', {limit: 10, sort: [['topic_count', 'desc']]}, ep.done('userListByCount'));
+    // 获取右侧资源
+    common.getSidebarNeed(res, next, function(need){
+        ep.emit('sidebar', need);
+    });
 };
 function account(req, res, next){
     accountPage(req, res, next, {page: 'user/account', title: '资料设置', fields: 'name nickName follower followed topic_count sign lastLogin_time email'});
