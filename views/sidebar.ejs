@@ -56,21 +56,14 @@
     <% } %>
 
     <div class="widget-list">
-        <h5 class="widget-head">最新加入 | New</h5>
-        <% if(users && users.length){ %>
-        <div class="list-users">
-            <ul class="clearfix">
-                <% for(var j = 0, len = users.length; j < len; j++){ %>
-                <li>
-                    <a href='#this'><img class="media-object img-rounded" src="img/nopic.gif" />
-                        <span><%= users[j].name %></span></a>
-                </li>
-                <% } %>
+        <h5 class="widget-head">最热话题 | Hot</h5>
+        <div class="media-body">
+            <ul>
+                <li><a href="#this">#工要工工工工工工要工工工#</a>&nbsp;(87)</li>
+                <li><a href="#this">#工一模压要工工工工工工要工工工#</a>&nbsp;(87)</li>
+                <li><a href="#this">#工一模要工工工工工工要工工工#</a>&nbsp;(87)</li>
             </ul>
         </div>
-        <% }else{ %>
-        <div>暂无用户。</div>
-        <% } %>
     </div>
     <div class="widget-list">
         <h5 class="widget-head">吐槽之星 | Top10</h5>
@@ -80,7 +73,7 @@
                 <% for(var j = 0, len = usersByCount.length; j < len; j++){ %>
                 <li>
                     <a href='#this' title="<%= usersByCount[j].topic_count %> 个吐槽"><img class="media-object img-rounded" src="img/nopic.gif" />
-                        <span><%= usersByCount[j].name %></span></a>
+                        <span><% if(usersByCount[j].nickName){ %><%= usersByCount[j].nickName %><% }else{ %><%= usersByCount[j].name %><% } %></span></a>
                 </li>
                 <% } %>
             </ul>
@@ -90,13 +83,20 @@
         <% } %>
     </div>
     <div class="widget-list">
-        <h5 class="widget-head">最热话题 | Hot</h5>
-        <div class="media-body">
-            <ul>
-                <li><a href="#this">#工要工工工工工工要工工工#</a>&nbsp;(87)</li>
-                <li><a href="#this">#工一模压要工工工工工工要工工工#</a>&nbsp;(87)</li>
-                <li><a href="#this">#工一模要工工工工工工要工工工#</a>&nbsp;(87)</li>
+        <h5 class="widget-head">最新加入 | New</h5>
+        <% if(users && users.length){ %>
+        <div class="list-users">
+            <ul class="clearfix">
+                <% for(var j = 0, len = users.length; j < len; j++){ %>
+                <li>
+                    <a href='#this'><img class="media-object img-rounded" src="img/nopic.gif" />
+                        <span><% if(users[j].nickName){ %><%= users[j].nickName %><% }else{ %><%= users[j].name %><% } %></span></a>
+                </li>
+                <% } %>
             </ul>
         </div>
+        <% }else{ %>
+        <div>暂无用户。</div>
+        <% } %>
     </div>
 </div>

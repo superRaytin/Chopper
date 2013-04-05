@@ -51,7 +51,7 @@ exports.index = function(req, res, next){
         );
     });
     ep.fail(next);
-    userProxy.getUserList('name', ep.done('userList'));
+    userProxy.getUserList('name nickName', ep.done('userList'));
     topicProxy.getTopicList(ep.done(function(topicList){
         var topicLen = topicList.length, hash = {};
 
@@ -71,7 +71,7 @@ exports.index = function(req, res, next){
         });
     }));
     userProxy.getUserInfoByName(res.locals.current_user, 'name nickName follower followed topic_count sign lastLogin_time', ep.done('current_user'));
-    userProxy.getUserListBy({}, 'name topic_count', {limit: 10, sort: [['topic_count', 'desc']]}, ep.done('userListByCount'))
+    userProxy.getUserListBy({}, 'name nickName topic_count', {limit: 10, sort: [['topic_count', 'desc']]}, ep.done('userListByCount'))
 
 };
 

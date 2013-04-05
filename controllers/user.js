@@ -32,13 +32,13 @@ function accountPage(req, res, next, setting){
     ep.fail(next);
 
     // 最新加入
-    userProxy.getUserList('name', ep.done('userList'));
+    userProxy.getUserList('name nickName', ep.done('userList'));
 
     // 用户信息
     userProxy.getUserInfoByName(res.locals.current_user, setting.fields, ep.done('current_user'));
 
     // 吐槽之星
-    userProxy.getUserListBy({}, 'name topic_count', {limit: 10, sort: [['topic_count', 'desc']]}, ep.done('userListByCount'));
+    userProxy.getUserListBy({}, 'name nickName topic_count', {limit: 10, sort: [['topic_count', 'desc']]}, ep.done('userListByCount'));
 };
 function account(req, res, next){
     accountPage(req, res, next, {page: 'user/account', title: '资料设置', fields: 'name nickName follower followed topic_count sign lastLogin_time email'});
