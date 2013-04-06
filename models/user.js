@@ -5,8 +5,7 @@
  * Time: 下午2:08
  */
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema,
-    util = require('../util');
+    Schema = mongoose.Schema;
 
 var userSchema = new Schema({
     name: {type: String, index: true},
@@ -21,7 +20,6 @@ var userSchema = new Schema({
     collecting: [String],
     followed: [String],
     follower: [String]
-
 });
 
 mongoose.model('User', userSchema);
