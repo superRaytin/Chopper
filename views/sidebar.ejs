@@ -3,7 +3,7 @@
     <div class="widget-list">
         <div class="media">
             <a href="#this" class="fn-posi-re pull-left">
-                <img class="media-object img-rounded" src="img/nopic.gif" style="width: 80px; height: 80px" />
+                <img class="media-object img-rounded" src="/img/nopic.gif" style="width: 80px; height: 80px" />
                 <span class="media-text fn-posi-ab">更换头像</span>
             </a>
             <div class="media-body user-infor-sign">
@@ -72,7 +72,7 @@
             <ul class="clearfix">
                 <% for(var j = 0, len = usersByCount.length; j < len; j++){ %>
                 <li>
-                    <a href='#this' title="<%= usersByCount[j].topic_count %> 个吐槽"><img class="media-object img-rounded" src="img/nopic.gif" />
+                    <a href='#this' title="<%= usersByCount[j].topic_count %> 个吐槽"><img class="media-object img-rounded" src="/img/nopic.gif" />
                         <span><% if(usersByCount[j].nickName){ %><%= usersByCount[j].nickName %><% }else{ %><%= usersByCount[j].name %><% } %></span></a>
                 </li>
                 <% } %>
@@ -89,7 +89,7 @@
             <ul class="clearfix">
                 <% for(var j = 0, len = users.length; j < len; j++){ %>
                 <li>
-                    <a href='#this'><img class="media-object img-rounded" src="img/nopic.gif" />
+                    <a href='#this'><img class="media-object img-rounded" src="/img/nopic.gif" />
                         <span><% if(users[j].nickName){ %><%= users[j].nickName %><% }else{ %><%= users[j].name %><% } %></span></a>
                 </li>
                 <% } %>

@@ -31,6 +31,7 @@ module.exports = function(app){
     app.post('/account', user.account_save);
     app.get('/pass', user.pass);
     app.post('/pass', user.pass_save);
+    app.get('/user/:name', user.myTopic);
 
     // test
     app.get('/test', home.test);

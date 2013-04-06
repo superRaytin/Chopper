@@ -12,16 +12,17 @@ var proxy = require('../proxy'),
     util = require('../util');
 
 // 个人资料
-function accountPage(req, res, next, setting){
+function accountPage(req, res, next, settings){
     if( !util.checkUserStatus(res, '请先登录。') ) return;
 
     var ep = new EventProxy();
 
-    ep.all('sidebar', function(sidebar){
-        res.render(setting.page,
+    ep.all('sidebar', 'topbar', function(sidebar, topbar){
+        res.render(settings.page,
             {
-                title: setting.title,
+                title: settings.title,
                 config: config,
+                topInfo: topbar.topInfo,
                 users: sidebar.users,
                 userInfo: sidebar.userInfo,
                 usersByCount: sidebar.usersByCount
@@ -31,8 +32,13 @@ function accountPage(req, res, next, setting){
     ep.fail(next);
 
     // 获取右侧资源
-    common.getSidebarNeed(res, next, function(need){
+    common.getSidebarNeed(res, next, settings.fields, function(need){
         ep.emit('sidebar', need);
+    });
+
+    // 获取顶部资源
+    common.getTopbarNeed(res, next, function(need){
+        ep.emit('topbar', need);
     });
 };
 function account(req, res, next){
@@ -63,7 +69,7 @@ function account_save(req, res, next){
 
 //修改密码
 function pass(req, res, next){
-    accountPage(req, res, next, {page: 'user/pass', title: '修改密码', fields: 'name nickName follower followed topic_count sign lastLogin_time email pass'});
+    accountPage(req, res, next, {page: 'user/pass', title: '修改密码', fields: 'name nickName follower followed topic_count sign lastLogin_time email'});
 };
 function pass_save(req, res, next){
     if( !util.checkUserStatusAsync(res, '先登录啊亲 (╯_╰)') ) return;
@@ -88,6 +94,60 @@ function pass_save(req, res, next){
         }
     }));
 
+};
+
+// 用户中心
+function myTopic(req, res, next){
+    //if( !util.checkUserStatus(res, '先登录啊亲 (╯_╰)') ) return;
+    var userName = req.params.name;
+
+    var ep = new EventProxy();
+
+    ep.all('topicList', 'sidebar', 'topbar', function(topicList, sidebar, topbar){
+        res.render('user/myTopic', {
+            title: config.name,
+            config: config,
+            topics: topicList,
+            topInfo: topbar.topInfo,
+            users: sidebar.users,
+            userInfo: sidebar.userInfo,
+            usersByCount: sidebar.usersByCount
+        });
+    }).fail(next);
+
+    // 验证用户是否存在
+    userProxy.getUserInfoByName(userName, 'name', ep.done(function(user){
+        if(user){
+            // 取得用户吐槽列表
+            topicProxy.getTopicListByName(userName, ep.done(function(topicList){
+                // 如果用户设置了昵称，则优先显示昵称
+                var nickName = user.nickName;
+                if(nickName){
+                    topicList.forEach(function(cur, i){
+                        cur.author_name = nickName;
+                    });
+                };
+
+                ep.emit('topicList', topicList);
+            }));
+
+            // 获取右侧资源
+            common.getSidebarNeed(res, next, {current_user: userName, fields: 'name nickName follower followed topic_count sign lastLogin_time'}, function(need){
+                ep.emit('sidebar', need);
+            });
+        }else{
+            res.render('notice/normal', {
+                title: '用户名不存在',
+                desc: userName + ' 介个用户不存在啊亲 (╯_╰) 检查检查~',
+                layout: null
+            });
+        }
+    }));
+
+    // 获取顶部资源
+    common.getTopbarNeed(res, next, function(need){
+        ep.emit('topbar', need);
+    });
 };
 
 function list(req, res, next){
@@ -116,5 +176,6 @@ module.exports = {
     account_save: account_save,
     pass: pass,
     pass_save: pass_save,
+    myTopic: myTopic,
     list: list
 };

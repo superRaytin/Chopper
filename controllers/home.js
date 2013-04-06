@@ -34,12 +34,13 @@ exports.index = function(req, res, next){
     };*/
     var ep = new EventProxy();
     //ep.all('userList', 'topicList', 'current_user', 'userListByCount', function(userList, topicList, current_user, userListByCount){
-    ep.all( 'topicList', 'sidebar', function(topicList, sidebar){
+    ep.all( 'topicList', 'sidebar', 'topbar', function(topicList, sidebar, topbar){
         res.render('index',
             {
                 title: config.name,
                 config: config,
                 topics: topicList,
+                topInfo: topbar.topInfo,
                 users: sidebar.users,
                 userInfo: sidebar.userInfo,
                 usersByCount: sidebar.usersByCount
@@ -48,7 +49,7 @@ exports.index = function(req, res, next){
     });
     ep.fail(next);
 
-    topicProxy.getTopicList(ep.done(function(topicList){
+    topicProxy.getTopicList('', ep.done(function(topicList){
         var topicLen = topicList.length, hash = {};
 
         // 如果用户设置了昵称，则优先显示昵称
@@ -68,8 +69,13 @@ exports.index = function(req, res, next){
     }));
 
     // 获取右侧资源
-    common.getSidebarNeed(res, next, function(need){
+    common.getSidebarNeed(res, next, {fields: 'name nickName follower followed topic_count sign lastLogin_time'}, function(need){
         ep.emit('sidebar', need);
+    });
+
+    // 获取顶部资源
+    common.getTopbarNeed(res, next, function(need){
+        ep.emit('topbar', need);
     });
 
 };

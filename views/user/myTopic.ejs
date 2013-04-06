@@ -1,0 +1,56 @@
+  <div class="container">
+      <div class="row">
+          <div class="span8">
+              <div class="clearfix">
+                  用户中心 > <%= userInfo.name %>
+              </div>
+              <hr>
+              <h3 class="fn-mt20">最新吐槽</h3>
+              <!--<div class="media">
+                  <a class="pull-left">
+                      <img src="img/nopic.gif" class="media-object img-rounded">
+                  </a>
+                  <div class="media-body">
+                      <h5 class="media-heading">
+                          <span class="reply">2013/2/30 22:0:35<a href="#this" class="fn-ml10">回复</a></span>
+                          aaa
+                      </h5>
+                      <a href="#this">#有没有人告诉你#</a>&nbsp;你懂的<a href="#this">@小天</a>
+                  </div>
+                  <div class="media-updown">
+                      <a href="#this">顶(+12)</a>&nbsp;
+                      <a href="#this">踩(-19)</a>
+                  </div>
+              </div>-->
+              <div id="J-topic-wrap">
+                  <% if(topics && topics.length){ %>
+                  <% for(var i = 0, len = topics.length; i < len; i++){ %>
+                  <% var curTopic = topics[i] %>
+                  <div class="media">
+                      <a class="pull-left">
+                          <img class="media-object img-rounded J-topic-img" src="/img/nopic.gif" />
+                      </a>
+                      <div class="media-body">
+                          <h5 class="media-heading">
+                              <span class="reply">
+                                  <em class="J-topic-time"><%= curTopic.create_time %></em>
+                                  <a class="fn-ml10 J-topic-replyLink" href="#this">回复</a>
+                              </span>
+                              <span class="J-topic-authorName"><%= curTopic.author_name %></span>
+                          </h5>
+                          <div class="J-topic-content"><%= curTopic.content %></div>
+                      </div>
+                      <div class="media-updown">
+                          <a href="#this">顶(+<span class="J-topic-ding">12</span>)</a>&nbsp;
+                          <a href="#this">踩(-<span class="J-topic-cai">29</span>)</a>
+                      </div>
+                  </div>
+                  <% } %>
+                  <% }else{ %>
+                  <div>暂无吐槽信息。</div>
+                  <% } %>
+              </div>
+          </div>
+          <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>
+      </div>
+  </div>
