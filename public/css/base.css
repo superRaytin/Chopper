@@ -246,3 +246,8 @@ hr{
     font-style: normal;
     padding-right: 5px;
 }
+
+.controls .icon-exclamation-sign{
+    margin-top: 3px;
+    margin-right: 5px;
+}
