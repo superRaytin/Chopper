@@ -17,16 +17,32 @@
                     </div>
                 </div>
                 <div class="control-group">
+                    <label for="J-headPic" class="control-label">头像：</label>
+                    <div class="controls">
+                        <input type="file" id="J-headPic" name="headPic">
+                    </div>
+                </div>
+                <div class="control-group">
                     <label for="J-email" class="control-label">Email：</label>
                     <div class="controls">
-                        <input type="text" id="J-email" name="email" value="<% if(userInfo.email){ %><%= userInfo.email %><% } %>">
+                        <input type="email" id="J-email" name="email" value="<% if(userInfo.email){ %><%= userInfo.email %><% } %>">
                         <span class="help-inline hide">格式不正确。</span>
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="J-sign" class="control-label">签名：</label>
                     <div class="controls">
-                        <textarea id="J-sign" rows="2" name="sign"><% if(userInfo.sign){ %><%= userInfo.sign %><% } %></textarea>
+                        <textarea id="J-sign" rows="3" name="sign"><% if(userInfo.sign){ %><%= userInfo.sign %><% } %></textarea>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="J-domain" class="control-label">个性主页：</label>
+                    <div class="controls">
+                        <div class="input-prepend">
+                            <span class="add-on">/user/</span>
+                            <input type="text" id="J-domain" name="domain" value="<% if(userInfo.domain){ %><%= userInfo.domain %><% } %>">
+                        </div>
+                        <span class="help-inline"><i class="icon-exclamation-sign"></i>按照惯例，设置之后不可更改</span>
                     </div>
                 </div>
             </form>
