@@ -2,7 +2,7 @@
       <div class="row">
           <div class="span8">
               <div class="clearfix">
-                  用户中心 > <%= userInfo.name %>
+                  用户中心 > <% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %>
               </div>
               <hr>
               <h3 class="fn-mt20">最新吐槽</h3>

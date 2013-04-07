@@ -7,7 +7,7 @@
                 <span class="media-text fn-posi-ab">更换头像</span>
             </a>
             <div class="media-body user-infor-sign">
-                <h4 class="media-heading"><i class="theCurrentName"><% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %></i></h4>
+                <h4 class="media-heading"><a href="/user/<%= userInfo.name %>"><i class="theCurrentName"><% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %></i></a></h4>
                 <div class="theCurrentSign"><%= userInfo.sign %></div>
             </div>
         </div>
@@ -20,7 +20,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#this">
+                    <a href="/user/<%= userInfo.name %>">
                         <span><strong id="J-userInfor-topicCount"><%= userInfo.topic_count %></strong></span>
                         <span>吐槽</span>
                     </a>
@@ -71,9 +71,10 @@
         <div class="list-users">
             <ul class="clearfix">
                 <% for(var j = 0, len = usersByCount.length; j < len; j++){ %>
+                <% var currentStar = usersByCount[j] %>
                 <li>
-                    <a href='#this' title="<%= usersByCount[j].topic_count %> 个吐槽"><img class="media-object img-rounded" src="/img/nopic.gif" />
-                        <span><% if(usersByCount[j].nickName){ %><%= usersByCount[j].nickName %><% }else{ %><%= usersByCount[j].name %><% } %></span></a>
+                    <a href='/user/<%= currentStar.name %>' title="<%= usersByCount[j].topic_count %> 个吐槽"><img class="media-object img-rounded" src="/img/nopic.gif" />
+                        <span><% if(currentStar.nickName){ %><%= currentStar.nickName %><% }else{ %><%= currentStar.name %><% } %></span></a>
                 </li>
                 <% } %>
             </ul>
@@ -89,7 +90,7 @@
             <ul class="clearfix">
                 <% for(var j = 0, len = users.length; j < len; j++){ %>
                 <li>
-                    <a href='#this'><img class="media-object img-rounded" src="/img/nopic.gif" />
+                    <a href='/user/<%= users[j].name %>'><img class="media-object img-rounded" src="/img/nopic.gif" />
                         <span><% if(users[j].nickName){ %><%= users[j].nickName %><% }else{ %><%= users[j].name %><% } %></span></a>
                 </li>
                 <% } %>

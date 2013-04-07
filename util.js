@@ -63,7 +63,6 @@ function checkUserStatusAsync(res, msg){
 };
 
 module.exports = {
-    formatDate: formatDate,
     checkUserStatus: checkUserStatus,
     checkUserStatusAsync: checkUserStatusAsync
 };

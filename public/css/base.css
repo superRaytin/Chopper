@@ -137,8 +137,11 @@ hr{
 .widget-list li{
 
 }
-.widget-list .media-heading{
+.widget-list .media-heading, .widget-list .media-heading a{
     color: #A27349;
+}
+.widget-list .media-heading a:hover{
+    color: #0088CC;
 }
 .list-users li{
     float: left;
