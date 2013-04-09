@@ -100,6 +100,14 @@ function pass_save(req, res, next){
 function avatar(req, res, next){
     accountPage(req, res, next, {page: 'user/avatar', title: '上传头像', fields: 'name nickName follower followed topic_count sign lastLogin_time email'});
 };
+function avatar_save(req, res, next){
+    console.log(req.body);
+    console.log(1111);
+    console.log(req.files);
+    console.log(req.files.headPic.filename);
+    console.log(req.files.headPic.length);
+    return;
+};
 
 // 用户中心
 function myTopic(req, res, next){
@@ -182,6 +190,7 @@ module.exports = {
     pass: pass,
     pass_save: pass_save,
     avatar: avatar,
+    avatar_save: avatar_save,
     myTopic: myTopic,
     list: list
 };
