@@ -96,6 +96,11 @@ function pass_save(req, res, next){
 
 };
 
+//上传头像
+function avatar(req, res, next){
+    accountPage(req, res, next, {page: 'user/avatar', title: '上传头像', fields: 'name nickName follower followed topic_count sign lastLogin_time email'});
+};
+
 // 用户中心
 function myTopic(req, res, next){
     //if( !util.checkUserStatus(res, '先登录啊亲 (╯_╰)') ) return;
@@ -176,6 +181,7 @@ module.exports = {
     account_save: account_save,
     pass: pass,
     pass_save: pass_save,
+    avatar: avatar,
     myTopic: myTopic,
     list: list
 };

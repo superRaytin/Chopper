@@ -32,6 +32,7 @@ module.exports = function(app){
     app.get('/pass', user.pass);
     app.post('/pass', user.pass_save);
     app.get('/user/:name', user.myTopic);
+    app.get('/avatar', user.avatar);
 
     // test
     app.get('/test', home.test);

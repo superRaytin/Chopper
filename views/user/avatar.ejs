@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="row">
+        <div class="span8">
+            <h3>上传真像</h3>
+            <hr>
+            <form class="form-horizontal fn-mt20">
+                <div class="control-group">
+                    <label for="J-headPic" class="control-label">URL：</label>
+                    <div class="controls">
+                        <input type="file" id="J-headPic" name="headPic">
+                        <div class=""><i class="icon-exclamation-sign"></i>只接受.gif | .jpg | .png格式。</div>
+                    </div>
+                </div>
+            </form>
+            <div class="form-actions">
+                <button id="J-save-account" class="btn btn-large btn-primary" type="button">保 存</button>
+            </div>
+        </div>
+        <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>
+    </div>
+</div>
+<script type="text/javascript">
+    D.use(['jquery', 'common'], function($, common){
+        //$(function(){
+        //common.account.init();
+        //});
+    });
+</script>

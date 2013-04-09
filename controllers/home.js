@@ -11,6 +11,8 @@ var proxy = require("../proxy"),
     config = require('../config').config,
     EventProxy = require("eventproxy");
 
+var fs = require('fs');
+
 exports.index = function(req, res, next){
     //console.log(req.user); //无效
     //console.log(req.params);
@@ -23,6 +25,10 @@ exports.index = function(req, res, next){
     //console.log(info);
     //req.session.handa = null;
     console.log(req.session);
+    /*fs.readdir('./public/csss', function(err, files){
+        if(err) return console.log(999999999999999);
+        console.log(files);
+    });*/
     /*var user = null;
     if(req.session && req.session.user ){
         user = req.session.user;
@@ -32,6 +38,7 @@ exports.index = function(req, res, next){
     /*res.locals.testfun = function(str){
         return '['+str+']';
     };*/
+
     var ep = new EventProxy();
     //ep.all('userList', 'topicList', 'current_user', 'userListByCount', function(userList, topicList, current_user, userListByCount){
     ep.all( 'topicList', 'sidebar', 'topbar', function(topicList, sidebar, topbar){
