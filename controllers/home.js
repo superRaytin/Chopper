@@ -57,26 +57,29 @@ exports.index = function(req, res, next){
     ep.fail(next);
 
     topicProxy.getTopicList('', ep.done(function(topicList){
-        var topicLen = topicList.length, hash = {};
+        var topicLen = topicList.length, hash = {}, headHash = {};
 
         // 如果用户设置了昵称，则优先显示昵称
         ep.after('toAll', topicLen, function(){
             topicList.forEach(function(cur, i){
-                hash[cur.author_id] && ( cur.author_name = hash[cur.author_id] );
+                hash[cur.author_id] && ( cur.author_nickName = hash[cur.author_id] );
+                headHash[cur.author_id] && ( cur.head = headHash[cur.author_id] );
             });
             ep.emit('topicList', topicList);
         });
 
         topicList.forEach(function(cur, i){
-            userProxy.getNickNameById(cur.author_id, ep.done(function(user){
+            userProxy.getOneUserInfo({_id : cur.author_id}, '_id nickName head', ep.done(function(user){
+            //userProxy.getNickNameById(cur.author_id, ep.done(function(user){
                 hash[user._id] = user.nickName;
+                headHash[user._id] = user.head;
                 ep.emit('toAll');
             }));
         });
     }));
 
     // 获取右侧资源
-    common.getSidebarNeed(res, next, {fields: 'name nickName follower followed topic_count sign lastLogin_time'}, function(need){
+    common.getSidebarNeed(res, next, {fields: 'name nickName head follower followed topic_count sign lastLogin_time'}, function(need){
         ep.emit('sidebar', need);
     });
 

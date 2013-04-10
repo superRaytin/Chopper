@@ -43,7 +43,7 @@ function accountPage(req, res, next, settings){
     });
 };
 function account(req, res, next){
-    accountPage(req, res, next, {page: 'user/account', title: '资料设置', fields: 'name nickName follower followed topic_count sign lastLogin_time email'});
+    accountPage(req, res, next, {page: 'user/account', title: '资料设置', fields: 'name nickName head follower followed topic_count sign lastLogin_time email'});
 };
 
 // 保存资料
@@ -70,7 +70,7 @@ function account_save(req, res, next){
 
 //修改密码
 function pass(req, res, next){
-    accountPage(req, res, next, {page: 'user/pass', title: '修改密码', fields: 'name nickName follower followed topic_count sign lastLogin_time email'});
+    accountPage(req, res, next, {page: 'user/pass', title: '修改密码', fields: 'name nickName head follower followed topic_count sign lastLogin_time email'});
 };
 function pass_save(req, res, next){
     if( !util.checkUserStatusAsync(res, '先登录啊亲 (╯_╰)') ) return;
@@ -99,7 +99,7 @@ function pass_save(req, res, next){
 
 //上传头像
 function avatar(req, res, next){
-    accountPage(req, res, next, {page: 'user/avatar', title: '上传头像', fields: 'name nickName follower followed topic_count sign head lastLogin_time email'});
+    accountPage(req, res, next, {page: 'user/avatar', title: '上传头像', fields: 'name nickName head follower followed topic_count sign head lastLogin_time email'});
 };
 function avatar_save(req, res, next){
     if( !util.checkUserStatus(res, '先登录啊亲 (╯_╰)') ) return;
@@ -108,7 +108,7 @@ function avatar_save(req, res, next){
         mat = pic.type.match(/(gif|jpeg|png)/g),
         tmp = pic.path,
         suffix,
-        target = config.uploadDir + user + '.',
+        target = config.uploadDir + 'userHeadPic_' + user + '.',
         ep = new EventProxy();
 
     ep.all('re', function(action){

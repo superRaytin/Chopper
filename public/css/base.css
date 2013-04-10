@@ -259,3 +259,8 @@ hr{
     min-height: 100px;
     border-radius: 8px;
 }
+
+.img64{
+    width: 64px;
+    height: 64px;
+}

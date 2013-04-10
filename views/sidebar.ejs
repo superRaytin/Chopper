@@ -3,7 +3,7 @@
     <div class="widget-list">
         <div class="media">
             <a href="#this" class="fn-posi-re pull-left">
-                <img class="media-object img-rounded" src="/img/nopic.gif" style="width: 80px; height: 80px" />
+                <img class="media-object img-rounded" src="<% if(userInfo.head){ %><%= userInfo.head %><% }else{ %>/img/nopic.jpg<% } %>" style="width: 80px; height: 80px" />
                 <span class="media-text fn-posi-ab">更换头像</span>
             </a>
             <div class="media-body user-infor-sign">
@@ -73,7 +73,7 @@
                 <% for(var j = 0, len = usersByCount.length; j < len; j++){ %>
                 <% var currentStar = usersByCount[j] %>
                 <li>
-                    <a href='/user/<%= currentStar.name %>' title="<%= usersByCount[j].topic_count %> 个吐槽"><img class="media-object img-rounded" src="/img/nopic.gif" />
+                    <a href='/user/<%= currentStar.name %>' title="<%= usersByCount[j].topic_count %> 个吐槽"><img class="media-object img-rounded" src="<% if(currentStar.head){ %><%= currentStar.head %><% }else{ %>/img/nopic.jpg<% } %>" />
                         <span><% if(currentStar.nickName){ %><%= currentStar.nickName %><% }else{ %><%= currentStar.name %><% } %></span></a>
                 </li>
                 <% } %>
@@ -89,9 +89,10 @@
         <div class="list-users">
             <ul class="clearfix">
                 <% for(var j = 0, len = users.length; j < len; j++){ %>
+                <% var newUser = users[j] %>
                 <li>
-                    <a href='/user/<%= users[j].name %>'><img class="media-object img-rounded" src="/img/nopic.gif" />
-                        <span><% if(users[j].nickName){ %><%= users[j].nickName %><% }else{ %><%= users[j].name %><% } %></span></a>
+                    <a href='/user/<%= users[j].name %>'><img class="media-object img-rounded" src="<% if(newUser.head){ %><%= newUser.head %><% }else{ %>/img/nopic.jpg<% } %>" />
+                        <span><% if(newUser.nickName){ %><%= newUser.nickName %><% }else{ %><%= newUser.name %><% } %></span></a>
                 </li>
                 <% } %>
             </ul>

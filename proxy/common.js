@@ -24,13 +24,13 @@ exports.getSidebarNeed = function(res, next, settings, callback){
     }).fail(next);
 
     // 最新加入
-    userProxy.getUserList('name nickName', ep.done('userList'));
+    userProxy.getUserList('name nickName head', ep.done('userList'));
 
     // 用户信息
     userProxy.getUserInfoByName(settings.current_user ? settings.current_user : res.locals.current_user, settings.fields, ep.done('current_user'));
 
     // 吐槽之星
-    userProxy.getUserListBy({}, 'name nickName topic_count', {limit: 10, sort: [['topic_count', 'desc']]}, ep.done('userListByCount'))
+    userProxy.getUserListBy({}, 'name nickName head topic_count', {limit: 10, sort: [['topic_count', 'desc']]}, ep.done('userListByCount'))
 };
 
 // 获取顶部资源

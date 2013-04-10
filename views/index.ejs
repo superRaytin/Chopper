@@ -10,7 +10,7 @@
               <h3 class="fn-mt20">最新吐槽</h3>
               <div class="media">
                   <a class="pull-left">
-                      <img src="img/nopic.gif" class="media-object img-rounded">
+                      <img src="img/nopic.jpg" class="media-object img-rounded img64">
                   </a>
                   <div class="media-body">
                       <h5 class="media-heading">
@@ -30,7 +30,7 @@
                   <% var curTopic = topics[i] %>
                   <div class="media">
                       <a class="pull-left">
-                          <img class="media-object img-rounded J-topic-img" src="img/nopic.gif" />
+                          <img class="media-object img-rounded img64 J-topic-img" src="<% if(curTopic.head){ %><%= curTopic.head %><% }else{ %>/img/nopic.jpg<% } %>" />
                       </a>
                       <div class="media-body">
                           <h5 class="media-heading">
@@ -38,7 +38,7 @@
                                   <em class="J-topic-time"><%= curTopic.create_time %></em>
                                   <a class="fn-ml10 J-topic-replyLink" href="#this">回复</a>
                               </span>
-                              <span class="J-topic-authorName"><%= curTopic.author_name %></span>
+                              <span class="J-topic-authorName"><a href="/user/<%= curTopic.author_name %>"><% if(curTopic.author_nickName){ %><%= curTopic.author_nickName %><% }else{ %><%= curTopic.author_name %><% } %></a></span>
                           </h5>
                           <div class="J-topic-content"><%= curTopic.content %></div>
                       </div>
