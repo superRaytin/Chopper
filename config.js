@@ -10,6 +10,7 @@
      version: '0.0.1',
      db: 'mongodb://127.0.0.1/chihuohuo',
      port: 3000,
+     uploadDir: './public/upload/', // 图片上传目录
      cookieSecret: 'chihuohuo',
      sessionSecret: 'chihuohuo'
  };

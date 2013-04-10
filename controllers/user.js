@@ -9,6 +9,7 @@ var proxy = require('../proxy'),
     topicProxy = proxy.Topic,
     config = require('../config').config,
     EventProxy = require('eventproxy'),
+    fs = require('fs'),
     util = require('../util');
 
 // 个人资料
@@ -98,19 +99,51 @@ function pass_save(req, res, next){
 
 //上传头像
 function avatar(req, res, next){
-    accountPage(req, res, next, {page: 'user/avatar', title: '上传头像', fields: 'name nickName follower followed topic_count sign lastLogin_time email'});
+    accountPage(req, res, next, {page: 'user/avatar', title: '上传头像', fields: 'name nickName follower followed topic_count sign head lastLogin_time email'});
 };
 function avatar_save(req, res, next){
     if( !util.checkUserStatus(res, '先登录啊亲 (╯_╰)') ) return;
-    var tmp = req.files.headPic.path,
-        target = './public/upload/' + res.locals.current_user + '.jpg';
+    var user = res.locals.current_user,
+        pic = req.files.headPic,
+        mat = pic.type.match(/(gif|jpeg|png)/g),
+        tmp = pic.path,
+        suffix,
+        target = config.uploadDir + user + '.',
+        ep = new EventProxy();
 
-    console.log(req.body);
-    console.log(1111);
-    console.log(req.files);
-    console.log(req.files.headPic.filename);
-    console.log(req.files.headPic.length);
-    return;
+    ep.all('re', function(action){
+        console.log('file: '+tmp+' uploaded to: '+target+' ,size: '+req.files.headPic.length);
+        res.render('notice/action', {
+            action: {
+                success: action.success,
+                data: action.data,
+                img: action.img
+            },
+            layout: null
+        })
+    }).fail(next);
+
+    // 检查文件的大小和格式
+    if(!mat){
+        msg = '（︶︿︶） 图片格式不对吧亲~';
+        ep.emit('re', {success: false, data: msg});
+        return;
+    }else if(pic.length > 204800){
+        msg = '（︶︿︶） 图片太大了，服务器表示鸭梨好大';
+        ep.emit('re', {success: false, data: msg});
+        return;
+    }
+    suffix = mat[0] === 'jpeg' ? 'jpg' : mat[0] === 'gif' ? 'gif' : 'png';
+
+    fs.rename(tmp, target += suffix, ep.done(function(){
+        userProxy.updateUserInfoByName(user, {head: target = target.replace('./public', '')}, ep.done(function(){
+            ep.emit('re', {
+                success: true,
+                data: '<(￣︶￣)> 已成功上传真像。',
+                img: target
+            });
+        }))
+    }));
 };
 
 // 用户中心

@@ -1,0 +1,15 @@
+model ***
+用户密码加密存储
+部分汉化webstorm ***
+发布内容模块 ***
+主题管理 ，用户管理（增加，删除，更改）
+
+
+========================
+常用方法与属性：
+<%- partial('posts', {posts:posts}) %>  引进子模板并传入对象
+req.body   对象，客户端POST过来的
+req.params 数组，匹配请求URL正则模式
+res.redirect 跳转
+res.locals 往模板塞变量
+req.files 获取提交的文件列表

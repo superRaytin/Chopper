@@ -13,7 +13,7 @@ var userSchema = new Schema({
     pass: {type: String},
     email: {type: String},
     sign: {type: String},
-    //pic: {type: String},
+    head: {type: String},
     lastLogin_time: {type: String, default: '0'},
 
     topic_count: {type: Number, default: 0},
