@@ -1,7 +1,8 @@
 body{
     padding-top: 60px;
     font-family: 'microsoft Yahei',simsun;
-    background: #d1d8de;
+    /*background: #d1d8de;*/
+    background: url("../img/background.png") repeat;
 }
 li{
     list-style: none;
@@ -98,6 +99,7 @@ hr{
     -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
     -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    opacity: 0.85;
 }
 .navbar-dec{
     color: #ddd;
@@ -263,4 +265,11 @@ hr{
 .img64{
     width: 64px;
     height: 64px;
+}
+
+.reply-border{
+    height: 1px;
+    background: #EBEAEA;
+    border-top: 1px solid #E1E1E1;
+    border-bottom: 1px solid #F5F5F5;
 }

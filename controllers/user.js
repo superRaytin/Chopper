@@ -148,7 +148,6 @@ function avatar_save(req, res, next){
 
 // 用户中心
 function myTopic(req, res, next){
-    //if( !util.checkUserStatus(res, '先登录啊亲 (╯_╰)') ) return;
     var userName = req.params.name;
 
     var ep = new EventProxy();
@@ -166,23 +165,23 @@ function myTopic(req, res, next){
     }).fail(next);
 
     // 验证用户是否存在
-    userProxy.getUserInfoByName(userName, 'name', ep.done(function(user){
+    userProxy.getUserInfoByName(userName, 'name nickName head', ep.done(function(user){
         if(user){
             // 取得用户吐槽列表
             topicProxy.getTopicListByName(userName, ep.done(function(topicList){
                 // 如果用户设置了昵称，则优先显示昵称
                 var nickName = user.nickName;
-                if(nickName){
-                    topicList.forEach(function(cur, i){
-                        cur.author_name = nickName;
-                    });
-                };
+
+                topicList.forEach(function(cur, i){
+                    cur.author_nickName = nickName;
+                    cur.head = user.head;
+                });
 
                 ep.emit('topicList', topicList);
             }));
 
             // 获取右侧资源
-            common.getSidebarNeed(res, next, {current_user: userName, fields: 'name nickName follower followed topic_count sign lastLogin_time'}, function(need){
+            common.getSidebarNeed(res, next, {current_user: userName, fields: 'name nickName head follower followed topic_count sign lastLogin_time'}, function(need){
                 ep.emit('sidebar', need);
             });
         }else{
