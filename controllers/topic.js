@@ -32,7 +32,7 @@ function newTopic(req, res, next){
 
     newTopic.content = content;
     newTopic.author_name = currentUser;
-    newTopic.create_time = new Date().format('yyyy/MM/dd hh:mm:ss');
+    newTopic.create_time = new Date().format('MM月dd日 hh:mm');
 
     ep.all('getUserId', function(user){
         user.topic_count += 1;

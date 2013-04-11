@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Bootstrap -->
     <link href="/css/bootstrap.css" rel="stylesheet" media="screen">
-    <link href="/css/base.css" rel="stylesheet" media="screen">
+    <link id="J-skin" href="/style/simple/base.css" rel="stylesheet" media="screen">
     <script type="text/javascript" src="/js/duck.js"></script>
     <script type="text/javascript">
         duckJS.config({
@@ -47,9 +47,6 @@
                     <a href="/login" class="navbar-link">登录</a><a href="/reg" class="navbar-link fn-ml10">注册</a>
                     <% } %>
                 </div>
-                <div class="navbar-text navbar-dec pull-left">
-                    <%= config.description %>
-                </div>
                 <!--<ul class="nav">
                     <li class="active">
                         <a href="#this">首页</a>
@@ -63,9 +60,15 @@
     </div>
 </div>
 <!-- navbar end -->
+<section class="mod-topinfo">
+    <div class="container">
+        <h1 class="site-name"><%= config.name %></h1>
+        <p class="fn-mt20"><%= config.description %></p>
+    </div>
+</section>
 <%- body %>
 <footer class="container fn-mt10">
-    <p>&copy; 小微吐槽 2013</p>
+    <p>&copy; <%= config.name %> 2013</p>
 </footer>
 </body>
 </html>

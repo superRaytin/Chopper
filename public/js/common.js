@@ -38,7 +38,7 @@ define(['jquery', 'alertify'], function($, alertify){
                 _util.doAsync('/newTopic', 'POST', {content: con.val()}, function(data){
                     var topic = data,
                         topic_wrap = $('#J-topic-wrap'),
-                        newTopic = topic_wrap.find('.media').eq(0).clone(true),
+                        newTopic = $('#J-topicItemTemplate').clone(true),
                         $count = $('#J-userInfor-topicCount');
 
                     newTopic.find('.J-topic-time').text(topic.create_time);
