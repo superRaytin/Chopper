@@ -14,6 +14,7 @@ req.params 数组，匹配请求URL正则模式
 res.redirect 跳转
 res.locals 往模板塞变量
 req.files 获取提交的文件列表
+User.find({ name: { $in: names } }, callback)  批量查数据 names为数组
 
 ========================
 初探文件上传
