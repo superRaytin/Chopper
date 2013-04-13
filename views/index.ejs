@@ -7,10 +7,9 @@
                   <div class="text-left"><input type="button" class="btn btn-primary" id="J-fabu" value="&nbsp;&nbsp;发 布&nbsp;&nbsp;"> Ctrl+Enter快速发布 </div>
               </div>
 
-              <h3 class="fn-mt20">最新吐槽</h3>
               <div id="J-topicItemTemplate" class="topic-item hide">
                   <div class="topic-left">
-                      <img src="img/nopic.jpg" class="media-object img64">
+                      <img src="img/nopic.jpg" class="media-object img50">
                   </div>
                   <div class="topic-body">
                       <div class="topic-content">
@@ -27,48 +26,49 @@
                   </div>
               </div>
 
-              <div id="J-topic-wrap" class="topic-wrap">
-                  <div class="topic-item">
-                      <div class="topic-left">
-                          <img src="img/nopic.jpg" class="media-object img64">
+              <div class="topic-item hide">
+                  <div class="topic-left">
+                      <img src="img/nopic.jpg" class="media-object img50">
+                  </div>
+                  <div class="topic-body">
+                      <div class="topic-content">
+                          <a href="#this" class="topic-user">我是神货</a>&nbsp;你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂的的
                       </div>
-                      <div class="topic-body">
-                          <div class="topic-content">
-                              <a href="#this" class="topic-user">我是神货</a>&nbsp;你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂的的
-                          </div>
-                          <div class="topic-updown clearfix">
-                              <span class="pull-left topic-time">04月11日 22:04</span>
+                      <div class="topic-updown clearfix">
+                          <span class="pull-left topic-time">04月11日 22:04</span>
                           <span class="pull-right">
                               <a href="#this">顶(+12)</a>&nbsp;
                               <a href="#this">踩(-19)</a>&nbsp;
                               <a href="#this" class="fn-ml10">评论(9)</a>
                           </span>
+                      </div>
+                      <div class="reply-border"></div>
+                      <div class="topic-reply clearfix">
+                          <div class="reply-body">
+                              <a class="reply-head pull-left">
+                                  <img src="img/nopic.jpg" class="media-object img30">
+                              </a>
+                              <a href="#this" class="topic-user">如果只是</a>&nbsp;&nbsp;你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂
                           </div>
-                          <div class="reply-border"></div>
-                          <div class="topic-reply clearfix">
-                              <div class="reply-body">
-                                  <a class="reply-head pull-left">
-                                      <img src="img/nopic.jpg" class="media-object img30">
-                                  </a>
-                                  <a href="#this" class="topic-user">如果只是</a>&nbsp;&nbsp;你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂
-                              </div>
-                          </div>
-                          <div class="topic-reply clearfix">
-                              <div class="reply-body">
-                                  <a class="reply-head pull-left">
-                                      <img src="img/nopic.jpg" class="media-object img30">
-                                  </a>
-                                  <a href="#this" class="topic-user">如果只是</a>&nbsp;&nbsp;咱哈哈
-                              </div>
+                      </div>
+                      <div class="topic-reply clearfix">
+                          <div class="reply-body">
+                              <a class="reply-head pull-left">
+                                  <img src="img/nopic.jpg" class="media-object img30">
+                              </a>
+                              <a href="#this" class="topic-user">如果只是</a>&nbsp;&nbsp;咱哈哈
                           </div>
                       </div>
                   </div>
+              </div>
+
+              <div id="J-topic-wrap" class="topic-wrap">
                   <% if(topics && topics.length){ %>
                   <% for(var i = 0, len = topics.length; i < len; i++){ %>
                   <% var curTopic = topics[i] %>
-                  <div class="topic-item">
+                  <div class="topic-item J-topicUser-<%= curTopic.author_name %>">
                       <div class="topic-left">
-                          <img src="<% if(curTopic.head){ %><%= curTopic.head %><% }else{ %>/img/nopic.jpg<% } %>" class="media-object img64">
+                          <img src="<% if(curTopic.head){ %><%= curTopic.head %><% }else{ %>/img/nopic.jpg<% } %>" class="media-object img50">
                       </div>
                       <div class="topic-body">
                           <div class="topic-content">
@@ -90,6 +90,33 @@
                   <div>暂无吐槽信息。</div>
                   <% } %>
               </div>
+              <!-- page start -->
+              <% if(totalCount > 0){ %>
+              <div class="pagination pagination-centered">
+                  <ul>
+                      <% if(page == 1){ %>
+                        <li class="disabled"><a>&laquo;</a></li>
+                      <% }else{ %>
+                        <li><a href="/?page=1">&laquo;</a></li>
+                      <% } %>
+
+                      <% for(i = 0; i < totalCount; i++){ var cur = i + 1; %>
+                        <% if(cur == page){ %>
+                        <li class="active"><a><%= cur %></a></li>
+                        <% }else{ %>
+                        <li><a href="/?page=<%= cur %>"><%= cur %></a></li>
+                        <% } %>
+                      <% } %>
+
+                      <% if(page == totalCount){ %>
+                      <li class="disabled"><a>»</a></li>
+                      <% }else{ %>
+                      <li><a href="/?page=<%= page+1 %>">»</a></li>
+                      <% } %>
+                  </ul>
+              </div>
+              <% } %>
+              <!-- page end -->
           </div>
           <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>
       </div>

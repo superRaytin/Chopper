@@ -1,5 +1,5 @@
 body{
-    padding-top: 40px;
+    padding-top: 60px;
     font-family: tahoma,helvetica,'microsoft Yahei',simsun;
     /*background: #d1d8de;*/
     background: url("/img/background.png") repeat;
@@ -9,6 +9,9 @@ li{
 }
 hr{
     border-color: #DDDDDD -moz-use-text-color #FFFFFF;
+}
+.fn-pl20{
+    padding-left: 20px;
 }
 .fn-mt10{
     margin-top: 10px;
@@ -28,10 +31,10 @@ hr{
 .fn-posi-ab{
     position: absolute;
 }
-
-.row{
-    margin-left: 0px;
+.fn-color-F66F6F{
+    color: #F66F6F;
 }
+
 .notice-normal{
     background: #bbf893;
 }
@@ -80,13 +83,14 @@ hr{
     min-height: 40px;
     padding-right: 20px;
     padding-left: 20px;
-    background-color: #fafafa;
+    /*background-color: #fafafa;
     background-image: -moz-linear-gradient(top, #049cdb, #3a87ad);
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#049cdb), to(#3a87ad));
     background-image: -webkit-linear-gradient(top, #049cdb, #3a87ad);
     background-image: -o-linear-gradient(top, #049cdb, #3a87ad);
     background-image: linear-gradient(to bottom, #049cdb, #3a87ad);
-    background-repeat: repeat-x;
+    background-repeat: repeat-x;*/
+    background: rgba(0, 0, 0, 0.7);
     border: 1px solid #d4d4d4;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -103,32 +107,23 @@ hr{
     margin-left: 20px;
     text-shadow: 1px 1px 0px #000;
     font-size: 16px;
+    line-height: 40px;
 }
 /*.navbar-inverse .navbar-inner{
     background-image: -moz-linear-gradient(center top , #444, #222);
 }*/
-.push{
-
-}
-.push textarea{
-    width: 98%;
-}
-.push-mostDiscuss{
-    margin-bottom: 5px;
-}
-.push-mostDiscuss i{
-    font-weight: bold;
-    color: #f90;
-}
 
 .widget-list{
-    margin-bottom: 10px;
+    margin-top: 20px;
+    padding: 0 20px 10px;
+    border-bottom: 1px dotted #DDD;
 }
 .widget-list .widget-head{
-    border-bottom: 1px solid #ddd;
-    padding: 8px 0px 8px 5px;
-    background: #eee;
     text-shadow: 1px 1px 1px #FFFFFF;
+}
+.widget-head span{
+    color: #888;
+    font-weight: normal;
 }
 .widget-list ul{
     margin-left: 0px;
@@ -138,25 +133,28 @@ hr{
 }
 .widget-list .media-heading, .widget-list .media-heading a{
     color: #A27349;
+    font-weight: normal;
 }
 .widget-list .media-heading a:hover{
     color: #0088CC;
 }
 .list-users li{
     float: left;
-    width: 50px;
-    height: 73px;
     margin-bottom: 5px;
-    margin-right: 10px;
+    margin-right: 5px;
+    width: 40px;
     overflow: hidden;
 }
 .list-users li a img{
-    width: 50px; height: 50px;
+    width: 40px;
+    height: 40px;
+    border-radius: 2px;
 }
 .list-users li a span{
     display: block;
     text-align: center;
     font-size: 12px;
+    white-space: nowrap;
 }
 
 .row .media-body{
@@ -172,19 +170,13 @@ hr{
 .media-heading .reply em{
     font-style: normal;
 }
-.media-text{
+.user-infor-replace{
     left: 0px; bottom: 0px;
-    background: #ccc;
+    background: rgba(0, 0, 0, 0.6);
     border-radius: 0 0 5px 5px;
-    width: 80px;
+    width: 180px;
     text-align: center;
-}
-.media-updown{
-    text-align: right;
-    margin-top: 15px;
-}
-.media-updown a{
-    font-size: 12px;
+    color: #fff;
 }
 
 .user-infor{
@@ -212,9 +204,18 @@ hr{
     color: #A27349;
 }
 .user-infor-sign{
-    height: 80px;
     font-size: 12px;
     line-height: 18px;
+}
+.user-infor-head{
+    display: block;
+}
+.user-infor-head img{
+    width: 180px;
+    height: 180px;
+}
+.user-infor-name{
+    font-weight: normal;
 }
 .navbar-text .caret{
     margin-top: 19px;
@@ -264,19 +265,49 @@ hr{
     width: 64px;
     height: 64px;
 }
+.img50{
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+}
 .img30{
     width: 30px;
     height: 30px;
 }
 
-.reply-border{
-    height: 1px;
-    background: #EBEAEA;
-    border-top: 1px solid #E1E1E1;
-    border-bottom: 1px solid #F5F5F5;
-}
+
 
 /*=============*/
+.row{
+    margin-left: 0px;
+}
+.row .span8, .row .span3{
+    background: #fff;
+    background: rgba(255, 255, 255, 0.9);
+    margin-left: 0px;
+}
+.row .span3{
+    border-top: 2px solid #1F3D5F;
+    background: rgba(255, 255, 255, 0.8);
+}
+.push{
+    padding: 20px;
+    background: #F8F8F8;
+    border-bottom: 1px solid #E8E8E8;
+}
+.push textarea{
+    width: 98%;
+}
+.push-mostDiscuss{
+    margin-bottom: 5px;
+}
+.push-mostDiscuss i{
+    font-weight: bold;
+    color: #f90;
+}
+.coninner{
+    padding: 20px;
+}
 .mod-topinfo .container{
     /*width: 900px;*/
     padding: 20px 0px 20px 80px;
@@ -286,28 +317,20 @@ hr{
     font-weight: normal;
 }
 .topic-wrap{
-    margin-top: -70px;
+    background: #fff;
 }
 .topic-item{
-    margin-top: 15px;
+    padding: 15px 0px;
+    border-bottom: 1px dotted #DDD;
 }
 .topic-body{
-    position: relative;
-    background: #f5f5f5;
-    padding-top: 20px;
-    margin-bottom: -64px;
-    border: 1px solid #E7E5E6;
+    overflow: hidden;
 }
 
 .topic-left{
     position: relative;
-    width: 80px;
-    height: 64px;
-    left: -64px;
-    top: 75px;
-}
-.topic-left img{
-    position: absolute;
+    float: left;
+    padding-left: 20px;
 }
 
 .topic-content{
@@ -315,7 +338,7 @@ hr{
     padding: 0 20px;
 }
 .topic-updown{
-    padding: 10px 20px 10px;
+    padding: 7px 20px 0;
     font-size: 12px;
 }
 .topic-time{
@@ -326,8 +349,19 @@ hr{
     font-weight: bold;
 }
 .topic-reply{
-    padding: 10px 20px 10px;
+    padding: 10px 0;
+    margin: 0 20px;
     border-bottom: 1px solid #ddd;
+}
+.topic-reply:last-child{
+    border-bottom: none;
+}
+.reply-border{
+    height: 1px;
+    background: #EBEAEA;
+    border-top: 1px solid #E1E1E1;
+    border-bottom: 1px solid #F5F5F5;
+    margin: 10px 15px 0px 20px;
 }
 .reply-head{
     position: relative;
@@ -341,4 +375,29 @@ hr{
     float: left;
     font-size: 12px;
     min-height: 36px;
+}
+
+/* 用户中心 */
+.person-infor{
+    padding: 20px;
+    background: #f5f5f5;
+    border-bottom: 1px solid #e8e8e8;
+}
+.person-infor-img{
+    float: left;
+    position: relative;
+    border: 1px solid #ddd;
+    padding: 4px;
+    margin-right: 20px;
+}
+.person-infor-img img{
+    width: 180px;
+    height: 180px;
+}
+.person-infor-data{
+    overflow: hidden;
+    max-height: 200px;
+}
+.person-infor-data h4{
+    font-weight: normal;
 }

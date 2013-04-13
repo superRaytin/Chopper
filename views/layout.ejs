@@ -31,7 +31,7 @@
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
-            <a class="brand" href="/"><%= config.name %><i>v <%= config.version %></i></a>
+            <a class="brand" href="/"><%= config.name %><i>v <%= config.version %></i></a><span class="navbar-dec pull-left"><%= config.description %></span>
             <div class="nav-collapse collapse">
                 <div class="navbar-text pull-right dropdown">
                     <% if(locals.current_user){ %>
@@ -60,7 +60,7 @@
     </div>
 </div>
 <!-- navbar end -->
-<section class="mod-topinfo">
+<section class="mod-topinfo hide">
     <div class="container">
         <h1 class="site-name"><%= config.name %></h1>
         <p class="fn-mt20"><%= config.description %></p>
@@ -68,7 +68,7 @@
 </section>
 <%- body %>
 <footer class="container fn-mt10">
-    <p>&copy; <%= config.name %> 2013</p>
+    <p>&copy; <%= config.name %> 2013 <a href="http://github.com/superRaytin/nodeApp" target="_blank">Github</a></p>
 </footer>
 </body>
 </html>

@@ -89,7 +89,7 @@ exports.logout = function(req, res){
         req.session.user = null;
 
         // 更新最后登出时间
-        userProxy.updateUserInfoByName(res.locals.current_user, {lastLogin_time: new Date().format('yy/MM/dd hh:mm:ss')}, function(err){
+        userProxy.updateUserInfoByName(res.locals.current_user, {lastLogin_time: new Date().format('yyyy/MM/dd hh:mm:ss')}, function(err){
             if(err) return next(err);
             return res.redirect('/');
         });

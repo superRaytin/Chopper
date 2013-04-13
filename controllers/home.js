@@ -14,7 +14,7 @@ var proxy = require("../proxy"),
 var fs = require('fs');
 
 exports.index = function(req, res, next){
-    //console.log(req.user); //无效
+    /*console.log(req.user); //无效
     //console.log(req.params);
     //console.log(req.body);
     //var ab = 8;
@@ -24,24 +24,28 @@ exports.index = function(req, res, next){
     //var info = req.flash( 'info');
     //console.log(info);
     //req.session.handa = null;
-    console.log(req.session);
-    /*fs.readdir('./public/csss', function(err, files){
+    fs.readdir('./public/csss', function(err, files){
         if(err) return console.log(999999999999999);
         console.log(files);
-    });*/
-    /*var user = null;
+    });
+    var user = null;
     if(req.session && req.session.user ){
         user = req.session.user;
-    }*/
-    //console.log(res.locals);
-    //res.locals.user = user;
-    /*res.locals.testfun = function(str){
+    }
+    console.log(res.locals);
+    res.locals.user = user;
+    res.locals.testfun = function(str){
         return '['+str+']';
     };*/
+    console.log(req.session);
+    console.log(req.query);
+    var ep = new EventProxy(),
+        page = req.query.page || 1,
+        limit = config.limit,
+        opt = {skip: (page - 1) * limit, limit: limit, sort: [['_id', 'desc']]};
 
-    var ep = new EventProxy();
     //ep.all('userList', 'topicList', 'current_user', 'userListByCount', function(userList, topicList, current_user, userListByCount){
-    ep.all( 'topicList', 'sidebar', 'topbar', function(topicList, sidebar, topbar){
+    ep.all( 'topicList', 'sidebar', 'topbar', 'totalCount', function(topicList, sidebar, topbar, totalCount){
         res.render('index',
             {
                 title: config.name,
@@ -50,13 +54,15 @@ exports.index = function(req, res, next){
                 topInfo: topbar.topInfo,
                 users: sidebar.users,
                 userInfo: sidebar.userInfo,
-                usersByCount: sidebar.usersByCount
+                usersByCount: sidebar.usersByCount,
+                totalCount: totalCount,
+                page: parseInt(page)
             }
         );
     });
     ep.fail(next);
 
-    topicProxy.getTopicList('', ep.done(function(topicList){
+    topicProxy.getTopicList('', opt, ep.done(function(topicList){
         var topicLen = topicList.length, hash = {}, headHash = {};
 
         // 如果用户设置了昵称，则优先显示昵称
@@ -87,6 +93,11 @@ exports.index = function(req, res, next){
     common.getTopbarNeed(res, next, function(need){
         ep.emit('topbar', need);
     });
+
+    // 取得总页数
+    topicProxy.getTopicCount(ep.done(function(totalCount){
+        ep.emit('totalCount', Math.ceil(totalCount / limit));
+    }));
 
 };
 

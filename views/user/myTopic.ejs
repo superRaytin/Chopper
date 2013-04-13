@@ -1,48 +1,46 @@
   <div class="container">
       <div class="row">
           <div class="span8">
-              <div class="clearfix">
-                  用户中心 > <% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %>
+              <% if(!locals.current_user || locals.current_user != userInfo.name){ %>
+              <div class="person-infor clearfix">
+                  <div class="clearfix hide">
+                      用户中心 > <% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %>
+                  </div>
+                  <div class="person-infor-img">
+                      <img src="<% if(userInfo.head){ %><%= userInfo.head %><% }else{ %>/img/nopic.jpg<% } %>">
+                  </div>
+                  <div class="person-infor-data">
+                      <h4><% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %></h4>
+                      <p><a href="/user/<%= userInfo.name %>">http://localhost:3000/user/<%= userInfo.name %></a></p>
+                      <p>粉丝：<strong class="fn-color-F66F6F"><%= userInfo.follower.length %></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;吐槽：<strong id="J-userInfor-topicCount"><%= userInfo.topic_count %></strong></p>
+                      <p><input type="button" class="btn btn-primary" value="@ 关注"></p>
+                      <div><%= userInfo.sign %></div>
+                  </div>
               </div>
-              <hr>
-              <h3 class="fn-mt20">TA的吐槽</h3>
-              <!--<div class="media">
-                  <a class="pull-left">
-                      <img src="img/nopic.gif" class="media-object img-rounded">
-                  </a>
-                  <div class="media-body">
-                      <h5 class="media-heading">
-                          <span class="reply">2013/2/30 22:0:35<a href="#this" class="fn-ml10">回复</a></span>
-                          aaa
-                      </h5>
-                      <a href="#this">#有没有人告诉你#</a>&nbsp;你懂的<a href="#this">@小天</a>
-                  </div>
-                  <div class="media-updown">
-                      <a href="#this">顶(+12)</a>&nbsp;
-                      <a href="#this">踩(-19)</a>
-                  </div>
-              </div>-->
+              <h3 class="fn-pl20">TA的吐槽</h3>
+              <% }else{ %>
+              <h3 class="fn-pl20">我的吐槽</h3>
+              <% } %>
               <div id="J-topic-wrap">
                   <% if(topics && topics.length){ %>
                   <% for(var i = 0, len = topics.length; i < len; i++){ %>
                   <% var curTopic = topics[i] %>
-                  <div class="media">
-                      <a class="pull-left">
-                          <img class="media-object img-rounded img64 J-topic-img" src="<% if(curTopic.head){ %><%= curTopic.head %><% }else{ %>/img/nopic.jpg<% } %>" />
-                      </a>
-                      <div class="media-body">
-                          <h5 class="media-heading">
-                              <span class="reply">
-                                  <em class="J-topic-time"><%= curTopic.create_time %></em>
-                                  <a class="fn-ml10 J-topic-replyLink" href="#this">回复</a>
-                              </span>
-                              <span class="J-topic-authorName"><a href="/user/<%= curTopic.author_name %>"><% if(curTopic.author_nickName){ %><%= curTopic.author_nickName %><% }else{ %><%= curTopic.author_name %><% } %></a></span>
-                          </h5>
-                          <div class="J-topic-content"><%= curTopic.content %></div>
+                  <div class="topic-item J-topicUser-<%= curTopic.author_name %>">
+                      <div class="topic-left">
+                          <img src="<% if(curTopic.head){ %><%= curTopic.head %><% }else{ %>/img/nopic.jpg<% } %>" class="media-object img50">
                       </div>
-                      <div class="media-updown">
-                          <a href="#this">顶(+<span class="J-topic-ding">12</span>)</a>&nbsp;
-                          <a href="#this">踩(-<span class="J-topic-cai">29</span>)</a>
+                      <div class="topic-body">
+                          <div class="topic-content">
+                              <a href="/user/<%= curTopic.author_name %>" class="topic-user J-topic-authorName"><% if(curTopic.author_nickName){ %><%= curTopic.author_nickName %><% }else{ %><%= curTopic.author_name %><% } %></a>&nbsp;&nbsp;<span class="J-topic-content"><%= curTopic.content %></span>
+                          </div>
+                          <div class="topic-updown clearfix">
+                              <span class="pull-left topic-time J-topic-time"><%= curTopic.create_time %></span>
+                          <span class="pull-right">
+                              <a href="#this">顶(+12)</a>&nbsp;
+                              <a href="#this">踩(-19)</a>&nbsp;
+                              <a href="#this" class="fn-ml10">评论(9)</a>
+                          </span>
+                          </div>
                       </div>
                   </div>
                   <% } %>

@@ -1,104 +1,90 @@
 <div class="span3 pull-right">
-    <% if(userInfo){ %>
-    <div class="widget-list">
-        <div class="media">
-            <a href="/avatar" class="fn-posi-re pull-left">
-                <img class="media-object img-rounded" src="<% if(userInfo.head){ %><%= userInfo.head %><% }else{ %>/img/nopic.jpg<% } %>" style="width: 80px; height: 80px" />
-                <span class="media-text fn-posi-ab">更换头像</span>
-            </a>
-            <div class="media-body user-infor-sign">
-                <h4 class="media-heading"><a href="/user/<%= userInfo.name %>"><i class="theCurrentName"><% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %></i></a></h4>
-                <div class="theCurrentSign"><%= userInfo.sign %></div>
+    <div class="inner">
+        <% if(userInfo){ %>
+            <% if(locals.current_user && locals.current_user == userInfo.name){ %>
+            <div class="widget-list">
+                <div class="media">
+                    <a href="/avatar" class="fn-posi-re user-infor-head">
+                        <img class="media-object img-rounded" src="<% if(userInfo.head){ %><%= userInfo.head %><% }else{ %>/img/nopic.jpg<% } %>" />
+                        <span class="user-infor-replace fn-posi-ab">更换头像</span>
+                    </a>
+                    <div class="user-infor-sign">
+                        <h4 class="user-infor-name"><a href="/user/<%= userInfo.name %>"><i class="theCurrentName"><% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %></i></a></h4>
+                        <p class="theCurrentSign"><%= userInfo.sign %></p>
+                        <p>粉丝：<strong class="fn-color-F66F6F"><%= userInfo.follower.length %></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;吐槽：<a href="/user/<%= userInfo.name %>"><strong id="J-userInfor-topicCount"><%= userInfo.topic_count %></strong></a></p>
+                        <p><input type="button" class="btn btn-primary" value="@ 关注"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="widget-list">
+                <h5 class="widget-head">我关注的人<span>(<%= userInfo.followed.length %>)</span></h5>
+                <div class="widget-body">1212</div>
+            </div>
+            <% }else{ %>
+            <div class="widget-list">
+                <h5 class="widget-head">TA关注的人<span>(<%= userInfo.followed.length %>)</span></h5>
+                <div class="widget-body">1212</div>
+            </div>
+            <% } %>
+        <% }else{ %>
+        <div class="widget-list sidebar-login">
+            <p>与其在别处仰望，不如在这里吐槽 <(￣︶￣)><p>
+            <form method="post" class="form-signin" action="/login">
+                <input type="text" placeholder="用户名或Email" name="email" class="input-block-level">
+                <input type="password" placeholder="密码" name="password" class="input-block-level">
+                <label class="checkbox">
+                    <input type="checkbox" value="remember-me"> 记住我
+                </label>
+                <button type="submit" class="btn btn-primary">登 录</button>
+                <input type="button" onclick="location.href='/reg'" value="注册一个账号" class="btn">
+            </form>
+        </div>
+        <% } %>
+
+        <div class="widget-list">
+            <h5 class="widget-head">最热话题 | Hot</h5>
+            <div class="media-body">
+                <ul>
+                    <li><a href="#this">#有没有人告诉你#</a>&nbsp;(87)</li>
+                    <li><a href="#this">#假数据#</a>&nbsp;(87)</li>
+                    <li><a href="#this">#不要点我#</a>&nbsp;(87)</li>
+                </ul>
             </div>
         </div>
-        <div class="user-infor fn-mt10">
-            <ul class="clearfix">
-                <li>
-                    <a href="#this">
-                        <span><strong><%= userInfo.follower.length %></strong></span>
-                        <span>粉丝</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/user/<%= userInfo.name %>">
-                        <span><strong id="J-userInfor-topicCount"><%= userInfo.topic_count %></strong></span>
-                        <span>吐槽</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#this">
-                        <span><strong><%= userInfo.followed.length %></strong></span>
-                        <span>关注</span>
-                    </a>
-                </li>
-                <!--<li>
-                    <a href="#this">
-                        <span><strong><%= userInfo.collecting %></strong></span>
-                        <span>收藏</span>
-                    </a>
-                </li>-->
-            </ul>
+        <div class="widget-list">
+            <h5 class="widget-head">吐槽之星 | Top10</h5>
+            <% if(usersByCount && usersByCount.length){ %>
+            <div class="list-users">
+                <ul class="clearfix">
+                    <% for(var j = 0, len = usersByCount.length; j < len; j++){ %>
+                    <% var currentStar = usersByCount[j] %>
+                    <li>
+                        <a href='/user/<%= currentStar.name %>' title="<% if(currentStar.nickName){ %><%= currentStar.nickName %><% }else{ %><%= currentStar.name %><% } %>， <%= usersByCount[j].topic_count %>个吐槽"><img class="media-object img-rounded" src="<% if(currentStar.head){ %><%= currentStar.head %><% }else{ %>/img/nopic.jpg<% } %>" /></a>
+                    </li>
+                    <% } %>
+                </ul>
+            </div>
+            <% }else{ %>
+            <div>暂无用户。</div>
+            <% } %>
         </div>
-    </div>
-    <% }else{ %>
-    <div>
-        <p>与其在别处仰望，不如在这里吐槽 <(￣︶￣)><p>
-        <form method="post" class="form-signin" action="/login">
-            <input type="text" placeholder="用户名或Email" name="email" class="input-block-level">
-            <input type="password" placeholder="密码" name="password" class="input-block-level">
-            <label class="checkbox">
-                <input type="checkbox" value="remember-me"> 记住我
-            </label>
-            <button type="submit" class="btn btn-primary">登 录</button>
-            <input type="button" onclick="location.href='/reg'" value="注册一个账号" class="btn">
-        </form>
-    </div>
-    <% } %>
-
-    <div class="widget-list">
-        <h5 class="widget-head">最热话题 | Hot</h5>
-        <div class="media-body">
-            <ul>
-                <li><a href="#this">#工要工工工工工工要工工工#</a>&nbsp;(87)</li>
-                <li><a href="#this">#工一模压要工工工工工工要工工工#</a>&nbsp;(87)</li>
-                <li><a href="#this">#工一模要工工工工工工要工工工#</a>&nbsp;(87)</li>
-            </ul>
+        <div class="widget-list">
+            <h5 class="widget-head">最新加入 | New</h5>
+            <% if(users && users.length){ %>
+            <div class="list-users">
+                <ul class="clearfix">
+                    <% for(var j = 0, len = users.length; j < len; j++){ %>
+                    <% var newUser = users[j] %>
+                    <li>
+                        <a href='/user/<%= users[j].name %>' title="<% if(newUser.nickName){ %><%= newUser.nickName %><% }else{ %><%= newUser.name %><% } %>"><img class="media-object" src="<% if(newUser.head){ %><%= newUser.head %><% }else{ %>/img/nopic.jpg<% } %>" />
+                            <span><% if(newUser.nickName){ %><%= newUser.nickName %><% }else{ %><%= newUser.name %><% } %></span></a>
+                    </li>
+                    <% } %>
+                </ul>
+            </div>
+            <% }else{ %>
+            <div>暂无用户。</div>
+            <% } %>
         </div>
-    </div>
-    <div class="widget-list">
-        <h5 class="widget-head">吐槽之星 | Top10</h5>
-        <% if(usersByCount && usersByCount.length){ %>
-        <div class="list-users">
-            <ul class="clearfix">
-                <% for(var j = 0, len = usersByCount.length; j < len; j++){ %>
-                <% var currentStar = usersByCount[j] %>
-                <li>
-                    <a href='/user/<%= currentStar.name %>' title="<%= usersByCount[j].topic_count %> 个吐槽"><img class="media-object img-rounded" src="<% if(currentStar.head){ %><%= currentStar.head %><% }else{ %>/img/nopic.jpg<% } %>" />
-                        <span><% if(currentStar.nickName){ %><%= currentStar.nickName %><% }else{ %><%= currentStar.name %><% } %></span></a>
-                </li>
-                <% } %>
-            </ul>
-        </div>
-        <% }else{ %>
-        <div>暂无用户。</div>
-        <% } %>
-    </div>
-    <div class="widget-list">
-        <h5 class="widget-head">最新加入 | New</h5>
-        <% if(users && users.length){ %>
-        <div class="list-users">
-            <ul class="clearfix">
-                <% for(var j = 0, len = users.length; j < len; j++){ %>
-                <% var newUser = users[j] %>
-                <li>
-                    <a href='/user/<%= users[j].name %>'><img class="media-object img-rounded" src="<% if(newUser.head){ %><%= newUser.head %><% }else{ %>/img/nopic.jpg<% } %>" />
-                        <span><% if(newUser.nickName){ %><%= newUser.nickName %><% }else{ %><%= newUser.name %><% } %></span></a>
-                </li>
-                <% } %>
-            </ul>
-        </div>
-        <% }else{ %>
-        <div>暂无用户。</div>
-        <% } %>
     </div>
 </div>

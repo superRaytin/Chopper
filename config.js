@@ -11,6 +11,7 @@
      db: 'mongodb://127.0.0.1/chihuohuo',
      port: 3000,
      uploadDir: './public/upload/', // 图片上传目录
+     limit: 10, // 每页数量
      cookieSecret: 'chihuohuo',
      sessionSecret: 'chihuohuo'
  };
