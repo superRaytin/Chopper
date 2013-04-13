@@ -14,12 +14,12 @@ var userSchema = new Schema({
     email: {type: String},
     sign: {type: String},
     head: {type: String},
-    lastLogin_time: {type: String, default: '0'},
+    lastLogin_time: {type: String, default: '0'}, // 最后登录时间
 
-    topic_count: {type: Number, default: 0},
-    collecting: [String],
-    followed: [String],
-    follower: [String]
+    topic_count: {type: Number, default: 0}, // 吐槽数
+    collecting: [String], // 收藏
+    followed: [String], // 关注
+    fans: [String] // 粉丝
 });
 
 mongoose.model('User', userSchema);

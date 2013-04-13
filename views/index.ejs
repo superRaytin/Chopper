@@ -4,7 +4,7 @@
               <div class="push clearfix">
                   <div class="push-mostDiscuss">目前有&nbsp;<i>2323</i>&nbsp;人在讨论&nbsp;<a href="#this">#有没有人告诉你#</a></div>
                   <textarea id="J-topic-content" rows="2" placeholder="说点儿什么..."></textarea>
-                  <div class="text-left"><input type="button" class="btn btn-primary" id="J-fabu" value="&nbsp;&nbsp;发 布&nbsp;&nbsp;"> Ctrl+Enter快速发布 </div>
+                  <div class="text-left"><input type="button" class="btn btn-primary" id="J-fabu" value="一吐为快"> Ctrl+Enter快速发布 </div>
               </div>
 
               <div id="J-topicItemTemplate" class="topic-item hide">
@@ -18,9 +18,9 @@
                       <div class="topic-updown clearfix">
                           <span class="pull-left topic-time J-topic-time"></span>
                           <span class="pull-right">
-                              <a href="#this">顶(+12)</a>&nbsp;
-                              <a href="#this">踩(-19)</a>&nbsp;
-                              <a href="#this" class="fn-ml10">评论(9)</a>
+                              <a href="#this"><i class="icon-thumbs-up"></i> 顶 (12)</a>&nbsp;
+                              <a href="#this"><i class="icon-thumbs-down"></i> 踩 (19)</a>&nbsp;
+                              <a href="#this" class="fn-ml10"><i class="icon-user"></i> 评论 (9)</a>
                           </span>
                       </div>
                   </div>
@@ -67,21 +67,21 @@
               <div id="J-topic-wrap" class="topic-wrap">
                   <% if(topics && topics.length){ %>
                   <% for(var i = 0, len = topics.length; i < len; i++){ %>
-                  <% var curTopic = topics[i] %>
+                  <% var curTopic = topics[i], show_name = curTopic.author_nickName ? curTopic.author_nickName : curTopic.author_name %>
                   <div class="topic-item">
                       <div class="topic-left">
-                          <img src="<% if(curTopic.head){ %><%= curTopic.head %><% }else{ %>/img/nopic.jpg<% } %>" class="media-object J-topic-img img50">
+                          <img src="<% if(curTopic.head){ %><%= curTopic.head %><% }else{ %>/img/nopic.jpg<% } %>" class="media-object J-topic-img img50" alt="<%= show_name %>" title="<%= show_name %>">
                       </div>
                       <div class="topic-body">
                           <div class="topic-content">
-                              <a href="/user/<%= curTopic.author_name %>" class="topic-user J-topic-authorName"><% if(curTopic.author_nickName){ %><%= curTopic.author_nickName %><% }else{ %><%= curTopic.author_name %><% } %></a>&nbsp;&nbsp;<span class="J-topic-content"><%= curTopic.content %></span>
+                              <a href="/user/<%= curTopic.author_name %>" class="topic-user J-topic-authorName" title="<%= show_name %>"><%= show_name %></a>&nbsp;&nbsp;<span class="J-topic-content"><%= curTopic.content %></span>
                           </div>
                           <div class="topic-updown clearfix">
                               <span class="pull-left topic-time J-topic-time"><%= curTopic.create_time %></span>
                           <span class="pull-right">
-                              <a href="#this">顶(+12)</a>&nbsp;
-                              <a href="#this">踩(-19)</a>&nbsp;
-                              <a href="#this" class="fn-ml10">评论(9)</a>
+                              <a href="#this"><i class="icon-thumbs-up"></i> 赞 (12)</a>&nbsp;
+                              <a href="#this"><i class="icon-thumbs-down"></i> 踩 (19)</a>&nbsp;
+                              <a href="#this" class="fn-ml10"><i class="icon-user"></i> 评论 (9)</a>
                           </span>
                           </div>
                       </div>
@@ -99,3 +99,10 @@
           <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>
       </div>
   </div>
+<script type="text/javascript">
+  duckJS.use(['jquery', 'common'], function($, common){
+      $(function(){
+          common.indexObj.init();
+      });
+  });
+</script>

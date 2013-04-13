@@ -13,6 +13,9 @@ hr{
 .fn-pl20{
     padding-left: 20px;
 }
+.fn-pb20{
+    padding-bottom: 20px;
+}
 .fn-mt10{
     margin-top: 10px;
 }
@@ -73,7 +76,11 @@ hr{
     color: #ffffff;
     text-shadow: 0 1px 0 #333;
 }
-.brand i{
+.brand .icon-home{
+    margin-top: 6px;
+    margin-right: 5px;
+}
+.navbar-version{
     color: #bbb;
     font-size: 11px;
     line-height: 12px;
@@ -124,6 +131,9 @@ hr{
 .widget-head span{
     color: #888;
     font-weight: normal;
+}
+.widget-head i{
+    margin-top: 2px;
 }
 .widget-list ul{
     margin-left: 0px;
@@ -221,6 +231,13 @@ hr{
     margin-top: 19px;
     margin-left: 10px;
     border-top: 4px solid #fff;
+}
+.navbar-text .label{
+    font-size: 14px;
+    line-height: 19px;
+}
+.navbar-text i{
+    margin-top: 3px;
 }
 .navbar-text .dropdown-toggle{
     color: #ddd;

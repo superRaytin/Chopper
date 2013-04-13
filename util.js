@@ -30,6 +30,27 @@ Date.prototype.format = function(format){
 };
 
 /**
+ * 判断数组中是否包含某一项
+ * @param {Array} arr 目标数组
+ */
+Array.prototype.contains = function(item){
+    var i = this.length;
+    while(i--){
+        if(this[i] == item) return true;
+    }
+    return false;
+};
+Array.prototype.remove = function(item){
+    var i = this.length;
+    while(i--){
+        if(this[i] == item){
+            this.splice(i, 1);
+        };
+    }
+    return this;
+};
+
+/**
  * 检查用户状态
  * @param {String} msg 未登录提示信息
  */

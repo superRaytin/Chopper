@@ -20,22 +20,18 @@
         });
 
         duckJS.use(['alertify-core', 'alertify-default']);
-        duckJS.use(['jquery', 'bootstrap', 'common'], function($, boot, common){
-            $(function(){
-                common.indexObj.init();
-            });
-        });
+        duckJS.use('bootstrap');
     </script>
 </head>
 <body>
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
-            <a class="brand" href="/"><%= config.name %><i>v <%= config.version %></i></a><span class="navbar-dec pull-left"><%= config.description %></span>
+            <a class="brand" href="/"><i class="icon-home icon-white"></i><%= config.name %><i class="navbar-version">v <%= config.version %></i></a><span class="navbar-dec pull-left"><%= config.description %></span>
             <div class="nav-collapse collapse">
                 <div class="navbar-text pull-right dropdown">
                     <% if(locals.current_user){ %>
-                    欢迎你，<i class="theCurrentName"><% if(topInfo.nickName){ %><%= topInfo.nickName %><% }else{ %><%= locals.current_user %><% } %></i>。<% if(topInfo.lastLogin_time != '0'){ %>上次登录：<%= topInfo.lastLogin_time %><% }else{ %>新人登录，速报三围~<% } %> <a class="dropdown-toggle" data-toggle="dropdown" role="button" href="#">设置<b class="caret"></b></a>
+                    欢迎你，<span class="theCurrentName label label-success"><% if(topInfo.nickName){ %><%= topInfo.nickName %><% }else{ %><%= locals.current_user %><% } %></span> <% if(topInfo.lastLogin_time != '0'){ %>上次登录：<%= topInfo.lastLogin_time %><% }else{ %>新人登录，速报三围~<% } %> <a class="dropdown-toggle" data-toggle="dropdown" role="button" href="#"><i class=" icon-wrench icon-white"></i> 设置<b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
                         <li role="presentation"><a role="menuitem" tabindex="-1" href="/account">基本资料</a></li>
                         <li role="presentation"><a role="menuitem" tabindex="-1" href="/avatar">修改头像</a></li>

@@ -182,9 +182,45 @@ define(['jquery', 'alertify'], function($, alertify){
         }
     };
 
+    var myTopic = {
+        follow: function(){
+            var btn = $('#J-follow'),
+                fans = $('#J-personInfor-fans'),
+                target = btn.attr('data-user'),
+                followIn = btn.val() == '取消关注' ? true : false,
+                status, msg, btntext;
+
+            btn.on('click', function(){
+                // 取消关注
+                if(followIn){
+                    status = false;
+                    msg = '<(￣︶￣)> 取消关注成功。';
+                    btntext = '@ 关注';
+                }
+                // 关注
+                else{
+                    status = true;
+                    msg = '<(￣︶￣)> 关注成功。';
+                    btntext = '取消关注';
+                }
+
+                _util.doAsync('/follow', 'post', {follow: status, user: target}, function(ret){
+                    alertify.alert(msg);
+                    btn.val(btntext);
+                    followIn = status;
+                    fans.text(ret.length);
+                });
+            });
+        },
+        init: function(){
+            this.follow();
+        }
+    };
+
     var exports = {
         indexObj: indexObj,
-        account: account
+        account: account,
+        myTopic: myTopic
     };
 
     return exports;

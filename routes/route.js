@@ -34,6 +34,7 @@ module.exports = function(app){
     app.get('/user/:name', user.myTopic);
     app.get('/avatar', user.avatar);
     app.post('/avatar', user.avatar_save);
+    app.post('/follow', user.follow);
 
     // test
     app.get('/test', home.test);

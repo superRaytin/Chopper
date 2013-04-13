@@ -1,56 +1,58 @@
 <div class="container">
     <div class="row">
         <div class="span8">
-            <h3>基本资料</h3>
-            <hr>
-            <form class="form-horizontal fn-mt20">
-                <div class="control-group">
-                    <label for="J-userName" class="control-label">用户名：</label>
-                    <div class="controls">
-                        <input type="text" id="J-userName" name="userName" value="<%= locals.current_user %>" disabled>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="J-nickName" class="control-label">昵称：</label>
-                    <div class="controls">
-                        <input type="text" id="J-nickName" name="nickName" value="<% if(userInfo.nickName){ %><%= userInfo.nickName %><% } %>">
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="J-email" class="control-label">Email：</label>
-                    <div class="controls">
-                        <input type="email" id="J-email" name="email" value="<% if(userInfo.email){ %><%= userInfo.email %><% } %>">
-                        <span class="help-inline hide">格式不正确。</span>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="J-sign" class="control-label">签名：</label>
-                    <div class="controls">
-                        <textarea id="J-sign" rows="3" name="sign"><% if(userInfo.sign){ %><%= userInfo.sign %><% } %></textarea>
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label for="J-domain" class="control-label">个性主页：</label>
-                    <div class="controls">
-                        <div class="input-prepend">
-                            <span class="add-on">/user/</span>
-                            <input type="text" id="J-domain" name="domain" value="<% if(userInfo.domain){ %><%= userInfo.domain %><% } %>">
+            <div class="coninner">
+                <h3>基本资料</h3>
+                <hr>
+                <form class="form-horizontal fn-mt20">
+                    <div class="control-group">
+                        <label for="J-userName" class="control-label">用户名：</label>
+                        <div class="controls">
+                            <input type="text" id="J-userName" name="userName" value="<%= locals.current_user %>" disabled>
                         </div>
-                        <span class="help-inline"><i class="icon-exclamation-sign"></i>按照惯例，设置之后不可更改</span>
                     </div>
+                    <div class="control-group">
+                        <label for="J-nickName" class="control-label">昵称：</label>
+                        <div class="controls">
+                            <input type="text" id="J-nickName" name="nickName" value="<% if(userInfo.nickName){ %><%= userInfo.nickName %><% } %>">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="J-email" class="control-label">Email：</label>
+                        <div class="controls">
+                            <input type="email" id="J-email" name="email" value="<% if(userInfo.email){ %><%= userInfo.email %><% } %>">
+                            <span class="help-inline hide">格式不正确。</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="J-sign" class="control-label">签名：</label>
+                        <div class="controls">
+                            <textarea id="J-sign" rows="3" name="sign"><% if(userInfo.sign){ %><%= userInfo.sign %><% } %></textarea>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="J-domain" class="control-label">个性主页：</label>
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">/user/</span>
+                                <input type="text" id="J-domain" name="domain" value="<% if(userInfo.domain){ %><%= userInfo.domain %><% } %>">
+                            </div>
+                            <span class="help-inline"><i class="icon-exclamation-sign"></i>按照惯例，设置之后不可更改</span>
+                        </div>
+                    </div>
+                </form>
+                <div class="form-actions">
+                    <button id="J-save-account" class="btn btn-large btn-primary" type="button">保 存</button>
                 </div>
-            </form>
-            <div class="form-actions">
-                <button id="J-save-account" class="btn btn-large btn-primary" type="button">保 存</button>
             </div>
         </div>
         <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>
     </div>
 </div>
 <script type="text/javascript">
-    D.use(['jquery', 'common'], function($, common){
-        //$(function(){
+    duckJS.use(['jquery', 'common'], function($, common){
+        $(function(){
             common.account.init();
-        //});
+        });
     });
 </script>

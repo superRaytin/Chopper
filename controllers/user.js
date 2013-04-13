@@ -148,7 +148,9 @@ function avatar_save(req, res, next){
 
 // 用户中心
 function myTopic(req, res, next){
-    var userName = req.params.name;
+    var userName = req.params.name,
+        current_user = res.locals.current_user,
+        followIn = false;
 
     var ep = new EventProxy();
 
@@ -160,13 +162,19 @@ function myTopic(req, res, next){
             topInfo: topbar.topInfo,
             users: sidebar.users,
             userInfo: sidebar.userInfo,
-            usersByCount: sidebar.usersByCount
+            usersByCount: sidebar.usersByCount,
+            followIn: followIn
         });
     }).fail(next);
 
     // 验证用户是否存在
-    userProxy.getUserInfoByName(userName, 'name nickName head', ep.done(function(user){
+    userProxy.getUserInfoByName(userName, 'name nickName head fans', ep.done(function(user){
         if(user){
+            if(current_user && user.fans.length){
+                if( user.fans.contains(current_user)){
+                    followIn = true;
+                }
+            }
             // 取得用户吐槽列表
             topicProxy.getTopicListByName(userName, ep.done(function(topicList){
                 // 如果用户设置了昵称，则优先显示昵称
@@ -181,7 +189,7 @@ function myTopic(req, res, next){
             }));
 
             // 获取右侧资源
-            common.getSidebarNeed(res, next, {current_user: userName, fields: 'name nickName head follower followed topic_count sign lastLogin_time'}, function(need){
+            common.getSidebarNeed(res, next, {current_user: userName, fields: 'name nickName head fans followed topic_count sign lastLogin_time'}, function(need){
                 ep.emit('sidebar', need);
             });
         }else{
@@ -197,6 +205,43 @@ function myTopic(req, res, next){
     common.getTopbarNeed(res, next, function(need){
         ep.emit('topbar', need);
     });
+};
+
+// 关注
+function follow(req, res, next){
+    if( !util.checkUserStatusAsync(res, '先登录啊亲 (╯_╰)') ) return;
+    var current_user = res.locals.current_user,
+        status = req.body.follow == 'true',
+        target = req.body.user,
+        ep = new EventProxy();
+
+    //console.log(status);return;
+    ep.all('target', 'follow', function(fans){
+        res.json({
+            success: true,
+            data: fans
+        });
+    }).fail(next);
+
+    // 更新目标用户粉丝
+    userProxy.getUserInfoByName(target, 'fans', ep.done(function(user){
+        user.fans[status ? 'push' : 'remove'](current_user);
+        console.log(status);
+        console.log(user.fans);
+        user.save(ep.done(function(){
+            ep.emit('target', user.fans);
+        }));
+    }));
+
+    // 更新当前用户关注
+    userProxy.getUserInfoByName(current_user, 'followed', ep.done(function(user){
+        user.followed[status ? 'push' : 'remove'](target);
+        console.log(status);
+        console.log(user.followed);
+        user.save(ep.done(function(){
+            ep.emit('follow');
+        }));
+    }));
 };
 
 function list(req, res, next){
@@ -228,5 +273,6 @@ module.exports = {
     avatar: avatar,
     avatar_save: avatar_save,
     myTopic: myTopic,
+    follow: follow,
     list: list
 };

@@ -11,18 +11,18 @@
                     <div class="user-infor-sign">
                         <h4 class="user-infor-name"><a href="/user/<%= userInfo.name %>"><i class="theCurrentName"><% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %></i></a></h4>
                         <p class="theCurrentSign"><%= userInfo.sign %></p>
-                        <p>粉丝：<strong class="fn-color-F66F6F"><%= userInfo.follower.length %></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;吐槽：<a href="/user/<%= userInfo.name %>"><strong id="J-userInfor-topicCount"><%= userInfo.topic_count %></strong></a></p>
-                        <p><input type="button" class="btn btn-primary" value="@ 关注"></p>
+                        <p>粉丝：<span class="badge badge-important"><%= userInfo.fans.length %></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;吐槽：<a href="/user/<%= userInfo.name %>"><span class="badge badge-info" id="J-userInfor-topicCount"><%= userInfo.topic_count %></span></a></p>
+                        <p>积分：<span class="badge">0</span></p>
                     </div>
                 </div>
             </div>
             <div class="widget-list">
-                <h5 class="widget-head">我关注的人<span>(<%= userInfo.followed.length %>)</span></h5>
+                <h5 class="widget-head"><i class="icon-heart"></i> 我关注的人<span>(<%= userInfo.followed.length %>)</span></h5>
                 <div class="widget-body">1212</div>
             </div>
             <% }else{ %>
             <div class="widget-list">
-                <h5 class="widget-head">TA关注的人<span>(<%= userInfo.followed.length %>)</span></h5>
+                <h5 class="widget-head"><i class="icon-heart"></i> TA关注的人<span>(<%= userInfo.followed.length %>)</span></h5>
                 <div class="widget-body">1212</div>
             </div>
             <% } %>
@@ -42,17 +42,17 @@
         <% } %>
 
         <div class="widget-list">
-            <h5 class="widget-head">最热话题 | Hot</h5>
+            <h5 class="widget-head"><i class="icon-certificate"></i> 最热话题 | Hot</h5>
             <div class="media-body">
                 <ul>
                     <li><a href="#this">#有没有人告诉你#</a>&nbsp;(87)</li>
+                    <li><a href="#this">#这是一个#</a>&nbsp;(87)</li>
                     <li><a href="#this">#假数据#</a>&nbsp;(87)</li>
-                    <li><a href="#this">#不要点我#</a>&nbsp;(87)</li>
                 </ul>
             </div>
         </div>
         <div class="widget-list">
-            <h5 class="widget-head">吐槽之星 | Top10</h5>
+            <h5 class="widget-head"><i class="icon-star"></i> 吐槽之星 | Top10</h5>
             <% if(usersByCount && usersByCount.length){ %>
             <div class="list-users">
                 <ul class="clearfix">
@@ -69,7 +69,7 @@
             <% } %>
         </div>
         <div class="widget-list">
-            <h5 class="widget-head">最新加入 | New</h5>
+            <h5 class="widget-head"><i class="icon-leaf"></i> 最新加入 | New</h5>
             <% if(users && users.length){ %>
             <div class="list-users">
                 <ul class="clearfix">
