@@ -36,25 +36,39 @@ define(['jquery', 'alertify'], function($, alertify){
                 };
 
                 _util.doAsync('/newTopic', 'POST', {content: con.val()}, function(data){
-                    var topic = data,
+                    var topic = data.topic,
+                        user = data.user,
                         topic_wrap = $('#J-topic-wrap'),
-                        newTopic = $('#J-topicItemTemplate').clone(true),
-                        $count = $('#J-userInfor-topicCount');
+                        $count = $('#J-userInfor-topicCount'),
+                        template = $('#J-topicItemTemplate'),
+                        newTopic,
+                        content, authorName, time;
 
-                    newTopic.find('.J-topic-time').text(topic.create_time);
-                    newTopic.find('.J-topic-authorName').text(topic.author_name);
-                    newTopic.find('.J-topic-content').text(topic.content);
+                    newTopic = template.clone(true);
+                    content = newTopic.find('.J-topic-content');
+                    authorName = newTopic.find('.J-topic-authorName');
+                    time = newTopic.find('.J-topic-time');
+                    img = newTopic.find('.J-topic-img');
 
-                    newTopic.hide();
+                    authorName.text(user.nickName ? user.nickName : user.name);
+                    img.attr('src', user.head);
+                    content.text(topic.content);
+                    time.text(topic.create_time);
+
                     topic_wrap.prepend(newTopic);
-                    newTopic.slideDown(1000);
+                    setTimeout(function(){
+                        newTopic.slideDown(800, function(){
+                            newTopic.removeClass('hide');
+                            topic_wrap.find('.topic-item').last().remove();
+                        });
+                    },300);
 
                     // 清空吐槽框
                     con.val('');
                     con.focus();
 
                     // 个人信息区域同步吐槽数
-                    $count.text(parseInt($count.text()) + 1);
+                    $count.text(user.topic_count);
                 });
             });
         },

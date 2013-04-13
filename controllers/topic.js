@@ -39,11 +39,14 @@ function newTopic(req, res, next){
         user.save();
         res.json({
             success: true,
-            data: newTopic
+            data: {
+                topic: newTopic,
+                user: user
+            }
         });
     }).fail(next);
 
-    userProxy.getOneUserInfo({name: currentUser}, '_id topic_count', ep.done(function(user){
+    userProxy.getOneUserInfo({name: currentUser}, '_id name nickName head topic_count', ep.done(function(user){
         newTopic.author_id = user._id;
         newTopic.save();
         ep.emit('getUserId', user);

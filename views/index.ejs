@@ -9,14 +9,14 @@
 
               <div id="J-topicItemTemplate" class="topic-item hide">
                   <div class="topic-left">
-                      <img src="img/nopic.jpg" class="media-object img50">
+                      <img src="img/nopic.jpg" class="media-object J-topic-img img50">
                   </div>
                   <div class="topic-body">
                       <div class="topic-content">
-                          <a href="#this" class="topic-user J-topic-authorName">我是神货</a>&nbsp;&nbsp;<span class="J-topic-content"></span>
+                          <a href="#this" class="topic-user J-topic-authorName"></a>&nbsp;&nbsp;<span class="J-topic-content"></span>
                       </div>
                       <div class="topic-updown clearfix">
-                          <span class="pull-left topic-time J-topic-time">04月11日 22:04</span>
+                          <span class="pull-left topic-time J-topic-time"></span>
                           <span class="pull-right">
                               <a href="#this">顶(+12)</a>&nbsp;
                               <a href="#this">踩(-19)</a>&nbsp;
@@ -28,7 +28,7 @@
 
               <div class="topic-item hide">
                   <div class="topic-left">
-                      <img src="img/nopic.jpg" class="media-object img50">
+                      <img src="img/nopic.jpg" class="media-object J-topic-img img50">
                   </div>
                   <div class="topic-body">
                       <div class="topic-content">
@@ -42,21 +42,23 @@
                               <a href="#this" class="fn-ml10">评论(9)</a>
                           </span>
                       </div>
-                      <div class="reply-border"></div>
-                      <div class="topic-reply clearfix">
-                          <div class="reply-body">
-                              <a class="reply-head pull-left">
-                                  <img src="img/nopic.jpg" class="media-object img30">
-                              </a>
-                              <a href="#this" class="topic-user">如果只是</a>&nbsp;&nbsp;你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂
+                      <div class="J-reply-wrapper">
+                          <div class="reply-border"></div>
+                          <div class="topic-reply clearfix">
+                              <div class="reply-body">
+                                  <a class="reply-head pull-left">
+                                      <img src="img/nopic.jpg" class="media-object img30">
+                                  </a>
+                                  <a href="#this" class="topic-user">如果只是</a>&nbsp;&nbsp;你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂
+                              </div>
                           </div>
-                      </div>
-                      <div class="topic-reply clearfix">
-                          <div class="reply-body">
-                              <a class="reply-head pull-left">
-                                  <img src="img/nopic.jpg" class="media-object img30">
-                              </a>
-                              <a href="#this" class="topic-user">如果只是</a>&nbsp;&nbsp;咱哈哈
+                          <div class="topic-reply clearfix">
+                              <div class="reply-body">
+                                  <a class="reply-head pull-left">
+                                      <img src="img/nopic.jpg" class="media-object img30">
+                                  </a>
+                                  <a href="#this" class="topic-user">如果只是</a>&nbsp;&nbsp;咱哈哈
+                              </div>
                           </div>
                       </div>
                   </div>
@@ -66,9 +68,9 @@
                   <% if(topics && topics.length){ %>
                   <% for(var i = 0, len = topics.length; i < len; i++){ %>
                   <% var curTopic = topics[i] %>
-                  <div class="topic-item J-topicUser-<%= curTopic.author_name %>">
+                  <div class="topic-item">
                       <div class="topic-left">
-                          <img src="<% if(curTopic.head){ %><%= curTopic.head %><% }else{ %>/img/nopic.jpg<% } %>" class="media-object img50">
+                          <img src="<% if(curTopic.head){ %><%= curTopic.head %><% }else{ %>/img/nopic.jpg<% } %>" class="media-object J-topic-img img50">
                       </div>
                       <div class="topic-body">
                           <div class="topic-content">
@@ -91,31 +93,7 @@
                   <% } %>
               </div>
               <!-- page start -->
-              <% if(totalCount > 0){ %>
-              <div class="pagination pagination-centered">
-                  <ul>
-                      <% if(page == 1){ %>
-                        <li class="disabled"><a>&laquo;</a></li>
-                      <% }else{ %>
-                        <li><a href="/?page=1">&laquo;</a></li>
-                      <% } %>
-
-                      <% for(i = 0; i < totalCount; i++){ var cur = i + 1; %>
-                        <% if(cur == page){ %>
-                        <li class="active"><a><%= cur %></a></li>
-                        <% }else{ %>
-                        <li><a href="/?page=<%= cur %>"><%= cur %></a></li>
-                        <% } %>
-                      <% } %>
-
-                      <% if(page == totalCount){ %>
-                      <li class="disabled"><a>»</a></li>
-                      <% }else{ %>
-                      <li><a href="/?page=<%= page+1 %>">»</a></li>
-                      <% } %>
-                  </ul>
-              </div>
-              <% } %>
+              <%- partial('pagination', {totalCount: totalCount, page: page}) %>
               <!-- page end -->
           </div>
           <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>

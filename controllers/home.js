@@ -36,9 +36,10 @@ exports.index = function(req, res, next){
     res.locals.user = user;
     res.locals.testfun = function(str){
         return '['+str+']';
-    };*/
+    };
+     console.log(req.query);
+    */
     console.log(req.session);
-    console.log(req.query);
     var ep = new EventProxy(),
         page = req.query.page || 1,
         limit = config.limit,
@@ -66,6 +67,7 @@ exports.index = function(req, res, next){
         var topicLen = topicList.length, hash = {}, headHash = {};
 
         // 如果用户设置了昵称，则优先显示昵称
+        // 将昵称与头像附加到主题对象
         ep.after('toAll', topicLen, function(){
             topicList.forEach(function(cur, i){
                 hash[cur.author_id] && ( cur.author_nickName = hash[cur.author_id] );
@@ -74,9 +76,9 @@ exports.index = function(req, res, next){
             ep.emit('topicList', topicList);
         });
 
+        // 获取当前主题的作者昵称与头像
         topicList.forEach(function(cur, i){
             userProxy.getOneUserInfo({_id : cur.author_id}, '_id nickName head', ep.done(function(user){
-            //userProxy.getNickNameById(cur.author_id, ep.done(function(user){
                 hash[user._id] = user.nickName;
                 headHash[user._id] = user.head;
                 ep.emit('toAll');
@@ -111,7 +113,6 @@ exports.test = function(req, res, next){
 exports.ajaxTest = function(req, res, next){
     userProxy.getUserList(function(err, users){
         if(err) return next(err);
-        //console.log(JSON.stringify(users));
         if(users && users.length){
             res.json(users)
         }

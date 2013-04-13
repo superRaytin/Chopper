@@ -1,0 +1,25 @@
+<% if(totalCount > 0){ %>
+<div class="pagination pagination-centered">
+    <ul>
+        <% if(page == 1){ %>
+        <li class="disabled"><a>&laquo;</a></li>
+        <% }else{ %>
+        <li><a href="/?page=<%= page-1 %>">&laquo;</a></li>
+        <% } %>
+
+        <% for(i = 0; i < totalCount; i++){ var cur = i + 1; %>
+        <% if(cur == page){ %>
+        <li class="active"><a><%= cur %></a></li>
+        <% }else{ %>
+        <li><a href="/?page=<%= cur %>"><%= cur %></a></li>
+        <% } %>
+        <% } %>
+
+        <% if(page == totalCount){ %>
+        <li class="disabled"><a>»</a></li>
+        <% }else{ %>
+        <li><a href="/?page=<%= page+1 %>">»</a></li>
+        <% } %>
+    </ul>
+</div>
+<% } %>
