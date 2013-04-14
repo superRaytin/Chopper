@@ -8,11 +8,11 @@ var userProxy = require('../proxy').User,
 
 // 获取右侧资源
 exports.getSidebarNeed = function(res, next, settings, callback){
-    var ep = new EventProxy();
+    var ep = new EventProxy(),
+        target_user = settings.current_user ? settings.current_user : res.locals.current_user;
+
     ep.all('userList', 'current_user', 'userListByCount', function(userList, current_user, userListByCount){
-        if(!current_user){
-            current_user = null;
-        }else{
+        if(current_user){
             current_user.sign = current_user.sign && current_user.sign != '' ? current_user.sign : '这家伙很懒，还没有签名';
         };
 
@@ -23,14 +23,23 @@ exports.getSidebarNeed = function(res, next, settings, callback){
         });
     }).fail(next);
 
-    // 最新加入
-    userProxy.getUserList('name nickName head', ep.done('userList'));
-
     // 用户信息
-    userProxy.getUserInfoByName(settings.current_user ? settings.current_user : res.locals.current_user, settings.fields, ep.done('current_user'));
+    if(target_user){
+        userProxy.getUserInfoByName(target_user, settings.fields, ep.done(function(info){
+            userProxy.getUserListBy({name: {$in: info.followed}}, 'name nickName head', {limit: 20, sort: [['topic_count', 'desc']]}, ep.done(function(followedInfo){
+                info.followedInfo = followedInfo;
+                ep.emit('current_user', info);
+            }));
+        }));
+    }else{
+        ep.emit('current_user', null);
+    }
 
     // 吐槽之星
-    userProxy.getUserListBy({}, 'name nickName head topic_count', {limit: 10, sort: [['topic_count', 'desc']]}, ep.done('userListByCount'))
+    userProxy.getUserListBy({}, 'name nickName head topic_count', {limit: 8, sort: [['topic_count', 'desc']]}, ep.done('userListByCount'));
+
+    // 最新加入
+    userProxy.getUserList('name nickName head', ep.done('userList'));
 };
 
 // 获取顶部资源

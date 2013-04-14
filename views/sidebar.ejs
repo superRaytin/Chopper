@@ -18,12 +18,34 @@
             </div>
             <div class="widget-list">
                 <h5 class="widget-head"><i class="icon-heart"></i> 我关注的人<span>(<%= userInfo.followed.length %>)</span></h5>
-                <div class="widget-body">1212</div>
+                <% if(userInfo.followed && userInfo.followed.length){ %>
+                <div class="widget-body list-users">
+                    <ul class="clearfix">
+                        <% for(var j = 0, len = userInfo.followedInfo.length; j < len; j++){ %>
+                        <% var current = userInfo.followedInfo[j] %>
+                        <li>
+                            <a href='/user/<%= current.name %>' title="<% if(current.nickName){ %><%= current.nickName %><% }else{ %><%= current.name %><% } %>"><img class="media-object img-rounded" src="<% if(current.head){ %><%= current.head %><% }else{ %>/img/nopic.jpg<% } %>" /></a>
+                        </li>
+                        <% } %>
+                    </ul>
+                </div>
+                <% } %>
             </div>
             <% }else{ %>
             <div class="widget-list">
                 <h5 class="widget-head"><i class="icon-heart"></i> TA关注的人<span>(<%= userInfo.followed.length %>)</span></h5>
-                <div class="widget-body">1212</div>
+                <% if(userInfo.followed && userInfo.followed.length){ %>
+                <div class="widget-body list-users">
+                    <ul class="clearfix">
+                        <% for(var j = 0, len = userInfo.followedInfo.length; j < len; j++){ %>
+                        <% var current = userInfo.followedInfo[j] %>
+                        <li>
+                            <a href='/user/<%= current.name %>' title="<% if(current.nickName){ %><%= current.nickName %><% }else{ %><%= current.name %><% } %>"><img class="media-object img-rounded" src="<% if(current.head){ %><%= current.head %><% }else{ %>/img/nopic.jpg<% } %>" /></a>
+                        </li>
+                        <% } %>
+                    </ul>
+                </div>
+                <% } %>
             </div>
             <% } %>
         <% }else{ %>
@@ -52,7 +74,7 @@
             </div>
         </div>
         <div class="widget-list">
-            <h5 class="widget-head"><i class="icon-star"></i> 吐槽之星 | Top10</h5>
+            <h5 class="widget-head"><i class="icon-star"></i> 吐槽之星 | Star</h5>
             <% if(usersByCount && usersByCount.length){ %>
             <div class="list-users">
                 <ul class="clearfix">

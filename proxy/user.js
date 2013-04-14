@@ -56,7 +56,7 @@ function getUserListBy(query, fields, opt, callback){
  * @param {Function} callback 回调函数
  */
 function getUserList(fields, callback){
-    getUserListBy({}, fields, {limit: 10, sort: [['_id', -1]]}, callback);
+    getUserListBy({}, fields, {limit: 20, sort: [['_id', -1]]}, callback);
     //UserModel.findOne({name : 'aaa'}, callback);
     //UserModel.find({}, 'name pass', {limit: 5}, callback);
     //UserModel.find({}, fields, {limit: 10, sort: [['_id', -1]]}, callback);
