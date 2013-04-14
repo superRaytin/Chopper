@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="span8">
-            <h3 class="titleBar">消息中心</h3>
+            <h3 class="titleBar">收件箱 (<% if(message){ %><%= message.length %><% }else{ %>0<% } %>)</h3>
             <div class="message-body">
                 <% if(message){ %>
                     <% for(var i = message.length - 1; i >= 0; i--){ %>
