@@ -17,12 +17,11 @@ var UserModel = models.User;
  * @param {Function} callback 回调函数
  */
 function getOneUserInfo(query, fields, callback){
-    if(!fields) fields = '';
     UserModel.findOne(query, fields, callback);
 };
 
 /**
- * 根据用户名查找用户
+ * 根据用户名查找用户信息
  * Callback:
  * - err, 数据库异常
  * - user, 用户
@@ -30,8 +29,13 @@ function getOneUserInfo(query, fields, callback){
  * @param {String} fields 返回字段
  * @param {Function} callback 回调函数
  */
-function getUserInfoByName(name, fields, callback){
-    getOneUserInfo({name : name}, fields, callback);
+function getUserInfoByName(name, fields, opt, callback, temp){
+    temp = opt;
+    if(typeof opt == 'function'){
+        callback = opt;
+        temp = {};
+    }
+    UserModel.findOne({name : name}, fields, temp, callback);
 };
 
 /**

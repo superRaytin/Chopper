@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= title %></title>
+    <title><% if(title){ %><%= title %><% }else{ %><%= config.name %><% } %></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Bootstrap -->
     <link href="/css/bootstrap.css" rel="stylesheet" media="screen">
@@ -31,7 +31,9 @@
             <div class="nav-collapse collapse">
                 <div class="navbar-text pull-right dropdown">
                     <% if(locals.current_user){ %>
-                    欢迎你，<span class="theCurrentName label label-success"><% if(topInfo.nickName){ %><%= topInfo.nickName %><% }else{ %><%= locals.current_user %><% } %></span> <% if(topInfo.lastLogin_time != '0'){ %>上次登录：<%= topInfo.lastLogin_time %><% }else{ %>新人登录，速报三围~<% } %> <a class="dropdown-toggle" data-toggle="dropdown" role="button" href="#"><i class=" icon-wrench icon-white"></i> 设置<b class="caret"></b></a>
+                    欢迎你，<span class="theCurrentName label label-success"><% if(topInfo.nickName){ %><%= topInfo.nickName %><% }else{ %><%= locals.current_user %><% } %></span>
+                    <% if(topInfo.msgCount != 0){ %> <a href="/message" title="新的消息"><span class="label label-warning"><i class="icon-envelope icon-white"></i> 消息(<%= topInfo.msgCount %>)</span></a> <% } %>
+                    <% if(topInfo.lastLogin_time != '0'){ %>上次登录：<%= topInfo.lastLogin_time %><% }else{ %>新人登录，速报三围~<% } %> <a class="dropdown-toggle" data-toggle="dropdown" role="button" href="#"><i class=" icon-wrench icon-white"></i> 设置<b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
                         <li role="presentation"><a role="menuitem" tabindex="-1" href="/account">基本资料</a></li>
                         <li role="presentation"><a role="menuitem" tabindex="-1" href="/avatar">修改头像</a></li>
@@ -64,7 +66,9 @@
 </section>
 <%- body %>
 <footer class="container fn-mt10 fn-pb20">
-    <p>&copy; <%= config.name %> 2013 基于<a href="http://nodejs.org/" target="_blank">Nodejs</a>+Express+MongoDB搭建 <a href="https://github.com/superRaytin/nodeApp/tree/develop" target="_blank">Github</a></p>
+    <p>&copy; <%= config.name %> 2013 <a href="https://github.com/superRaytin/nodeApp/tree/develop" target="_blank">Github</a></p>
+
+    <p>本站前端基于<a href="https://github.com/superRaytin/duckJS" target="_blank">duckJS</a>+<a href="http://twitter.github.io/bootstrap/" target="_blank">bootstrap</a>&nbsp;&nbsp;&nbsp;&nbsp;后端基于<a href="http://nodejs.org/" target="_blank">Nodejs</a>+Express+MongoDB搭建</p>
 </footer>
 </body>
 </html>

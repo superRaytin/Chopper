@@ -1,17 +1,26 @@
+待FIX：
+========================
 model ***
 用户密码加密存储
 部分汉化webstorm ***
 发布内容模块 ***
 主题管理 ，用户管理（增加，删除，更改）
 回复，顶
-分页组件 分页限制页数范围
+不能重复评论或顶
+分页组件 *** 分页限制页数范围
+我的吐槽分页
 用户分级，每天登录加10分
 昵称唯一性验证
-站内通知
-我关注的人功能
+站内通知 *** 清空收件箱功能
+我关注的人功能 ***
+回到顶部
+个人主页功能
+我的吐槽显示自己和关注的人的吐槽
+发起活动功能
 
-========================
+
 常用方法与属性：
+========================
 <%- partial('posts', {posts:posts}) %>  引进子模板并传入对象
 req.body   对象，客户端POST过来的
 req.params 数组，匹配请求URL正则模式
@@ -20,6 +29,34 @@ res.redirect 跳转
 res.locals 往模板塞变量
 req.files 获取提交的文件列表
 User.find({ name: { $in: names } }, callback)  批量查数据 names为数组
+
+
+系统设计：
+========================
+站内通知
+[
+    'fansIn|time|nickName|username', // 有人关注了你
+    'fansOut|time|nickName|username', // 取消关注
+    'up|time|nickName|username|topicId', // 有人赞了你
+    'down|time|nickName|username|topicId', // 有人踩了你
+    'comment|time|nickName|username|topicId' // 有人评论
+]
+关注：
+time  XXX 关注了你
+
+取消关注：
+time  XXX 取消了对你的关注
+
+赞：
+time  你的吐槽 topic 太精彩了，被 XXX 激动地赞了一下
+
+踩：
+time  你的吐槽 topic 引起 XXX 不爽，被无情地踩了一脚
+
+评论：
+time  你的吐槽 topic 被 XXX 点评了
+
+time 你人品爆发，获得系统随机金币10个
 
 ========================
 初探文件上传

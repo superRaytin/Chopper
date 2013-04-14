@@ -213,7 +213,8 @@ function follow(req, res, next){
     var current_user = res.locals.current_user,
         status = req.body.follow == 'true',
         target = req.body.user,
-        ep = new EventProxy();
+        ep = new EventProxy(),
+        msgBody;
 
     //console.log(status);return;
     ep.all('target', 'follow', function(fans){
@@ -223,23 +224,100 @@ function follow(req, res, next){
         });
     }).fail(next);
 
-    // 更新目标用户粉丝
-    userProxy.getUserInfoByName(target, 'fans', ep.done(function(user){
-        user.fans[status ? 'push' : 'remove'](current_user);
-        console.log(status);
-        console.log(user.fans);
-        user.save(ep.done(function(){
-            ep.emit('target', user.fans);
+    // 更新用户数据
+    userProxy.getUserListBy({name: {$in: [target, current_user]}}, 'name nickName fans followed message newMessage', ep.done(function(user){
+        var curUser = user[0],
+            tarUser = user[1];
+
+        // 检查校正返回用户顺序
+        if(curUser.name != current_user){
+            curUser = user[1];
+            tarUser = user[0];
+        }
+
+        // 更新目标用户粉丝
+        tarUser.fans[status ? 'push' : 'remove'](current_user);
+
+        // 更新目标用户消息
+        msgBody = {
+            msgType: status ? 'fansIn' : 'fansOut',
+            time: new Date().format('MM月dd日 hh:mm'),
+            name: current_user,
+            nickName: curUser.nickName ? curUser.nickName : current_user,
+            readed: false
+        };
+        tarUser.message.push(msgBody);
+        tarUser.newMessage += 1;
+        tarUser.save(ep.done(function(){
+            ep.emit('target', tarUser.fans);
+        }));
+
+        // 更新当前用户关注列表
+        curUser.followed[status ? 'push' : 'remove'](target);
+        curUser.save(ep.done(function(){
+            ep.emit('follow');
         }));
     }));
+};
 
-    // 更新当前用户关注
-    userProxy.getUserInfoByName(current_user, 'followed', ep.done(function(user){
-        user.followed[status ? 'push' : 'remove'](target);
-        console.log(status);
-        console.log(user.followed);
+// 消息中心
+function message(req, res, next){
+    if( !util.checkUserStatusAsync(res, '先登录啊亲 (╯_╰)') ) return;
+
+    var current_user = res.locals.current_user,
+        ep = new EventProxy();
+
+    ep.all('sidebar', 'topbar', 'message', function(sidebar, topbar, current_user){
+        var message = current_user.message;
+
+        if(!message || !message.length){
+            message = null;
+        };
+
+        res.render('user/message', {
+            title: '消息中心 | ' + config.name,
+            config: config,
+            topInfo: topbar.topInfo,
+            users: sidebar.users,
+            userInfo: sidebar.userInfo,
+            usersByCount: sidebar.usersByCount,
+            message: message
+        });
+
+
+    }).fail(next);
+
+    // 获取右侧资源
+    common.getSidebarNeed(res, next, {fields: 'name nickName head fans followed topic_count sign lastLogin_time'}, function(need){
+        ep.emit('sidebar', need);
+    });
+
+    // 获取顶部资源
+    common.getTopbarNeed(res, next, function(need){
+        ep.emit('topbar', need);
+    });
+
+    // 获取消息
+    userProxy.getUserInfoByName(current_user, 'message newMessage', ep.done(function(user){
+        var message = user.message, clone = JSON.parse(JSON.stringify(user));
+
+        // 加上用户已读标记
+        user.newMessage = 0;
+        message.forEach(function(item){
+            // 为什么readed不能更新为true??待解决！
+            item.readed = true;
+        });
+        // 超过20条消息则删除旧的10条
+        if(message.length > 20){
+            message.splice(0, 10);
+        }else{
+            // 纠结了一下午无法更新message的问题
+            // 加下面这句无意义的代码竟然成更新成功！不知所谓中
+            user.message.splice(0, 0);
+        };
+
         user.save(ep.done(function(){
-            ep.emit('follow');
+            ep.emit('message', clone );
         }));
     }));
 };
@@ -274,5 +352,6 @@ module.exports = {
     avatar_save: avatar_save,
     myTopic: myTopic,
     follow: follow,
+    message: message,
     list: list
 };

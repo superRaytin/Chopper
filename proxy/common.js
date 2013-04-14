@@ -51,10 +51,12 @@ exports.getTopbarNeed = function(res, next, callback){
     var ep = new EventProxy();
 
     ep.all('current_user', function(current_user){
+        var msg = current_user.newMessage;
+        current_user.msgCount = msg ? msg : 0;
         callback({
             topInfo: current_user
         });
     }).fail(next);
 
-    userProxy.getUserInfoByName(res.locals.current_user, 'name nickName lastLogin_time', ep.done('current_user'));
+    userProxy.getUserInfoByName(res.locals.current_user, 'name nickName lastLogin_time message newMessage', ep.done('current_user'));
 };

@@ -1,9 +1,8 @@
 <div class="container">
     <div class="row">
         <div class="span8">
+            <h3 class="titleBar">上传真像</h3>
             <div class="coninner">
-                <h3>上传真像</h3>
-                <hr>
                 <form name="avatarForm" enctype="multipart/form-data" target="hideUpload" class="form-horizontal fn-mt20" method="post">
                     <div class="control-group">
                         <div class="controls"><img class="previewImg" src="<% if(userInfo.head){ %><%= userInfo.head %><% }else{ %>/img/nopic.jpg<% } %>"></div>

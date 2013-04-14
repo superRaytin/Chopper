@@ -28,6 +28,9 @@ hr{
 .fn-ml10{
     margin-left: 10px;
 }
+.fn-mr20{
+    margin-right: 20px;
+}
 .fn-posi-re{
     position: relative;
 }
@@ -236,7 +239,7 @@ hr{
     font-size: 14px;
     line-height: 19px;
 }
-.navbar-text i{
+.navbar-text .icon-wrench, .navbar-text .icon-envelope{
     margin-top: 3px;
 }
 .navbar-text .dropdown-toggle{
@@ -302,6 +305,7 @@ hr{
     background: #fff;
     background: rgba(255, 255, 255, 0.9);
     margin-left: 0px;
+    min-height: 580px;
 }
 .row .span3{
     border-top: 2px solid #1F3D5F;
@@ -340,6 +344,9 @@ hr{
     padding: 15px 0px;
     border-bottom: 1px dotted #DDD;
 }
+.topic-item:hover{
+    background: #f9f9f9;
+}
 .topic-body{
     overflow: hidden;
 }
@@ -360,6 +367,8 @@ hr{
 }
 .topic-time{
     color: #759AAD;
+    font-size: 12px;
+    display: inline-block;
 }
 .topic-user{
     color: #006A92;
@@ -418,3 +427,33 @@ hr{
 .person-infor-data h4{
     font-weight: normal;
 }
+
+.titleBar{
+    background: #F8F8F8;
+    border-bottom: 1px solid #E8E8E8;
+    margin: 0px;
+    padding: 15px 20px;
+}
+.message-item{
+    border-bottom: 1px dotted #ddd;
+    padding: 15px 20px;
+}
+.message-item:last-child{
+    border-bottom: none;
+}
+.message-item:hover{
+    background: #F8F8F8;
+    box-shadow: 0px 0px 3px #ddd inset;
+}
+.message-item-new{
+    background: #E2F5D0;
+}
+.message-topic{
+    background: #f5f5f5;
+    border: 1px solid #eee;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    display: inline-block;
+}
+
