@@ -74,7 +74,7 @@ exports.index = function(req, res, next){
 
         // 获取当前主题的作者昵称与头像
         topicList.forEach(function(cur, i){
-            userProxy.getOneUserInfo({_id : cur.author_id}, 'nickName head', ep.done(function(user){
+            userProxy.getOneUserInfo({_id : cur.author_id}, 'name nickName head', ep.done(function(user){
                 var nickName = user.nickName;
 
                 cur.author_nickName = nickName ? nickName : user.name;
