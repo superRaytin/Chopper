@@ -67,14 +67,14 @@
               <div id="J-topic-wrap" class="topic-wrap">
                   <% if(topics && topics.length){ %>
                   <% for(var i = 0, len = topics.length; i < len; i++){ %>
-                  <% var curTopic = topics[i], show_name = curTopic.author_nickName ? curTopic.author_nickName : curTopic.author_name %>
+                  <% var curTopic = topics[i] %>
                   <div class="topic-item">
                       <div class="topic-left">
-                          <img src="<% if(curTopic.head){ %><%= curTopic.head %><% }else{ %>/img/nopic.jpg<% } %>" class="media-object J-topic-img img50" alt="<%= show_name %>" title="<%= show_name %>">
+                          <img src="<%= curTopic.head %>" class="media-object J-topic-img img50" alt="<%= curTopic.author_nickName %>" title="<%= curTopic.author_nickName %>">
                       </div>
                       <div class="topic-body">
                           <div class="topic-content">
-                              <a href="/user/<%= curTopic.author_name %>" class="topic-user J-topic-authorName" title="<%= show_name %>"><%= show_name %></a>&nbsp;&nbsp;<span class="J-topic-content"><%= curTopic.content %></span>
+                              <a href="/user/<%= curTopic.author_name %>" class="topic-user J-topic-authorName" title="<%= curTopic.author_nickName %>"><%= curTopic.author_nickName %></a>&nbsp;&nbsp;<span class="J-topic-content"><%= curTopic.content %></span>
                           </div>
                           <div class="topic-updown clearfix">
                               <span class="pull-left topic-time J-topic-time"><%= curTopic.create_time %></span>
@@ -93,7 +93,7 @@
                   <% } %>
               </div>
               <!-- page start -->
-              <%- partial('pagination', {totalCount: totalCount, page: page}) %>
+              <%- partial('pagination', {pre: "", totalCount: totalCount, page: page}) %>
               <!-- page end -->
           </div>
           <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>

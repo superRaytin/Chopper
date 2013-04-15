@@ -1,39 +1,18 @@
 <div class="container">
       <div class="row">
           <div class="span8">
-              <% if(!locals.current_user || locals.current_user != userInfo.name){ %>
-              <div class="person-infor clearfix">
-                  <div class="clearfix hide">
-                      用户中心 > <% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %>
-                  </div>
-                  <div class="person-infor-img">
-                      <img src="<% if(userInfo.head){ %><%= userInfo.head %><% }else{ %>/img/nopic.jpg<% } %>">
-                  </div>
-                  <div class="person-infor-data">
-                      <h4><% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %></h4>
-                      <p><a href="/user/<%= userInfo.name %>">http://localhost:3000/user/<%= userInfo.name %></a></p>
-                      <p>粉丝：<strong class="fn-color-F66F6F" id="J-personInfor-fans"><%= userInfo.fans.length %></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;吐槽：<strong id="J-userInfor-topicCount"><%= userInfo.topic_count %></strong></p>
-                      <p>
-                          <input type="button" class="btn btn-primary" id="J-follow" value="<% if(followIn){ %>取消关注<% }else{ %>@ 关注<% } %>" data-user="<%= userInfo.name %>">
-                      </p>
-                      <div><%= userInfo.sign %></div>
-                  </div>
-              </div>
-              <h3 class="titleBar">TA的吐槽</h3>
-              <% }else{ %>
               <h3 class="titleBar">我的吐槽</h3>
-              <% } %>
               <div id="J-topic-wrap">
                   <% if(topics && topics.length){ %>
                   <% for(var i = 0, len = topics.length; i < len; i++){ %>
                   <% var curTopic = topics[i] %>
                   <div class="topic-item J-topicUser-<%= curTopic.author_name %>">
                       <div class="topic-left">
-                          <img src="<% if(curTopic.head){ %><%= curTopic.head %><% }else{ %>/img/nopic.jpg<% } %>" class="media-object img50">
+                          <img src="<%= curTopic.head %>" class="media-object img50" title="<%= curTopic.author_nickName %>">
                       </div>
                       <div class="topic-body">
                           <div class="topic-content">
-                              <a href="/user/<%= curTopic.author_name %>" class="topic-user J-topic-authorName"><% if(curTopic.author_nickName){ %><%= curTopic.author_nickName %><% }else{ %><%= curTopic.author_name %><% } %></a>&nbsp;&nbsp;<span class="J-topic-content"><%= curTopic.content %></span>
+                              <a href="/user/<%= curTopic.author_name %>" class="topic-user J-topic-authorName"><%= curTopic.author_nickName %></a>&nbsp;&nbsp;<span class="J-topic-content"><%= curTopic.content %></span>
                           </div>
                           <div class="topic-updown clearfix">
                               <span class="pull-left topic-time J-topic-time"><%= curTopic.create_time %></span>
@@ -50,6 +29,9 @@
                   <div class="fn-pl20 fn-pb20 fn-pt20">暂无吐槽信息。</div>
                   <% } %>
               </div>
+              <!-- page start -->
+              <%- partial('pagination', {pre: "mine", totalCount: totalCount, page: page}) %>
+              <!-- page end -->
           </div>
           <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>
       </div>

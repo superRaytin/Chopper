@@ -146,15 +146,17 @@ function avatar_save(req, res, next){
     }));
 };
 
-// 用户中心
+// 我的吐槽
 function myTopic(req, res, next){
-    var userName = req.params.name,
-        current_user = res.locals.current_user,
-        followIn = false;
+    if( !util.checkUserStatus(res, '先登录啊亲 (╯_╰)') ) return;
 
-    var ep = new EventProxy();
+    var current_user = res.locals.current_user,
+        ep = new EventProxy(),
+        page = req.query.page || 1,
+        limit = config.limit,
+        opt = {skip: (page - 1) * limit, limit: limit, sort: [['_id', 'desc']]};
 
-    ep.all('topicList', 'sidebar', 'topbar', function(topicList, sidebar, topbar){
+    ep.all('topicList', 'sidebar', 'topbar', 'totalCount', function(topicList, sidebar, topbar, totalCount){
         res.render('user/myTopic', {
             title: config.name,
             config: config,
@@ -163,20 +165,84 @@ function myTopic(req, res, next){
             users: sidebar.users,
             userInfo: sidebar.userInfo,
             usersByCount: sidebar.usersByCount,
-            followIn: followIn
+            totalCount: totalCount,
+            page: parseInt(page)
+        });
+    }).fail(next);
+
+    // 取得用户吐槽列表
+    topicProxy.getTopicList({author_name: current_user}, opt, ep.done(function(topicList){
+        // 获取当前主题的作者昵称与头像
+        ep.after('toAll', topicList.length, function(){
+            ep.emit('topicList', topicList);
+        });
+
+        topicList.forEach(function(cur, i){
+            userProxy.getOneUserInfo({_id : cur.author_id}, 'nickName head', ep.done(function(user){
+                var nickName = user.nickName;
+
+                cur.author_nickName = nickName ? nickName : user.name;
+                cur.head = user.head ? user.head : config.nopic;
+
+                ep.emit('toAll');
+            }));
+        });
+    }));
+
+    // 获取右侧资源
+    common.getSidebarNeed(res, next, {fields: 'name nickName head fans followed topic_count sign lastLogin_time'}, function(need){
+        ep.emit('sidebar', need);
+    });
+
+    // 获取顶部资源
+    common.getTopbarNeed(res, next, function(need){
+        ep.emit('topbar', need);
+    });
+
+    // 取得总页数
+    topicProxy.getTopicCount({author_name: current_user}, ep.done(function(totalCount){
+        ep.emit('totalCount', Math.ceil(totalCount / limit));
+    }));
+};
+
+// 用户中心
+function user_center(req, res, next){
+    var userName = req.params.name,
+        current_user = res.locals.current_user,
+        followIn = false;
+
+    var ep = new EventProxy(),
+        page = req.query.page || 1,
+        limit = config.limit,
+        opt = {skip: (page - 1) * limit, limit: limit, sort: [['_id', 'desc']]};
+
+    ep.all('topicList', 'sidebar', 'topbar', 'totalCount', function(topicList, sidebar, topbar, totalCount){
+        res.locals.location = 'usercenter';
+        res.render('user/usercenter', {
+            title: config.name,
+            config: config,
+            topics: topicList,
+            topInfo: topbar.topInfo,
+            users: sidebar.users,
+            userInfo: sidebar.userInfo,
+            usersByCount: sidebar.usersByCount,
+            followIn: followIn,
+            totalCount: totalCount,
+            page: parseInt(page)
         });
     }).fail(next);
 
     // 验证用户是否存在
     userProxy.getUserInfoByName(userName, 'name nickName head fans', ep.done(function(user){
         if(user){
+            // 检查登录用户是否当前用户的粉丝
             if(current_user && user.fans.length){
                 if( user.fans.contains(current_user)){
                     followIn = true;
                 }
             }
             // 取得用户吐槽列表
-            topicProxy.getTopicListByName(userName, ep.done(function(topicList){
+            topicProxy.getTopicList({author_name: userName}, opt, ep.done(function(topicList){
                 // 如果用户设置了昵称，则优先显示昵称
                 var nickName = user.nickName;
 
@@ -205,6 +271,11 @@ function myTopic(req, res, next){
     common.getTopbarNeed(res, next, function(need){
         ep.emit('topbar', need);
     });
+
+    // 取得总页数
+    topicProxy.getTopicCount({author_name: userName}, ep.done(function(totalCount){
+        ep.emit('totalCount', Math.ceil(totalCount / limit));
+    }));
 };
 
 // 关注
@@ -366,6 +437,7 @@ module.exports = {
     avatar: avatar,
     avatar_save: avatar_save,
     myTopic: myTopic,
+    user_center: user_center,
     follow: follow,
     message: message,
     message_empty: message_empty,

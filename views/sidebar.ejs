@@ -1,56 +1,47 @@
 <div class="span3 pull-right">
     <div class="inner">
+        <%
+        var myself = false, woorta = 'TA';
+        if(locals.current_user && locals.current_user == userInfo.name){
+            myself = true;
+            woorta = '我';
+        }
+        %>
         <% if(userInfo){ %>
-            <% if(locals.current_user && locals.current_user == userInfo.name){ %>
+            <% if(myself && !locals.location){ %>
             <div class="widget-list">
-                <div class="media">
-                    <a href="/avatar" class="fn-posi-re user-infor-head">
-                        <img class="media-object img-rounded" src="<% if(userInfo.head){ %><%= userInfo.head %><% }else{ %>/img/nopic.jpg<% } %>" />
-                        <span class="user-infor-replace fn-posi-ab">更换头像</span>
-                    </a>
-                    <div class="user-infor-sign">
-                        <h4 class="user-infor-name">
-                            <span class="pull-right sidebar-message"><a href="/message" title="消息中心"><i class="icon-envelope fn-mt3"></i></a></span>
-                            <a href="/user/<%= userInfo.name %>"><i class="theCurrentName"><% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %></i></a>
-                        </h4>
-                        <p class="theCurrentSign"><%= userInfo.sign %></p>
-                        <p>粉丝：<span class="badge badge-important"><%= userInfo.fans.length %></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;吐槽：<a href="/user/<%= userInfo.name %>"><span class="badge badge-info" id="J-userInfor-topicCount"><%= userInfo.topic_count %></span></a></p>
-                        <p>金币：<span class="badge">0</span></p>
+                    <div class="media">
+                        <a href="/avatar" class="fn-posi-re user-infor-head">
+                            <img class="media-object img-rounded" src="<% if(userInfo.head){ %><%= userInfo.head %><% }else{ %>/img/nopic.jpg<% } %>" />
+                            <span class="user-infor-replace fn-posi-ab">更换头像</span>
+                        </a>
+                        <div class="user-infor-sign">
+                            <h4 class="user-infor-name">
+                                <span class="pull-right sidebar-message" title="消息中心"><a href="/message"><i class="icon-envelope fn-mt3"></i></a></span>
+                                <a href="/user/<%= userInfo.name %>"><i class="theCurrentName"><% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %></i></a>
+                            </h4>
+                            <p class="theCurrentSign"><%= userInfo.sign %></p>
+                            <p>粉丝：<span class="badge badge-important"><%= userInfo.fans.length %></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;吐槽：<a href="/mine"><span class="badge badge-info" id="J-userInfor-topicCount"><%= userInfo.topic_count %></span></a></p>
+                            <p>金币：<span class="badge">0</span></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="widget-list">
-                <h5 class="widget-head"><i class="icon-heart"></i> 我关注的人<span>(<%= userInfo.followed.length %>)</span></h5>
-                <% if(userInfo.followed && userInfo.followed.length){ %>
-                <div class="widget-body list-users">
-                    <ul class="clearfix">
-                        <% for(var j = 0, len = userInfo.followedInfo.length; j < len; j++){ %>
-                        <% var current = userInfo.followedInfo[j] %>
-                        <li>
-                            <a href='/user/<%= current.name %>' title="<% if(current.nickName){ %><%= current.nickName %><% }else{ %><%= current.name %><% } %>"><img class="media-object img-rounded" src="<% if(current.head){ %><%= current.head %><% }else{ %>/img/nopic.jpg<% } %>" /></a>
-                        </li>
-                        <% } %>
-                    </ul>
-                </div>
-                <% } %>
-            </div>
-            <% }else{ %>
-            <div class="widget-list">
-                <h5 class="widget-head"><i class="icon-heart"></i> TA关注的人<span>(<%= userInfo.followed.length %>)</span></h5>
-                <% if(userInfo.followed && userInfo.followed.length){ %>
-                <div class="widget-body list-users">
-                    <ul class="clearfix">
-                        <% for(var j = 0, len = userInfo.followedInfo.length; j < len; j++){ %>
-                        <% var current = userInfo.followedInfo[j] %>
-                        <li>
-                            <a href='/user/<%= current.name %>' title="<% if(current.nickName){ %><%= current.nickName %><% }else{ %><%= current.name %><% } %>"><img class="media-object img-rounded" src="<% if(current.head){ %><%= current.head %><% }else{ %>/img/nopic.jpg<% } %>" /></a>
-                        </li>
-                        <% } %>
-                    </ul>
-                </div>
-                <% } %>
+            <% } %>
+        <div class="widget-list">
+            <h5 class="widget-head"><i class="icon-heart"></i> <%=woorta%>关注的人<span>(<%= userInfo.followed.length %>)</span></h5>
+            <% if(userInfo.followed && userInfo.followed.length){ %>
+            <div class="widget-body list-users">
+                <ul class="clearfix">
+                    <% for(var j = 0, len = userInfo.followedInfo.length; j < len; j++){ %>
+                    <% var current = userInfo.followedInfo[j] %>
+                    <li>
+                        <a href='/user/<%= current.name %>' title="<% if(current.nickName){ %><%= current.nickName %><% }else{ %><%= current.name %><% } %>"><img class="media-object img-rounded" src="<% if(current.head){ %><%= current.head %><% }else{ %>/img/nopic.jpg<% } %>" /></a>
+                    </li>
+                    <% } %>
+                </ul>
             </div>
             <% } %>
+        </div>
         <% }else{ %>
         <div class="widget-list sidebar-login">
             <p>与其在别处仰望，不如在这里吐槽 <(￣︶￣)><p>

@@ -64,23 +64,22 @@ exports.index = function(req, res, next){
     ep.fail(next);
 
     topicProxy.getTopicList('', opt, ep.done(function(topicList){
-        var topicLen = topicList.length, hash = {}, headHash = {};
+        var topicLen = topicList.length;
 
         // 如果用户设置了昵称，则优先显示昵称
         // 将昵称与头像附加到主题对象
         ep.after('toAll', topicLen, function(){
-            topicList.forEach(function(cur, i){
-                hash[cur.author_id] && ( cur.author_nickName = hash[cur.author_id] );
-                headHash[cur.author_id] && ( cur.head = headHash[cur.author_id] );
-            });
             ep.emit('topicList', topicList);
         });
 
         // 获取当前主题的作者昵称与头像
         topicList.forEach(function(cur, i){
-            userProxy.getOneUserInfo({_id : cur.author_id}, '_id nickName head', ep.done(function(user){
-                hash[user._id] = user.nickName;
-                headHash[user._id] = user.head;
+            userProxy.getOneUserInfo({_id : cur.author_id}, 'nickName head', ep.done(function(user){
+                var nickName = user.nickName;
+
+                cur.author_nickName = nickName ? nickName : user.name;
+                cur.head = user.head ? user.head : config.nopic;
+
                 ep.emit('toAll');
             }));
         });
