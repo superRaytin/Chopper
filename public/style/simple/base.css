@@ -16,6 +16,12 @@ hr{
 .fn-pb20{
     padding-bottom: 20px;
 }
+.fn-pt20{
+    padding-top: 20px;
+}
+.fn-mt3{
+    margin-top: 3px;
+}
 .fn-mt10{
     margin-top: 10px;
 }
@@ -456,4 +462,29 @@ hr{
     font-size: 12px;
     display: inline-block;
 }
+.doThisEmpty{
+    font-weight: normal;
+    font-size: 12px;
+    display: inline-block;
+    padding: 0 15px;
+    cursor: pointer;
+}
+.doThisEmpty:hover{
+    background: #eee;
+}
 
+/* 侧边栏 */
+.sidebar-message{
+    display: inline-block;
+    padding: 0 8px;
+    border:1px solid rgba(255, 255, 255, 0);
+    cursor: pointer;
+}
+.sidebar-message:hover{
+    background: #eee;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+.sidebar-newmessage{
+    background: #EED29B;
+}

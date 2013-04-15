@@ -6,6 +6,10 @@
 define(['jquery', 'alertify'], function($, alertify){
     var _util = {
         doAsync : function(url, type, params, callback){
+            if(typeof params == 'function'){
+                callback = params;
+                params = {};
+            }
             $.ajax({
                 url: url,
                 data: params,
@@ -24,6 +28,7 @@ define(['jquery', 'alertify'], function($, alertify){
         }
     };
 
+    // 首页
     var indexObj = {
         fabu: function(){
             var btn = $('#J-fabu'),
@@ -182,6 +187,7 @@ define(['jquery', 'alertify'], function($, alertify){
         }
     };
 
+    // 我的吐槽
     var myTopic = {
         follow: function(){
             var btn = $('#J-follow'),
@@ -217,10 +223,37 @@ define(['jquery', 'alertify'], function($, alertify){
         }
     };
 
+    // 消息中心
+    var message = {
+        areYouSure: function(){
+            var btn = $('#J-doThisEmpty');
+
+            btn.on('click', function(){
+                alertify.confirm('消息超过20条时，系统将自动删除最早的10条，还是确定要清空吗？', function(e){
+                    if(e){
+                        message.empty();
+                    }
+                });
+            });
+        },
+        empty: function(){
+            var msgbody = $('#J-message-body');
+            _util.doAsync('/message_empty', 'post', function(res){
+                msgbody.empty();
+                msgbody.append('<div class="message-item">没有新的消息。</div>');
+                alertify.success('已清空消息中心。');
+            });
+        },
+        init: function(){
+            this.areYouSure();
+        }
+    };
+
     var exports = {
         indexObj: indexObj,
         account: account,
-        myTopic: myTopic
+        myTopic: myTopic,
+        message: message
     };
 
     return exports;

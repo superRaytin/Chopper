@@ -1,8 +1,13 @@
 <div class="container">
     <div class="row">
         <div class="span8">
-            <h3 class="titleBar">收件箱 (<% if(message){ %><%= message.length %><% }else{ %>0<% } %>)</h3>
-            <div class="message-body">
+            <h3 class="titleBar">
+                <% if(message){ %>
+                <span class="pull-right doThisEmpty" id="J-doThisEmpty" title="消息超过20条时，系统将自动删除最早的10条"><i class="icon-trash"></i> 清空</span>
+                <% } %>
+                消息中心 (<% if(message){ %><%= message.length %><% }else{ %>0<% } %>)
+            </h3>
+            <div class="message-body" id="J-message-body">
                 <% if(message){ %>
                     <% for(var i = message.length - 1; i >= 0; i--){ %>
                         <%
@@ -13,29 +18,27 @@
                             <span class="topic-time"><i class="icon-envelope"></i> <%=cur.time%></span><br>
                             你的魅力破表，<a href="/user/<%=cur.name%>" title="<%=cur.nickName%>"><span class="label label-info"><%=cur.nickName%></span></a> 关注了你
                         </div>
-                        <%}else if(type == 'fansOut'){%>
+                        <% }else if(type == 'fansOut'){ %>
                         <div class="message-item<% if(cur.readed === false){ %> message-item-new<%}%>">
                             <span class="topic-time"><i class="icon-envelope"></i> <%=cur.time%></span><br>
                             <a href="/user/<%=cur.name%>" title="<%=cur.nickName%>"><span class="label label-info"><%=cur.nickName%></span></a> 偷偷地取消了对你的关注
                         </div>
-                        <%}else if(type == 'up'){%>
+                        <% }else if(type == 'up'){ %>
                         <div class="message-item<% if(cur.readed === false){ %> message-item-new<%}%>">
                             <span class="topic-time"><i class="icon-envelope"></i> <%=cur.time%></span><br>
                             你的吐槽 <span class="message-topic"><%=cur.topic%></span> 太精彩了，被 <a href="/user/<%=cur.name%>"><span class="label label-info"><%=cur.nickName%></span></a> 激动地赞了一下
                         </div>
-                        <%
-                            }else if(type == 'down'){
-                        %>
+                        <% }else if(type == 'down'){ %>
                         <div class="message-item">
                             <span class="topic-time"><i class="icon-envelope"></i> <%=cur.time%></span><br>
                             你的吐槽 <span class="message-topic"><%=cur.topic%></span> 引起 <a href="/user/<%=cur.name%>"><span class="label label-info"><%=cur.nickName%></span></a> 不爽，TA抬起香港脚一顿狂踩
                         </div>
-                        <%}else if(type == 'comment'){%>
+                        <% }else if(type == 'comment'){ %>
                         <div class="message-item">
                             <span class="topic-time"><i class="icon-envelope"></i> <%=cur.time%></span><br>
                             你的吐槽 <span class="message-topic"><%=cur.topic%></span> 被 <a href="/user/<%=cur.name%>"><span class="label label-info"><%=cur.nickName%></span></a> 点评了，快去看看
                         </div>
-                        <%}%>
+                        <% } %>
                     <% } %>
                 <% }else{ %>
                     <div class="message-item">
@@ -47,3 +50,10 @@
         <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>
     </div>
 </div>
+<script type="text/javascript">
+    duckJS.use(['jquery', 'common'], function($, common){
+        $(function(){
+            common.message.init();
+        });
+    });
+</script>

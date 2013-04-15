@@ -304,20 +304,35 @@ function message(req, res, next){
         // 加上用户已读标记
         user.newMessage = 0;
         message.forEach(function(item){
-            // 为什么readed不能更新为true??待解决！
             item.readed = true;
         });
+        user.markModified('message');
+
         // 超过20条消息则删除旧的10条
         if(message.length > 20){
             message.splice(0, 10);
-        }else{
-            // 纠结了一下午无法更新message的问题
-            // 加下面这句无意义的代码竟然成更新成功！不知所谓中
-            user.message.splice(0, 0);
         };
 
         user.save(ep.done(function(){
             ep.emit('message', clone );
+        }));
+    }));
+};
+// 清空消息中心
+function message_empty(req, res, next){
+    if( !util.checkUserStatusAsync(res, '先登录啊亲 (╯_╰)') ) return;
+
+    var current_user = res.locals.current_user,
+        ep = new EventProxy();
+
+    ep.fail(next);
+
+    userProxy.getUserInfoByName(current_user, 'message', ep.done(function(user){
+        user.message = [];
+        user.save(ep.done(function(){
+            res.json({
+                success: true
+            });
         }));
     }));
 };
@@ -353,5 +368,6 @@ module.exports = {
     myTopic: myTopic,
     follow: follow,
     message: message,
+    message_empty: message_empty,
     list: list
 };

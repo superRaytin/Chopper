@@ -9,7 +9,10 @@
                         <span class="user-infor-replace fn-posi-ab">更换头像</span>
                     </a>
                     <div class="user-infor-sign">
-                        <h4 class="user-infor-name"><a href="/user/<%= userInfo.name %>"><i class="theCurrentName"><% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %></i></a></h4>
+                        <h4 class="user-infor-name">
+                            <span class="pull-right sidebar-message"><a href="/message" title="消息中心"><i class="icon-envelope fn-mt3"></i></a></span>
+                            <a href="/user/<%= userInfo.name %>"><i class="theCurrentName"><% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %></i></a>
+                        </h4>
                         <p class="theCurrentSign"><%= userInfo.sign %></p>
                         <p>粉丝：<span class="badge badge-important"><%= userInfo.fans.length %></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;吐槽：<a href="/user/<%= userInfo.name %>"><span class="badge badge-info" id="J-userInfor-topicCount"><%= userInfo.topic_count %></span></a></p>
                         <p>金币：<span class="badge">0</span></p>

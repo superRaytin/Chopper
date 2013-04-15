@@ -34,10 +34,15 @@ function getTopicListByName(name, callback){
  * Callback:
  * - err, 数据库异常
  * - count, 话题数
+ * @param {Object} condition 条件
  * @param {Function} callback 回调函数
  */
-function getTopicCount(callback){
-    modelTopic.count({}, callback);
+function getTopicCount(condition, callback){
+    if(typeof condition == 'function'){
+        callback = condition;
+        condition = {};
+    }
+    modelTopic.count(condition, callback);
 };
 
 module.exports = {
