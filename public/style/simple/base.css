@@ -111,7 +111,7 @@ hr{
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#049cdb', endColorstr='#3a87ad', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#333333', endColorstr='#666666', GradientType=0);
     *zoom: 1;
     -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
     -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
@@ -361,6 +361,8 @@ hr{
     position: relative;
     float: left;
     padding-left: 20px;
+    width: 50px\9;
+    height: 50px\9;
 }
 
 .topic-content{
@@ -421,6 +423,8 @@ hr{
     border: 1px solid #ddd;
     padding: 4px;
     margin-right: 20px;
+    width: 180px\9;
+    height: 180px\9;
 }
 .person-infor-img img{
     width: 180px;

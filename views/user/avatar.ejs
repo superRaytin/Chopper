@@ -31,7 +31,7 @@ D.use(['jquery', 'alertify'], function($, alertify){
         uploadNotice = function(rec){
             alertify.alert(rec.data);
             if(rec.success){
-                $('.previewImg').attr('src', rec.img +'?'+ new Date().getTime());
+                $('.previewImg, #J-user-infor-head').attr('src', rec.img +'?'+ new Date().getTime());
             }
         }
     });

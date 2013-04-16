@@ -21,7 +21,7 @@ app.configure(function(){
   app.use(flash());
   app.use(express.favicon());
   app.use(express.logger('dev'));
-  app.use(express.bodyParser({uploadDir: './tmp'}));
+  app.use(express.bodyParser({uploadDir: config.uploadTempDir}));
   app.use(express.methodOverride());
   app.use(express.cookieParser(config.cookieSecret));
   app.use(express.session({

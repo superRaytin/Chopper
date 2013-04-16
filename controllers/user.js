@@ -127,10 +127,12 @@ function avatar_save(req, res, next){
     if(!mat){
         msg = '（︶︿︶） 图片格式不对吧亲~';
         ep.emit('re', {success: false, data: msg});
+        fs.unlink(tmp);
         return;
     }else if(pic.length > 204800){
         msg = '（︶︿︶） 图片太大了，服务器表示鸭梨好大';
         ep.emit('re', {success: false, data: msg});
+        fs.unlink(tmp);
         return;
     }
     suffix = mat[0] === 'jpeg' ? 'jpg' : mat[0] === 'gif' ? 'gif' : 'png';
@@ -142,7 +144,7 @@ function avatar_save(req, res, next){
                 data: '<(￣︶￣)> 已成功上传真像。',
                 img: target
             });
-        }))
+        }));
     }));
 };
 

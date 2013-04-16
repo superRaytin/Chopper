@@ -58,17 +58,25 @@
     </div>
 </div>
 <!-- navbar end -->
-<section class="mod-topinfo hide">
+<div class="mod-topinfo hide">
     <div class="container">
         <h1 class="site-name"><%= config.name %></h1>
         <p class="fn-mt20"><%= config.description %></p>
     </div>
-</section>
+</div>
+<!--[if lt IE 9]>
+<div class="container alert alert-block">
+    <button data-dismiss="alert" class="close" type="button">×</button>
+    <h4>你Out啦！</h4>
+    还在使用 <strong>老掉牙</strong> 的 IE 吗，为了避免你在使用过程中，<b>突然发生</b> 诸如 “凤姐向你表白”、“贞子爬满屏幕” 等等可能的灵异事件<br>
+    请换用 <strong>Firefox</strong> 或 <strong>chrome</strong> 等现代浏览器，感受更畅快的吐槽体验。此通知仅出现一次，一次一年。<br>
+</div>
+<![endif]-->
 <%- body %>
-<footer class="container fn-mt10 fn-pb20">
+<div class="container fn-mt10 fn-pb20">
     <p>&copy; <%= config.name %> 2013 <a href="https://github.com/superRaytin/nodeApp/tree/develop" target="_blank">Github</a></p>
 
     <p>本站前端基于<a href="https://github.com/superRaytin/duckJS" target="_blank">duckJS</a>+<a href="http://twitter.github.io/bootstrap/" target="_blank">bootstrap</a>&nbsp;&nbsp;&nbsp;&nbsp;后端基于<a href="http://nodejs.org/" target="_blank">Nodejs</a>+Express+MongoDB搭建</p>
-</footer>
+</div>
 </body>
 </html>

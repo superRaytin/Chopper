@@ -22,8 +22,8 @@ module.exports = function(app){
     app.get('/logout', sign.logout);
 
     // 话题首页、发表话题
-    app.get('/topic', topic.index);
-    app.post('/topic', topic.addTopic);
+    //app.get('/topic', topic.index);
+    //app.post('/topic', topic.addTopic);
     app.post('/newTopic', topic.newTopic);
 
     // 个人中心

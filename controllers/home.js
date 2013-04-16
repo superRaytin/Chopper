@@ -12,6 +12,7 @@ var proxy = require("../proxy"),
     EventProxy = require("eventproxy");
 
 var fs = require('fs');
+var crypto = require('crypto');
 
 exports.index = function(req, res, next){
     /*console.log(req.user); //无效
@@ -39,6 +40,24 @@ exports.index = function(req, res, next){
     };
      console.log(req.query);
     */
+    var cipher = crypto.createCipher('aes-256-cbc', config.key);
+    console.log(cipher);
+    var cryptoed = cipher.update('xiao1989jie0106abcdefg', 'binary', 'hex');
+    console.log( cryptoed );
+    var miied = cryptoed + cipher.final('hex');
+    console.log( miied );
+    var decipher = crypto.createDecipher('aes-256-cbc', config.key);
+    console.log(decipher);
+    var deciphered = decipher.update(miied, 'hex', 'utf8');
+    console.log(deciphered);
+    console.log( decipher.final('utf8') )
+
+
+    /*console.log(cipher);
+    console.log( cipher.update('lucassdddddddddsfsdafasfadsfdasf', 'binary', 'hex') );
+    //console.log( cipher.update('hankas', 'binary', 'hex') );
+    console.log( cipher.final('hex') );*/
+
     console.log(req.session);
     var ep = new EventProxy(),
         page = req.query.page || 1,
@@ -75,10 +94,11 @@ exports.index = function(req, res, next){
         // 获取当前主题的作者昵称与头像
         topicList.forEach(function(cur, i){
             userProxy.getOneUserInfo({_id : cur.author_id}, 'name nickName head', ep.done(function(user){
-                var nickName = user.nickName;
+                var nickName = user.nickName, time = cur.create_time;
 
                 cur.author_nickName = nickName ? nickName : user.name;
                 cur.head = user.head ? user.head : config.nopic;
+                cur.create_time = new Date(time).format('MM月dd日 hh:mm');
 
                 ep.emit('toAll');
             }));

@@ -11,8 +11,10 @@
      db: 'mongodb://127.0.0.1/chihuohuo',
      port: 3000,
      uploadDir: './public/upload/', // 图片上传目录
+     uploadTempDir: './tmp', // 临时文件存放目录
      nopic: '/img/nopic.jpg', // 用户无头像图片
      limit: 10, // 每页数量
+     key: 'r9g4w3a2', // 密钥
      cookieSecret: 'chihuohuo',
      sessionSecret: 'chihuohuo'
  };

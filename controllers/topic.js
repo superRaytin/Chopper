@@ -13,13 +13,15 @@ var proxy = require('../proxy'),
 
 // 发表话题（异步）
 function newTopic(req, res, next){
+    if( !util.checkUserStatusAsync(res, '先登录啊亲 (╯_╰)') ) return;
+
     //var session = req.session;
     var currentUser = res.locals.current_user,
         content = req.body['content'],
         desc;
 
-    if(!currentUser || content == ''){
-        desc = !currentUser ? '请先登录，才能发表话题。' : '话题内容不能为空。';
+    if(content == ''){
+        desc = '话题内容不能为空。';
         res.json({
             success: false,
             data: desc
@@ -32,9 +34,10 @@ function newTopic(req, res, next){
 
     newTopic.content = content;
     newTopic.author_name = currentUser;
-    newTopic.create_time = new Date().format('MM月dd日 hh:mm');
+    newTopic.create_time = new Date().format('yyyy/MM/dd hh:mm:ss');
 
     ep.all('getUserId', function(user){
+        newTopic.create_time = new Date(newTopic.create_time).format('MM月dd日 hh:mm');
         user.topic_count += 1;
         user.save();
         res.json({
@@ -48,8 +51,9 @@ function newTopic(req, res, next){
 
     userProxy.getOneUserInfo({name: currentUser}, '_id name nickName head topic_count', ep.done(function(user){
         newTopic.author_id = user._id;
-        newTopic.save();
-        ep.emit('getUserId', user);
+        newTopic.save(ep.done(function(){
+            ep.emit('getUserId', user);
+        }));
     }));
 };
 
@@ -97,7 +101,7 @@ function addTopic(req, res, next){
 
     newTopic.content = content;
     newTopic.author_name = currentUser;
-    newTopic.create_time = util.formatDate(new Date());
+    newTopic.create_time = new Date().format('yyyy/MM/dd hh:mm:ss');
 
     ep.all('getUserId', function(user){
         user.topic_count += 1;
@@ -113,7 +117,7 @@ function addTopic(req, res, next){
 };
 
 module.exports = {
-    newTopic: newTopic,
-    index: index,
-    addTopic: addTopic
+    //addTopic: addTopic,
+    //index: index,
+    newTopic: newTopic
 };
