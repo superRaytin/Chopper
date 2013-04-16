@@ -14,6 +14,7 @@ var userSchema = new Schema({
     email: {type: String},
     sign: {type: String},
     head: {type: String},
+    reg_time: {type: String},
     lastLogin_time: {type: String, default: '0'}, // 最后登录时间
 
     topic_count: {type: Number, default: 0}, // 吐槽数

@@ -34,11 +34,11 @@
                   <% var curTopic = topics[i] %>
                   <div class="topic-item J-topicUser-<%= curTopic.author_name %>">
                       <div class="topic-left">
-                          <img src="<% if(curTopic.head){ %><%= curTopic.head %><% }else{ %>/img/nopic.jpg<% } %>" class="media-object img50">
+                          <img src="<%= curTopic.head %>" class="media-object img50" title="<%= curTopic.author_nickName %>">
                       </div>
                       <div class="topic-body">
                           <div class="topic-content">
-                              <a href="/user/<%= curTopic.author_name %>" class="topic-user J-topic-authorName"><% if(curTopic.author_nickName){ %><%= curTopic.author_nickName %><% }else{ %><%= curTopic.author_name %><% } %></a>&nbsp;&nbsp;<span class="J-topic-content"><%= curTopic.content %></span>
+                              <a href="/user/<%= curTopic.author_name %>" class="topic-user J-topic-authorName"><%= curTopic.author_nickName %></a>&nbsp;&nbsp;<span class="J-topic-content"><%= curTopic.content %></span>
                           </div>
                           <div class="topic-updown clearfix">
                               <span class="pull-left topic-time J-topic-time"><%= curTopic.create_time %></span>

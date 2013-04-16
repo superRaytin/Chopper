@@ -3,6 +3,8 @@
  * User: raytin
  * Date: 13-3-28
  */
+var crypto = require('crypto'),
+    config = require('./config').config;
 
 /**
  * 日期时间格式化
@@ -83,7 +85,28 @@ function checkUserStatusAsync(res, msg){
     return true;
 };
 
+/**
+ * 加密解密
+ * @param {String} will 待加密或解密的串
+ */
+function encrypt(will){
+    var cipher = crypto.createCipher('aes-256-cbc', config.key),
+        ciphered = cipher.update(will, 'binary', 'hex'),
+        encrypted = ciphered + cipher.final('hex');
+
+    return encrypted;
+};
+function decrypt(will){
+    var decipher = crypto.createDecipher('aes-256-cbc', config.key),
+        deciphered = decipher.update(will, 'hex', 'utf8'),
+        decrypted = deciphered + decipher.final('utf8');
+
+    return decrypted;
+}
+
 module.exports = {
     checkUserStatus: checkUserStatus,
-    checkUserStatusAsync: checkUserStatusAsync
+    checkUserStatusAsync: checkUserStatusAsync,
+    encrypt: encrypt,
+    decrypt: decrypt
 };

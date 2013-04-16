@@ -15,15 +15,10 @@ var fs = require('fs');
 var crypto = require('crypto');
 
 exports.index = function(req, res, next){
-    /*console.log(req.user); //无效
+    /*
     //console.log(req.params);
-    //console.log(req.body);
-    //var ab = 8;
-    //req.flash('info', 'you have %s items in yours', ab);
     //req.session.info = 'ubssss';
     //req.session.handa = 'dddyyy';
-    //var info = req.flash( 'info');
-    //console.log(info);
     //req.session.handa = null;
     fs.readdir('./public/csss', function(err, files){
         if(err) return console.log(999999999999999);
@@ -39,25 +34,14 @@ exports.index = function(req, res, next){
         return '['+str+']';
     };
      console.log(req.query);
-    */
+
     var cipher = crypto.createCipher('aes-256-cbc', config.key);
-    console.log(cipher);
     var cryptoed = cipher.update('xiao1989jie0106abcdefg', 'binary', 'hex');
-    console.log( cryptoed );
-    var miied = cryptoed + cipher.final('hex');
-    console.log( miied );
+    var encrypted = cryptoed + cipher.final('hex');
     var decipher = crypto.createDecipher('aes-256-cbc', config.key);
-    console.log(decipher);
-    var deciphered = decipher.update(miied, 'hex', 'utf8');
-    console.log(deciphered);
-    console.log( decipher.final('utf8') )
-
-
-    /*console.log(cipher);
-    console.log( cipher.update('lucassdddddddddsfsdafasfadsfdasf', 'binary', 'hex') );
-    //console.log( cipher.update('hankas', 'binary', 'hex') );
-    console.log( cipher.final('hex') );*/
-
+    var deciphered = decipher.update(encrypted, 'hex', 'utf8');
+    console.log( deciphered + decipher.final('utf8') )
+     */
     console.log(req.session);
     var ep = new EventProxy(),
         page = req.query.page || 1,

@@ -28,7 +28,7 @@ exports.reg = function(req, res){
 exports.doReg = function(req, res, next){
     //console.log(req.body);
     var error = [],
-        userName = req.body['email'],
+        userName = req.body['username'],
         passWord = req.body['password'],
         confirmPassWord = req.body['confirmPassword'];
 
@@ -70,7 +70,8 @@ exports.doReg = function(req, res, next){
             else{
                 var userModel = new models.User();
                 userModel.name = userName;
-                userModel.pass = passWord;
+                userModel.pass = util.encrypt(passWord);
+                userModel.reg_time = new Date().format('yyyy/MM/dd hh:mm:ss');
                 userModel.save(function(err){
                     if(err){
                         return next(err);
@@ -113,7 +114,7 @@ exports.login = function(req, res){
 // 处理用户登录
 exports.doLogin = function(req, res, next){
     var error = [],
-        userName = req.body['email'],
+        userName = req.body['username'],
         passWord = req.body['password'];
 
     if(userName === ''){
@@ -141,7 +142,7 @@ exports.doLogin = function(req, res, next){
             }
             if(user){
                 // 开始校验账户密码
-                if(passWord === user.pass){
+                if(util.encrypt(passWord) === user.pass){
                     // 登录成功
                     req.session.user = userName;
                     return res.redirect('/');

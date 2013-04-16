@@ -36,6 +36,17 @@
           margin-bottom: 15px;
           padding: 7px 9px;
       }
+      .back{
+          max-width: 300px;
+          margin: 0px auto;
+          text-align: center;
+      }
+      .back-to{
+          color: #333;
+          font-size: 14px;
+          padding: 8px 10px;
+          background: #eee;
+      }
     </style>
 </head>
 <body>
@@ -52,16 +63,38 @@
     </div>
     <% } %>
     <div class="container fn-mt10">
-        <form class="form-signin" method="post">
+        <form id="J-logForm" class="form-signin" method="post">
             <h2 class="form-signin-heading">欢迎回家。</h2>
-            <input type="text" class="input-block-level" name="email" placeholder="用户名">
-            <input type="password" class="input-block-level" name="password" placeholder="密码">
+            <input id="J-username" type="text" class="input-block-level" name="username" placeholder="用户名">
+            <input id="J-password" type="password" class="input-block-level" name="password" placeholder="密码">
             <label class="checkbox">
                 <input type="checkbox" value="remember-me"> 记住我
             </label>
             <button class="btn btn-large btn-primary" type="submit">登 录</button>
             <input class="btn btn-large" type="button" value='注册一个账号' onclick="location.href='/reg'">
         </form>
+        <div class="back">
+            <a class="back-to" href="/"><i class="icon-home"></i> 首页</a>
+        </div>
     </div>
 </body>
+  <script type="text/javascript">
+      var get = function(id){ return document.getElementById(id) };
+      var form = get('J-logForm'),
+              username = get('J-username'),
+              pass = get('J-password');
+
+      form.onsubmit = function(){
+          if(username.value == ''){
+              alert('用户名拿来！');
+              username.focus();
+              return false;
+          };
+          if(pass.value == ''){
+              alert('密码在哪？');
+              pass.focus();
+              return false;
+          }
+      };
+  </script>
 </html>

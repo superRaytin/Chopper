@@ -85,11 +85,11 @@ function pass_save(req, res, next){
             success: true,
             data: 'ok'
         };
-        if(req.body.pass !== user.pass){
+        if(util.encrypt(req.body.pass) !== user.pass){
             param.data = 'no';
             res.json(param);
         }else{
-            userProxy.updateUserInfoByName(username, {pass: req.body.newPass}, ep.done(function(){
+            userProxy.updateUserInfoByName(username, {pass: util.encrypt(req.body.newPass)}, ep.done(function(){
                 res.json(param);
             }));
         }
@@ -179,12 +179,13 @@ function myTopic(req, res, next){
             ep.emit('topicList', topicList);
         });
 
-        topicList.forEach(function(cur, i){
-            userProxy.getOneUserInfo({_id : cur.author_id}, 'nickName head', ep.done(function(user){
-                var nickName = user.nickName;
+        topicList.forEach(function(cur){
+            userProxy.getOneUserInfo({_id : cur.author_id}, 'name nickName head', ep.done(function(user){
+                var nickName = user.nickName, time = cur.create_time;
 
                 cur.author_nickName = nickName ? nickName : user.name;
                 cur.head = user.head ? user.head : config.nopic;
+                cur.create_time = new Date(time).format('MM月dd日 hh:mm');
 
                 ep.emit('toAll');
             }));
@@ -249,8 +250,9 @@ function user_center(req, res, next){
                 var nickName = user.nickName;
 
                 topicList.forEach(function(cur, i){
-                    cur.author_nickName = nickName;
-                    cur.head = user.head;
+                    cur.author_nickName = nickName ? nickName : user.name;
+                    cur.head = user.head ? user.head : config.nopic;
+                    cur.create_time = new Date(cur.create_time).format('MM月dd日 hh:mm');
                 });
 
                 ep.emit('topicList', topicList);
