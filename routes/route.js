@@ -7,6 +7,7 @@ var controllers = require('../controllers'),
     sign = controllers.sign,
     user = controllers.user,
     topic = controllers.topic,
+    message = controllers.message,
     home = controllers.home;
 
 module.exports = function(app){
@@ -21,26 +22,26 @@ module.exports = function(app){
     app.post('/login', sign.doLogin);
     app.get('/logout', sign.logout);
 
-    // 话题首页、发表话题
+    // 发表话题 | 我的吐槽
     //app.get('/topic', topic.index);
     //app.post('/topic', topic.addTopic);
-    app.post('/newTopic', topic.newTopic);
+    app.post('/newTopic.json', topic.newTopic);
+    app.get('/mine', topic.myTopic);
 
     // 个人中心
     app.get('/account', user.account);
     app.post('/account', user.account_save);
     app.get('/pass', user.pass);
     app.post('/pass', user.pass_save);
-    app.get('/mine', user.myTopic);
     app.get('/user/:name', user.user_center);
     app.get('/avatar', user.avatar);
     app.post('/avatar', user.avatar_save);
-    app.post('/follow', user.follow);
+    app.post('/follow.json', user.follow);
 
-    app.get('/message', user.message);
-    app.post('/message_empty', user.message_empty);
+    // 消息中心
+    app.get('/message', message.page);
+    app.post('/message_empty', message.message_empty);
 
     // test
     app.get('/test', home.test);
-    app.get('/getUserList.json', home.ajaxTest);
 };

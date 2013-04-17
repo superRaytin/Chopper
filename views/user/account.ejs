@@ -11,7 +11,7 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label for="J-nickName" class="control-label">昵称：</label>
+                        <label for="J-nickName" class="control-label">花名：</label>
                         <div class="controls">
                             <input type="text" id="J-nickName" name="nickName" value="<% if(userInfo.nickName){ %><%= userInfo.nickName %><% } %>">
                         </div>
@@ -29,6 +29,7 @@
                             <textarea id="J-sign" rows="3" name="sign"><% if(userInfo.sign){ %><%= userInfo.sign %><% } %></textarea>
                         </div>
                     </div>
+                    <!--
                     <div class="control-group">
                         <label for="J-domain" class="control-label">个性主页：</label>
                         <div class="controls">
@@ -39,6 +40,7 @@
                             <span class="help-inline"><i class="icon-exclamation-sign"></i>按照惯例，设置之后不可更改</span>
                         </div>
                     </div>
+                    -->
                 </form>
                 <div class="form-actions">
                     <button id="J-save-account" class="btn btn-large btn-primary" type="button">保 存</button>

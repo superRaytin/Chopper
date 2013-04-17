@@ -45,6 +45,10 @@ function accountPage(req, res, next, settings){
 function account(req, res, next){
     accountPage(req, res, next, {page: 'user/account', title: '资料设置', fields: 'name nickName head follower followed topic_count sign lastLogin_time email'});
 };
+// 修改密码
+function pass(req, res, next){
+    accountPage(req, res, next, {page: 'user/pass', title: '修改密码', fields: 'name nickName head follower followed topic_count sign lastLogin_time email'});
+};
 
 // 保存资料
 function account_save(req, res, next){
@@ -54,7 +58,7 @@ function account_save(req, res, next){
         ep = new EventProxy();
 
     // 删除时间戳
-    delete req.body.random;
+    if(req.body.random) delete req.body.random;
 
     ep.all('updateUserInfo', 'getUserInfo', function(update, user){
         res.json({
@@ -63,15 +67,20 @@ function account_save(req, res, next){
         });
     }).fail(next);
 
-    userProxy.updateUserInfoByName(username, req.body, ep.done('updateUserInfo'));
-    userProxy.getUserInfoByName(username, 'sign nickName', ep.done('getUserInfo'));
+    userProxy.getUserListBy({nickName: req.body.nickName}, 'name nickName', {}, ep.done(function(user){
+        if(user.length > 1 || (user.length == 1 && user[0].name != username)){
+            return res.json({
+                success: false,
+                data: '(╯_╰) 【'+req.body.nickName+'】坑已被占，换一个'
+            });
+        }
+        userProxy.updateUserInfoByName(username, req.body, ep.done('updateUserInfo'));
+        userProxy.getUserInfoByName(username, 'sign nickName', ep.done('getUserInfo'));
+    }));
 
 };
 
-//修改密码
-function pass(req, res, next){
-    accountPage(req, res, next, {page: 'user/pass', title: '修改密码', fields: 'name nickName head follower followed topic_count sign lastLogin_time email'});
-};
+// 修改密码前端接口
 function pass_save(req, res, next){
     if( !util.checkUserStatusAsync(res, '先登录啊亲 (╯_╰)') ) return;
 
@@ -154,11 +163,12 @@ function myTopic(req, res, next){
 
     var current_user = res.locals.current_user,
         ep = new EventProxy(),
-        page = req.query.page || 1,
+        page = parseInt(req.query.page) || 1,
         limit = config.limit,
         opt = {skip: (page - 1) * limit, limit: limit, sort: [['_id', 'desc']]};
 
     ep.all('topicList', 'sidebar', 'topbar', 'totalCount', function(topicList, sidebar, topbar, totalCount){
+        var pagination = util.pagination(page, totalCount);
         res.render('user/myTopic', {
             title: config.name,
             config: config,
@@ -167,8 +177,7 @@ function myTopic(req, res, next){
             users: sidebar.users,
             userInfo: sidebar.userInfo,
             usersByCount: sidebar.usersByCount,
-            totalCount: totalCount,
-            page: parseInt(page)
+            pagination: pagination
         });
     }).fail(next);
 
@@ -215,12 +224,16 @@ function user_center(req, res, next){
         followIn = false;
 
     var ep = new EventProxy(),
-        page = req.query.page || 1,
+        page = parseInt(req.query.page) || 1,
         limit = config.limit,
         opt = {skip: (page - 1) * limit, limit: limit, sort: [['_id', 'desc']]};
 
     ep.all('topicList', 'sidebar', 'topbar', 'totalCount', function(topicList, sidebar, topbar, totalCount){
+        var pagination = util.pagination(page, totalCount);
+
+        // 标识当前所在位置为用户中心
         res.locals.location = 'usercenter';
+
         res.render('user/usercenter', {
             title: config.name,
             config: config,
@@ -230,8 +243,7 @@ function user_center(req, res, next){
             userInfo: sidebar.userInfo,
             usersByCount: sidebar.usersByCount,
             followIn: followIn,
-            totalCount: totalCount,
-            page: parseInt(page)
+            pagination: pagination
         });
     }).fail(next);
 
@@ -313,7 +325,7 @@ function follow(req, res, next){
         // 更新目标用户粉丝
         tarUser.fans[status ? 'push' : 'remove'](current_user);
 
-        // 更新目标用户消息
+        // 向目标用户推送消息
         msgBody = {
             msgType: status ? 'fansIn' : 'fansOut',
             time: new Date().format('MM月dd日 hh:mm'),
@@ -321,11 +333,9 @@ function follow(req, res, next){
             nickName: curUser.nickName ? curUser.nickName : current_user,
             readed: false
         };
-        tarUser.message.push(msgBody);
-        tarUser.newMessage += 1;
-        tarUser.save(ep.done(function(){
+        util.pushMessage(tarUser, msgBody, function(){
             ep.emit('target', tarUser.fans);
-        }));
+        });
 
         // 更新当前用户关注列表
         curUser.followed[status ? 'push' : 'remove'](target);
@@ -333,104 +343,6 @@ function follow(req, res, next){
             ep.emit('follow');
         }));
     }));
-};
-
-// 消息中心
-function message(req, res, next){
-    if( !util.checkUserStatusAsync(res, '先登录啊亲 (╯_╰)') ) return;
-
-    var current_user = res.locals.current_user,
-        ep = new EventProxy();
-
-    ep.all('sidebar', 'topbar', 'message', function(sidebar, topbar, current_user){
-        var message = current_user.message;
-
-        if(!message || !message.length){
-            message = null;
-        };
-
-        res.render('user/message', {
-            title: '消息中心 | ' + config.name,
-            config: config,
-            topInfo: topbar.topInfo,
-            users: sidebar.users,
-            userInfo: sidebar.userInfo,
-            usersByCount: sidebar.usersByCount,
-            message: message
-        });
-
-
-    }).fail(next);
-
-    // 获取右侧资源
-    common.getSidebarNeed(res, next, {fields: 'name nickName head fans followed topic_count sign lastLogin_time'}, function(need){
-        ep.emit('sidebar', need);
-    });
-
-    // 获取顶部资源
-    common.getTopbarNeed(res, next, function(need){
-        ep.emit('topbar', need);
-    });
-
-    // 获取消息
-    userProxy.getUserInfoByName(current_user, 'message newMessage', ep.done(function(user){
-        var message = user.message, clone = JSON.parse(JSON.stringify(user));
-
-        // 加上用户已读标记
-        user.newMessage = 0;
-        message.forEach(function(item){
-            item.readed = true;
-        });
-        user.markModified('message');
-
-        // 超过20条消息则删除旧的10条
-        if(message.length > 20){
-            message.splice(0, 10);
-        };
-
-        user.save(ep.done(function(){
-            ep.emit('message', clone );
-        }));
-    }));
-};
-// 清空消息中心
-function message_empty(req, res, next){
-    if( !util.checkUserStatusAsync(res, '先登录啊亲 (╯_╰)') ) return;
-
-    var current_user = res.locals.current_user,
-        ep = new EventProxy();
-
-    ep.fail(next);
-
-    userProxy.getUserInfoByName(current_user, 'message', ep.done(function(user){
-        user.message = [];
-        user.save(ep.done(function(){
-            res.json({
-                success: true
-            });
-        }));
-    }));
-};
-
-function list(req, res, next){
-    userProxy.getUserList(function(err, users){
-        console.log(users);
-        if(err){
-            return next(err);
-        };
-        if(users){
-            res.render('userList', {
-                title: '用户列表',
-                userNames: users
-            });
-            return;
-        }else{
-            res.render('userList', {
-                title: '用户列表',
-                userNames: null
-            });
-        };
-    });
 };
 
 module.exports = {
@@ -442,8 +354,5 @@ module.exports = {
     avatar_save: avatar_save,
     myTopic: myTopic,
     user_center: user_center,
-    follow: follow,
-    message: message,
-    message_empty: message_empty,
-    list: list
+    follow: follow
 };

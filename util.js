@@ -6,9 +6,7 @@
 var crypto = require('crypto'),
     config = require('./config').config;
 
-/**
- * 日期时间格式化
- */
+// 日期时间格式化
 Date.prototype.format = function(format){
     var o = {
         "M+" : this.getMonth() + 1, //month
@@ -31,10 +29,7 @@ Date.prototype.format = function(format){
     return format;
 };
 
-/**
- * 判断数组中是否包含某一项
- * @param {Array} arr 目标数组
- */
+// 判断数组中是否包含某一项
 Array.prototype.contains = function(item){
     var i = this.length;
     while(i--){
@@ -42,6 +37,8 @@ Array.prototype.contains = function(item){
     }
     return false;
 };
+
+// 删除数组中某一项
 Array.prototype.remove = function(item){
     var i = this.length;
     while(i--){
@@ -71,6 +68,11 @@ function checkUserStatus(res, msg){
 
     return true;
 };
+
+/**
+ * 检查用户状态（异步）
+ * @param {String} msg 未登录提示信息
+ */
 function checkUserStatusAsync(res, msg){
     var currentUser = res.locals.current_user;
 
@@ -87,7 +89,7 @@ function checkUserStatusAsync(res, msg){
 
 /**
  * 加密解密
- * @param {String} will 待加密或解密的串
+ * @param {String} will 待加密或解密的字符串
  */
 function encrypt(will){
     var cipher = crypto.createCipher('aes-256-cbc', config.key),
@@ -95,7 +97,7 @@ function encrypt(will){
         encrypted = ciphered + cipher.final('hex');
 
     return encrypted;
-};
+}
 function decrypt(will){
     var decipher = crypto.createDecipher('aes-256-cbc', config.key),
         deciphered = decipher.update(will, 'hex', 'utf8'),
@@ -104,9 +106,46 @@ function decrypt(will){
     return decrypted;
 }
 
+/**
+ * 收集分页所需数据
+ * @param {Number} page 当前请求的页码
+ * @param {Number} totalCount 总页数
+ */
+function pagination(page, totalCount){
+    var pageRange = config.pageRange,
+        showNum = pageRange * 2 + 1, // 页码显示个数
+        currentRange = Math.ceil(page / showNum); // 当前区间，从1开始
+
+    //var pageStartNum = (currentRange - 1) * showNum; // 开始
+
+    return {
+        totalPage: totalCount,
+        currentPage: page,
+        pageRange: pageRange,
+        last: Math.min(currentRange * showNum, totalCount)
+    };
+}
+
+/**
+ * 消息推送
+ * @param {String} user 推送目标用户
+ * @param {Object} params 推送消息主体
+ * @param {Function} callback 回调
+ */
+function pushMessage(user, params, callback){
+    user.message.push(params);
+    user.newMessage += 1;
+    user.save(function(err){
+        if(err) return err;
+        if(callback) callback();
+    });
+}
+
 module.exports = {
     checkUserStatus: checkUserStatus,
     checkUserStatusAsync: checkUserStatusAsync,
     encrypt: encrypt,
-    decrypt: decrypt
+    decrypt: decrypt,
+    pagination: pagination,
+    pushMessage: pushMessage
 };

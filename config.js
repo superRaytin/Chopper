@@ -13,7 +13,8 @@
      uploadDir: './public/upload/', // 图片上传目录
      uploadTempDir: './tmp', // 临时文件存放目录
      nopic: '/img/nopic.jpg', // 用户无头像图片
-     limit: 10, // 每页数量
+     limit: 15, // 每页数量
+     pageRange: 3, // 分页范围(指当前页码两边个数)
      key: 'r9g4w3a2', // 密钥
      cookieSecret: 'chihuohuo',
      sessionSecret: 'chihuohuo'

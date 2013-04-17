@@ -6,11 +6,13 @@
 var user = require("../controllers/user"),
     topic = require("../controllers/topic"),
     sign = require("../controllers/sign"),
+    message = require("../controllers/message"),
     home = require("../controllers/home");
 
 module.exports = {
     home: home,
     user: user,
     topic: topic,
-    sign: sign
+    sign: sign,
+    message: message
 };

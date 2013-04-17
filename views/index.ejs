@@ -93,7 +93,7 @@
                   <% } %>
               </div>
               <!-- page start -->
-              <%- partial('pagination', {pre: "", totalCount: totalCount, page: page}) %>
+              <%- partial('pagination', {pre: "", pagination: pagination}) %>
               <!-- page end -->
           </div>
           <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>

@@ -40,7 +40,7 @@ define(['jquery', 'alertify'], function($, alertify){
                     return;
                 };
 
-                _util.doAsync('/newTopic', 'POST', {content: con.val()}, function(data){
+                _util.doAsync('/newTopic.json', 'POST', {content: con.val()}, function(data){
                     var topic = data.topic,
                         user = data.user,
                         topic_wrap = $('#J-topic-wrap'),
@@ -210,7 +210,7 @@ define(['jquery', 'alertify'], function($, alertify){
                     btntext = '取消关注';
                 }
 
-                _util.doAsync('/follow', 'post', {follow: status, user: target}, function(ret){
+                _util.doAsync('/follow.json', 'post', {follow: status, user: target}, function(ret){
                     alertify.alert(msg);
                     btn.val(btntext);
                     followIn = status;

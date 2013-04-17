@@ -9,10 +9,11 @@ var proxy = require("../proxy"),
     userProxy = proxy.User,
     topicProxy = proxy.Topic,
     config = require('../config').config,
-    EventProxy = require("eventproxy");
+    EventProxy = require("eventproxy"),
+    util = require('../util');
 
-var fs = require('fs');
-var crypto = require('crypto');
+//var fs = require('fs');
+//var crypto = require('crypto');
 
 exports.index = function(req, res, next){
     /*
@@ -44,12 +45,12 @@ exports.index = function(req, res, next){
      */
     console.log(req.session);
     var ep = new EventProxy(),
-        page = req.query.page || 1,
+        page = parseInt(req.query.page) || 1,
         limit = config.limit,
         opt = {skip: (page - 1) * limit, limit: limit, sort: [['_id', 'desc']]};
 
-    //ep.all('userList', 'topicList', 'current_user', 'userListByCount', function(userList, topicList, current_user, userListByCount){
     ep.all( 'topicList', 'sidebar', 'topbar', 'totalCount', function(topicList, sidebar, topbar, totalCount){
+        var pagination = util.pagination(page, totalCount);
         res.render('index',
             {
                 title: config.name,
@@ -59,8 +60,7 @@ exports.index = function(req, res, next){
                 users: sidebar.users,
                 userInfo: sidebar.userInfo,
                 usersByCount: sidebar.usersByCount,
-                totalCount: totalCount,
-                page: parseInt(page)
+                pagination: pagination
             }
         );
     });
@@ -110,14 +110,5 @@ exports.index = function(req, res, next){
 exports.test = function(req, res, next){
     res.render('test', {
         title: 'test'
-    });
-};
-
-exports.ajaxTest = function(req, res, next){
-    userProxy.getUserList(function(err, users){
-        if(err) return next(err);
-        if(users && users.length){
-            res.json(users)
-        }
     });
 };

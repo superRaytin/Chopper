@@ -56,7 +56,7 @@
                   <% } %>
               </div>
               <!-- page start -->
-              <%- partial('pagination', {pre: "user/"+userInfo.name, totalCount: totalCount, page: page}) %>
+              <%- partial('pagination', {pre: "user/" + userInfo.name, pagination: pagination}) %>
               <!-- page end -->
           </div>
           <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>
