@@ -22,11 +22,12 @@ module.exports = function(app){
     app.post('/login', sign.doLogin);
     app.get('/logout', sign.logout);
 
-    // 发表话题 | 我的吐槽
+    // 发表话题 | 我的吐槽 | 获取评论
     //app.get('/topic', topic.index);
     //app.post('/topic', topic.addTopic);
     app.post('/newTopic.json', topic.newTopic);
     app.get('/mine', topic.myTopic);
+    app.post('/getComments.json', topic.getComments);
 
     // 个人中心
     app.get('/account', user.account);

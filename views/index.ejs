@@ -26,6 +26,16 @@
                   </div>
               </div>
 
+              <div id="J-replyRepeat" class="topic-reply clearfix hide">
+                  <div class="reply-body">
+                      <a class="reply-head pull-left">
+                          <img src="img/nopic.jpg" class="media-object img30 J-reply-head">
+                      </a>
+                      <a href="" class="J-reply-user topic-user"></a>&nbsp;&nbsp;<span class="J-reply-con"></span>
+                  </div>
+                  <div class="reply-at"><a class="J-reply-at">回复</a></div>
+              </div>
+
               <div class="topic-item hide">
                   <div class="topic-left">
                       <img src="img/nopic.jpg" class="media-object J-topic-img img50">
@@ -37,28 +47,25 @@
                       <div class="topic-updown clearfix">
                           <span class="pull-left topic-time">04月11日 22:04</span>
                           <span class="pull-right">
-                              <a href="#this">顶(+12)</a>&nbsp;
-                              <a href="#this">踩(-19)</a>&nbsp;
-                              <a href="#this" class="fn-ml10">评论(9)</a>
+                              <a class="topic-up J-topic-up"><i class="icon-thumbs-up"></i> 赞 (12)</a>&nbsp;
+                              <a class="topic-down J-topic-down"><i class="icon-thumbs-down"></i> 踩 (19)</a>&nbsp;
+                              <a class="topic-showreply J-topic-showreply"><i class="icon-user"></i> 评论 (9)</a>
                           </span>
                       </div>
                       <div class="J-reply-wrapper">
                           <div class="reply-border"></div>
-                          <div class="topic-reply clearfix">
-                              <div class="reply-body">
-                                  <a class="reply-head pull-left">
-                                      <img src="img/nopic.jpg" class="media-object img30">
-                                  </a>
-                                  <a href="#this" class="topic-user">如果只是</a>&nbsp;&nbsp;你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂
-                              </div>
+                          <div class="reply-push J-reply-push">
+                              <textarea rows="1"></textarea>
+                              <div class="text-right"><input type="button" value="发 布" class="btn btn-primary"></div>
                           </div>
-                          <div class="topic-reply clearfix">
+                          <div class="J-replyRepeat topic-reply clearfix">
                               <div class="reply-body">
                                   <a class="reply-head pull-left">
-                                      <img src="img/nopic.jpg" class="media-object img30">
+                                      <img src="img/nopic.jpg" class="media-object img30 J-reply-head">
                                   </a>
-                                  <a href="#this" class="topic-user">如果只是</a>&nbsp;&nbsp;咱哈哈
+                                  <a href="#this" class="J-topic-user topic-user">如果只是</a>&nbsp;&nbsp;<span class="J-reply-con">你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂</span>
                               </div>
+                              <div class="reply-at"><a class="J-reply-at">回复</a></div>
                           </div>
                       </div>
                   </div>
@@ -68,7 +75,7 @@
                   <% if(topics && topics.length){ %>
                   <% for(var i = 0, len = topics.length; i < len; i++){ %>
                   <% var curTopic = topics[i] %>
-                  <div class="topic-item">
+                  <div class="topic-item J-topic-item">
                       <div class="topic-left">
                           <img src="<%= curTopic.head %>" class="media-object J-topic-img img50" alt="<%= curTopic.author_nickName %>" title="<%= curTopic.author_nickName %>">
                       </div>
@@ -78,11 +85,18 @@
                           </div>
                           <div class="topic-updown clearfix">
                               <span class="pull-left topic-time J-topic-time"><%= curTopic.create_time %></span>
-                          <span class="pull-right">
-                              <a href="#this"><i class="icon-thumbs-up"></i> 赞 (12)</a>&nbsp;
-                              <a href="#this"><i class="icon-thumbs-down"></i> 踩 (19)</a>&nbsp;
-                              <a href="#this" class="fn-ml10"><i class="icon-user"></i> 评论 (9)</a>
-                          </span>
+                              <span class="pull-right J-topic-updown hide">
+                                  <a class="topic-up J-topic-up"><i class="icon-thumbs-up"></i> 赞 (12)</a>&nbsp;
+                                  <a class="topic-down J-topic-down"><i class="icon-thumbs-down"></i> 踩 (19)</a>&nbsp;
+                                  <a class="topic-showreply J-topic-showreply" data-topicid="<%= curTopic._id %>"><i class="icon-user"></i> 评论 (9)</a>
+                              </span>
+                          </div>
+                          <div class="J-reply-wrapper hide">
+                              <div class="reply-border"></div>
+                              <div class="reply-push">
+                                  <textarea rows="1"></textarea>
+                                  <div class="text-right"><input type="button" value="发 布" class="btn btn-primary J-reply-fabu" data-topicid="<%= curTopic._id %>"></div>
+                              </div>
                           </div>
                       </div>
                   </div>

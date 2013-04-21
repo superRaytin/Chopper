@@ -355,6 +355,7 @@ hr{
 }
 .topic-body{
     overflow: hidden;
+    min-height: 50px;
 }
 
 .topic-left{
@@ -397,6 +398,16 @@ hr{
     border-bottom: 1px solid #F5F5F5;
     margin: 10px 15px 0px 20px;
 }
+.reply-push{
+    margin:0 20px;
+    padding:10px 0;
+}
+.reply-push textarea{
+    width: 98%;
+}
+.topic-up, .topic-down, .topic-showreply{
+    cursor: pointer;
+}
 .reply-head{
     position: relative;
     top: 4px;
@@ -405,10 +416,19 @@ hr{
     margin-right: 10px;
 }
 .reply-body{
-    width: 480px;
+    width: 450px;
     float: left;
     font-size: 12px;
     min-height: 36px;
+}
+.reply-at{
+    float: left;
+    width: 56px;
+    text-align: right;
+}
+.reply-at a{
+    font-size:12px;
+    cursor:pointer;
 }
 
 /* 用户中心 */

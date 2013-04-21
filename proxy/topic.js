@@ -45,8 +45,22 @@ function getTopicCount(condition, callback){
     modelTopic.count(condition, callback);
 };
 
+/**
+ * 获取所有最新话题
+ * Callback:
+ * - err, 数据库异常
+ * - topics, 话题
+ * @param {String} id 话题id
+ * @param {Object} opt 字段
+ * @param {Function} callback 回调函数
+ */
+function getOneTopicById(id, opt, callback){
+    modelTopic.findOne({_id: id}, opt, callback);
+};
+
 module.exports = {
     getTopicList: getTopicList,
     getTopicListByName: getTopicListByName,
-    getTopicCount: getTopicCount
+    getTopicCount: getTopicCount,
+    getOneTopicById: getOneTopicById
 };

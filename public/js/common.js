@@ -28,6 +28,51 @@ define(['jquery', 'alertify'], function($, alertify){
         }
     };
 
+    var public = {
+        reply: {
+            domEventInit: function(){
+                var topicItem = $('.J-topic-item'),
+                    showReply = $('.J-topic-showreply'),
+                    replyRepeat = $('#J-replyRepeat'),
+                    replyWrap, that;
+
+                // 点击评论
+                showReply.on('click', function(e){
+                    that = $(this);
+                    replyWrap = that.parent().parent().next('.J-reply-wrapper');
+
+                    // 发请求拿评论数据
+                    _util.doAsync('/getComments.json', 'post', {
+                        topicid: that.attr('data-topicid')
+                    }, function(res){
+                        if(res.length){
+                            $.each(res, function(i, replyItem){
+                                var replyItemTemplate = replyRepeat.clone(true).removeAttr('id').removeClass('hide');
+                                replyItemTemplate.find('.J-reply-head').attr('src', replyItem.head);
+                                replyItemTemplate.find('.J-reply-user').attr('href', '/user/' + replyItem.author_name).text(replyItem.author_nickName);
+                                replyItemTemplate.find('.J-reply-con').text(replyItem.content);
+                                replyItemTemplate.find('.J-reply-at').attr('data-user', replyItem.author_nickName);
+                                replyWrap.append(replyItemTemplate);
+                            });
+                        }
+
+                        replyWrap.removeClass('hide');
+                    });
+                });
+
+                // hover
+                topicItem.hover(
+                    function(){
+                        $(this).find('.J-topic-updown').removeClass('hide');
+                    },
+                    function(){
+                        $(this).find('.J-topic-updown').addClass('hide');
+                    }
+                );
+            }
+        }
+    };
+
     // 首页
     var indexObj = {
         fabu: function(){
@@ -79,6 +124,7 @@ define(['jquery', 'alertify'], function($, alertify){
         },
         init: function(){
             this.fabu();
+            public.reply.domEventInit();
         }
     };
 

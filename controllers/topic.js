@@ -118,6 +118,29 @@ function myTopic(req, res, next){
     }));
 };
 
+// 获取评论
+function getComments(req, res, next){
+    var topicid = req.body.topicid;
+
+    var ep = new EventProxy();
+
+    ep.fail(next);
+
+    topicProxy.getOneTopicById(topicid, 'replys', ep.done(function(list){
+        if(list.replys){
+            res.json({
+                success: true,
+                data: list.replys
+            });
+        }else{
+            res.json({
+                success: false,
+                data: '获取错误。'
+            });
+        }
+    }));
+};
+
 /* 话题广场首页
 function index(req, res, next){
     // 查询话题信息
@@ -181,5 +204,6 @@ module.exports = {
     //addTopic: addTopic,
     //index: index,
     myTopic: myTopic,
-    newTopic: newTopic
+    newTopic: newTopic,
+    getComments: getComments
 };
