@@ -54,8 +54,12 @@ function getTopicCount(condition, callback){
  * @param {Object} opt 字段
  * @param {Function} callback 回调函数
  */
-function getOneTopicById(id, opt, callback){
-    modelTopic.findOne({_id: id}, opt, callback);
+function getOneTopicById(id, condi, opt, callback){
+    if(typeof opt == 'function'){
+        callback = opt;
+        opt = {};
+    }
+    modelTopic.findOne({_id: id}, condi, opt, callback);
 };
 
 module.exports = {

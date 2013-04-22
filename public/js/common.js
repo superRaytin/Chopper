@@ -57,20 +57,21 @@ define(['jquery', 'alertify'], function($, alertify){
                                 var replyItemTemplate = replyRepeat.clone(true).removeAttr('id').removeClass('hide');
                                 replyItemTemplate.find('.J-reply-head').attr('src', replyItem.head);
                                 replyItemTemplate.find('.J-reply-user').attr('href', '/user/' + replyItem.author_name).text(replyItem.author_nickName);
-                                replyItemTemplate.find('.J-reply-con').text(replyItem.content);
+                                replyItemTemplate.find('.J-reply-con').html(replyItem.content);
                                 replyItemTemplate.find('.J-reply-at').attr('data-user', replyItem.author_nickName);
                                 replyWrap.append(replyItemTemplate);
                             });
                         }
 
                         replyWrap.removeClass('hide');
+                        replyWrap.find('textarea').val('').focus();
                     });
                 });
 
                 // 发表评论
                 btn_replyFabu.on('click', function(){
                     var that = $(this),
-                        content = that.parent().prev().val(),
+                        content = that.parent().prev().get(0).value.toString().replace(/(\r)*\n/g,"<br/>").replace(/\s/g," "),
                         replyWrap = that.parents('.J-reply-wrapper'),
                         topicid = that.attr('data-topicid');
 
@@ -81,19 +82,19 @@ define(['jquery', 'alertify'], function($, alertify){
                         var replyItemTemplate = replyRepeat.clone(true).removeAttr('id').removeClass('hide');
                         replyItemTemplate.find('.J-reply-head').attr('src', res.head);
                         replyItemTemplate.find('.J-reply-user').attr('href', '/user/' + res.author_name).text(res.author_nickName);
-                        replyItemTemplate.find('.J-reply-con').text(res.content);
+                        replyItemTemplate.find('.J-reply-con').html(res.content);
                         replyItemTemplate.find('.J-reply-at').attr('data-user', res.author_nickName);
                         replyWrap.append(replyItemTemplate);
                     });
                 });
 
                 // hover
-                topicItem.on('mouseover', function(){
+                /*topicItem.on('mouseover', function(){
                     $(this).find('.J-topic-updown').removeClass('hide');
                 });
                 topicItem.on('mouseout', function(){
                     $(this).find('.J-topic-updown').addClass('hide');
-                });
+                });*/
             }
         }
     };
@@ -110,7 +111,9 @@ define(['jquery', 'alertify'], function($, alertify){
                     return;
                 };
 
-                _util.doAsync('/newTopic.json', 'POST', {content: con.val()}, function(data){
+                var content = con.val().toString().replace(/(\r)*\n/g,"<br/>").replace(/\s/g," ");
+
+                _util.doAsync('/newTopic.json', 'POST', {content: content}, function(data){
                     var topic = data.topic,
                         user = data.user,
                         topic_wrap = $('#J-topic-wrap'),

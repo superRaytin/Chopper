@@ -400,10 +400,11 @@ hr{
 }
 .reply-push{
     margin:0 20px;
-    padding:10px 0;
+    padding:10px 0 0;
 }
 .reply-push textarea{
-    width: 98%;
+    width: 80%;
+    margin-bottom: 0;
 }
 .topic-up, .topic-down, .topic-showreply{
     cursor: pointer;

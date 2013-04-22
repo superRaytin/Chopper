@@ -67,25 +67,34 @@ exports.index = function(req, res, next){
     ep.fail(next);
 
     topicProxy.getTopicList('', opt, ep.done(function(topicList){
-        var topicLen = topicList.length;
+        var topicLen = topicList.length, arr = [];
+        for(var i = 0; i < topicLen; i++){
+            if(!topicList[i].replyTo){
+                arr.push(topicList[i]);
+            }
+        };
+
+        console.log(arr);
 
         // 如果用户设置了昵称，则优先显示昵称
         // 将昵称与头像附加到主题对象
-        ep.after('toAll', topicLen, function(){
-            ep.emit('topicList', topicList);
+        ep.after('toAll', arr.length, function(){
+            ep.emit('topicList', arr);
         });
 
         // 获取当前主题的作者昵称与头像
-        topicList.forEach(function(cur, i){
-            userProxy.getOneUserInfo({_id : cur.author_id}, 'name nickName head', ep.done(function(user){
-                var nickName = user.nickName, time = cur.create_time;
+        arr.forEach(function(cur, i){
+            //if(!cur.replyTo){
+                userProxy.getOneUserInfo({_id : cur.author_id}, 'name nickName head', ep.done(function(user){
+                    var nickName = user.nickName, time = cur.create_time;
 
-                cur.author_nickName = nickName ? nickName : user.name;
-                cur.head = user.head ? user.head : config.nopic;
-                cur.create_time = new Date(time).format('MM月dd日 hh:mm');
+                    cur.author_nickName = nickName ? nickName : user.name;
+                    cur.head = user.head ? user.head : config.nopic;
+                    cur.create_time = new Date(time).format('MM月dd日 hh:mm');
 
-                ep.emit('toAll');
-            }));
+                    ep.emit('toAll');
+                }));
+            //}
         });
     }));
 
