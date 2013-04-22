@@ -15,7 +15,7 @@ var models = require('../models'),
  * @param {Function} callback 回调函数
  */
 function getTopicList(query, opt, callback){
-    modelTopic.find(query !== '' ? query : {}, '', opt, callback);
+    modelTopic.find(query, '', opt, callback);
 };
 
 /**

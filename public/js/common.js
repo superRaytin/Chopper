@@ -34,17 +34,24 @@ define(['jquery', 'alertify'], function($, alertify){
                 var topicItem = $('.J-topic-item'),
                     showReply = $('.J-topic-showreply'),
                     replyRepeat = $('#J-replyRepeat'),
+                    btn_replyFabu = $('.J-reply-fabu'),
                     replyWrap, that;
 
                 // 点击评论
-                showReply.on('click', function(e){
+                showReply.on('click', function(){
                     that = $(this);
                     replyWrap = that.parent().parent().next('.J-reply-wrapper');
+
+                    if(replyWrap.is(':visible')){
+                        replyWrap.addClass('hide');
+                        return;
+                    }
 
                     // 发请求拿评论数据
                     _util.doAsync('/getComments.json', 'post', {
                         topicid: that.attr('data-topicid')
                     }, function(res){
+                        replyWrap.find('.topic-reply').remove();
                         if(res.length){
                             $.each(res, function(i, replyItem){
                                 var replyItemTemplate = replyRepeat.clone(true).removeAttr('id').removeClass('hide');
@@ -60,15 +67,33 @@ define(['jquery', 'alertify'], function($, alertify){
                     });
                 });
 
+                // 发表评论
+                btn_replyFabu.on('click', function(){
+                    var that = $(this),
+                        content = that.parent().prev().val(),
+                        replyWrap = that.parents('.J-reply-wrapper'),
+                        topicid = that.attr('data-topicid');
+
+                    _util.doAsync('/newComment.json', 'post', {
+                        topicid: topicid,
+                        content: content
+                    }, function(res){
+                        var replyItemTemplate = replyRepeat.clone(true).removeAttr('id').removeClass('hide');
+                        replyItemTemplate.find('.J-reply-head').attr('src', res.head);
+                        replyItemTemplate.find('.J-reply-user').attr('href', '/user/' + res.author_name).text(res.author_nickName);
+                        replyItemTemplate.find('.J-reply-con').text(res.content);
+                        replyItemTemplate.find('.J-reply-at').attr('data-user', res.author_nickName);
+                        replyWrap.append(replyItemTemplate);
+                    });
+                });
+
                 // hover
-                topicItem.hover(
-                    function(){
-                        $(this).find('.J-topic-updown').removeClass('hide');
-                    },
-                    function(){
-                        $(this).find('.J-topic-updown').addClass('hide');
-                    }
-                );
+                topicItem.on('mouseover', function(){
+                    $(this).find('.J-topic-updown').removeClass('hide');
+                });
+                topicItem.on('mouseout', function(){
+                    $(this).find('.J-topic-updown').addClass('hide');
+                });
             }
         }
     };

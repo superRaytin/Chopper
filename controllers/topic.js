@@ -141,6 +141,82 @@ function getComments(req, res, next){
     }));
 };
 
+// 发布评论
+function newComment(req, res, next){
+    if( !util.checkUserStatusAsync(res, '先登录啊亲 (╯_╰)') ) return;
+
+    var topicid = req.body.topicid,
+        content = req.body.content,
+        current_user = res.locals.current_user;
+
+    var ep = new EventProxy();
+    ep.fail(next);
+
+    var newTopic = new topicModel({
+            author_name: current_user,
+            replyTo: topicid,
+            content: content,
+            create_time: new Date().format('yyyy/MM/dd hh:mm:ss')
+        });
+
+    ep.all('getUser', 'saveTopic', function(user, topic){
+        console.log(999);
+        var params = {
+            head: user.head ? user.head : config.nopic,
+            author_name: current_user,
+            author_nickName: user.nickName ? user.nickName : user.name,
+            content: content
+        };
+        topic.replys.push(params);
+        topic.replyCount += 1;
+        topic.markModified('replys');
+        topic.save(ep.done(function(){
+            res.json({
+                success: true,
+                data: params
+            });
+        }));
+
+    });
+
+    ep.after('getTopic', 1, function(reply){
+        // 更新吐槽信息
+        topicProxy.getOneTopicById(topicid, '', ep.done(function(topic){
+            //topic.replys.push(reply[0]._id);
+            /*topic.replys.push({
+                a
+            });
+            console.log(222);
+            console.log(topic);
+            console.log(topic.replys);
+            topic.replyCount += 1;
+            topic.markModified('replys');
+            topic.save(ep.done(function(topic){
+                console.log(111111);
+                console.log(topic);
+                ep.emit('saveTopic', topic);
+            }));*/
+            ep.emit('saveTopic', topic);
+        }));
+    });
+
+    // 更新用户信息与评论
+    userProxy.getOneUserInfo({name: current_user}, '_id name nickName head topic_count', ep.done(function(user){
+        newTopic.author_id = user._id;
+        ep.emit('getUser', user);
+        newTopic.save(ep.done(function(reply){
+            console.log(reply);
+            // 更新用户吐槽数
+            user.topic_count += 1;
+            user.save(function(err){
+                if(err) return err;
+                console.log(4444);
+                ep.emit('getTopic', reply);
+            });
+        }));
+    }));
+};
+
 /* 话题广场首页
 function index(req, res, next){
     // 查询话题信息
@@ -205,5 +281,6 @@ module.exports = {
     //index: index,
     myTopic: myTopic,
     newTopic: newTopic,
-    getComments: getComments
+    getComments: getComments,
+    newComment: newComment
 };

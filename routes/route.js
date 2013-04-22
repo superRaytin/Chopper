@@ -28,6 +28,7 @@ module.exports = function(app){
     app.post('/newTopic.json', topic.newTopic);
     app.get('/mine', topic.myTopic);
     app.post('/getComments.json', topic.getComments);
+    app.post('/newComment.json', topic.newComment);
 
     // 个人中心
     app.get('/account', user.account);
