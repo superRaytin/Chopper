@@ -44,6 +44,7 @@ exports.index = function(req, res, next){
     console.log( deciphered + decipher.final('utf8') )
      */
     console.log(req.session);
+
     var ep = new EventProxy(),
         page = parseInt(req.query.page) || 1,
         limit = config.limit,
@@ -73,8 +74,6 @@ exports.index = function(req, res, next){
                 arr.push(topicList[i]);
             }
         };
-
-        console.log(arr);
 
         // 如果用户设置了昵称，则优先显示昵称
         // 将昵称与头像附加到主题对象

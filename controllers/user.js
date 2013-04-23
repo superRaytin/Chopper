@@ -343,6 +343,28 @@ function follow(req, res, next){
             ep.emit('follow');
         }));
     }));
+}
+
+// 获取用户昵称
+function getNickName(req, res, next){
+    var userName = req.body.userName,
+        ep = new EventProxy();
+
+    ep.fail(next);
+
+    userProxy.getUserInfoByName(userName, 'name nickName', {}, ep.done(function(user){
+        if(user){
+            res.json({
+                success: true,
+                data: user.nickName ? user.nickName : userName
+            })
+        }else{
+            res.json({
+                success: true,
+                data: null
+            })
+        }
+    }));
 };
 
 module.exports = {
@@ -354,5 +376,6 @@ module.exports = {
     avatar_save: avatar_save,
     myTopic: myTopic,
     user_center: user_center,
-    follow: follow
+    follow: follow,
+    getNickName: getNickName
 };

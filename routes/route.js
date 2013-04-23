@@ -39,6 +39,7 @@ module.exports = function(app){
     app.get('/avatar', user.avatar);
     app.post('/avatar', user.avatar_save);
     app.post('/follow.json', user.follow);
+    app.post('/getNickName.json', user.getNickName);
 
     // 消息中心
     app.get('/message', message.page);

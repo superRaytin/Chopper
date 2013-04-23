@@ -405,6 +405,7 @@ hr{
 .reply-push textarea{
     width: 80%;
     margin-bottom: 0;
+    font-size: 12px;
 }
 .topic-up, .topic-down, .topic-showreply{
     cursor: pointer;

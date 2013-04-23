@@ -25,6 +25,50 @@ define(['jquery', 'alertify'], function($, alertify){
                     alertify.alert(err);
                 }
             });
+        },
+        // 话题显示前处理
+        // @aaa => <a rel="xxx(@aaa)" href="/user/aaa">xxx</a>
+        BeforeShow: function(content, callback){
+            //var reg = /@([a-zA-Z0-9]{3,})?!=\)/g,
+            var reg = /[^\(]@([a-zA-Z0-9]{3,})/g,
+                mat = content.match(reg),
+                len, num, con = content;
+
+            if(mat){
+                num = len = mat.length;
+                for(var i = 0; i < len; i++){
+                    var userName = mat[i].substr(2);
+
+                    (function(userName){
+                        _util.doAsync('/getNickName.json', 'post', {
+                            userName: userName
+                        }, function(res){
+                            if(res){
+                                //con = con.replace('@'+userName, '<a rel="'+res+'(@'+userName+')" href="/user/'+userName+'">'+res+'</a>');
+                                con = con.replace(new RegExp('([^\\(])@('+userName + ')', 'g'), function(a, prefix){
+                                    return prefix + '<a rel="'+res+'(@'+userName+')" href="/user/'+userName+'">'+res+'</a>';
+                                });
+                            }
+
+                            num--;
+                            if(num == 0){
+                                callback(con);
+                            }
+                        });
+                    })(userName);
+                }
+            }else{
+                callback(null);
+            };
+        },
+        // @回复前处理
+        // <a rel="xxx(@aaa)" href="/user/aaa">xxx</a> => @aaa
+        beforeAt: function(content){
+            var reg = /<a rel=\"[^\(]*\(([^\)]*)\)\"[^>]*>[^<]*<\/a>/g;
+
+            return content.replace(reg, function(str, atUser){
+                return atUser;
+            });
         }
     };
 
@@ -35,6 +79,7 @@ define(['jquery', 'alertify'], function($, alertify){
                     showReply = $('.J-topic-showreply'),
                     replyRepeat = $('#J-replyRepeat'),
                     btn_replyFabu = $('.J-reply-fabu'),
+                    btn_replyAt = $('.J-reply-at'),
                     replyWrap, that;
 
                 // 点击评论
@@ -51,29 +96,42 @@ define(['jquery', 'alertify'], function($, alertify){
                     _util.doAsync('/getComments.json', 'post', {
                         topicid: that.attr('data-topicid')
                     }, function(res){
+                        // 先清空之前数据
                         replyWrap.find('.topic-reply').remove();
+
                         if(res.length){
                             $.each(res, function(i, replyItem){
                                 var replyItemTemplate = replyRepeat.clone(true).removeAttr('id').removeClass('hide');
                                 replyItemTemplate.find('.J-reply-head').attr('src', replyItem.head);
-                                replyItemTemplate.find('.J-reply-user').attr('href', '/user/' + replyItem.author_name).text(replyItem.author_nickName);
-                                replyItemTemplate.find('.J-reply-con').html(replyItem.content);
+                                replyItemTemplate.find('.J-reply-user').attr({'href': '/user/' + replyItem.author_name,'rel' : replyItem.author_name}).text(replyItem.author_nickName);
                                 replyItemTemplate.find('.J-reply-at').attr('data-user', replyItem.author_nickName);
-                                replyWrap.append(replyItemTemplate);
+
+                                (function(replyItem, replyItemTemplate){
+                                    _util.BeforeShow(replyItem.content, function(con){
+                                        replyItemTemplate.find('.J-reply-con').html(con ? con : replyItem.content);
+                                        replyWrap.append(replyItemTemplate);
+
+                                        if(i == res.length - 1){
+                                            replyWrap.removeClass('hide');
+                                            replyWrap.find('textarea').val('').focus();
+                                        }
+                                    });
+                                })(replyItem, replyItemTemplate);
                             });
                         }
-
-                        replyWrap.removeClass('hide');
-                        replyWrap.find('textarea').val('').focus();
                     });
                 });
 
                 // 发表评论
                 btn_replyFabu.on('click', function(){
                     var that = $(this),
-                        content = that.parent().prev().get(0).value.toString().replace(/(\r)*\n/g,"<br/>").replace(/\s/g," "),
+                        //content = that.parent().prev().get(0).value.toString().replace(/(\r)*\n/g,"<br/>").replace(/\s/g," "),
+                        pushArea = that.parent().prev(),
+                        content = pushArea.val(),
                         replyWrap = that.parents('.J-reply-wrapper'),
-                        topicid = that.attr('data-topicid');
+                        replyNumArea = replyWrap.prev().find('.J-topic-replyNum'),
+                        topicid = that.attr('data-topicid'),
+                        replyAuthorTopic = $('#J-userInfor-topicCount');
 
                     _util.doAsync('/newComment.json', 'post', {
                         topicid: topicid,
@@ -81,11 +139,33 @@ define(['jquery', 'alertify'], function($, alertify){
                     }, function(res){
                         var replyItemTemplate = replyRepeat.clone(true).removeAttr('id').removeClass('hide');
                         replyItemTemplate.find('.J-reply-head').attr('src', res.head);
-                        replyItemTemplate.find('.J-reply-user').attr('href', '/user/' + res.author_name).text(res.author_nickName);
-                        replyItemTemplate.find('.J-reply-con').html(res.content);
+                        replyItemTemplate.find('.J-reply-user').attr({'href': '/user/' + res.author_name, 'rel' : res.author_name}).text(res.author_nickName);
                         replyItemTemplate.find('.J-reply-at').attr('data-user', res.author_nickName);
-                        replyWrap.append(replyItemTemplate);
+
+                        _util.BeforeShow(res.content, function(con){
+                            replyItemTemplate.find('.J-reply-con').html(con);
+                            replyWrap.append(replyItemTemplate);
+                            pushArea.val('');
+
+                            // 同步页面数据
+                            replyNumArea.text( parseInt(replyNumArea.text()) + 1 );
+                            replyAuthorTopic.text( replyAuthorTopic.text() + 1 );
+                        });
                     });
+                });
+
+                // 回复给某人
+                btn_replyAt.on('click', function(){
+                    var that = $(this),
+                        area = that.parents('.J-reply-wrapper').find('.reply-push textarea'),
+                        //atUserNick = that.attr('data-user'),
+                        par = that.parent().prev(),
+                        atUserName = par.find('.J-reply-user').attr('rel'),
+                        atCon = _util.beforeAt(par.find('.J-reply-con').html());
+
+                    area.val(' || @' + atUserName + ': ' + atCon);
+                    area.get(0).setSelectionRange(0, 0);
+                    area.focus();
                 });
 
                 // hover
@@ -111,25 +191,29 @@ define(['jquery', 'alertify'], function($, alertify){
                     return;
                 };
 
-                var content = con.val().toString().replace(/(\r)*\n/g,"<br/>").replace(/\s/g," ");
+                //var content = con.val().toString().replace(/(\r)*\n/g,"<br>").replace(/\s/g," ");
 
-                _util.doAsync('/newTopic.json', 'POST', {content: content}, function(data){
+                _util.doAsync('/newTopic.json', 'POST', {content: con.val()}, function(data){
                     var topic = data.topic,
                         user = data.user,
                         topic_wrap = $('#J-topic-wrap'),
                         $count = $('#J-userInfor-topicCount'),
                         template = $('#J-topicItemTemplate'),
-                        newTopic,
-                        content, authorName, time;
+                        newTopic, content, authorName, time,
+                        img, showReply, replyFabu;
 
                     newTopic = template.clone(true);
                     content = newTopic.find('.J-topic-content');
                     authorName = newTopic.find('.J-topic-authorName');
                     time = newTopic.find('.J-topic-time');
                     img = newTopic.find('.J-topic-img');
+                    showReply = newTopic.find('.J-topic-showreply');
+                    replyFabu = newTopic.find('.J-reply-fabu');
 
                     authorName.text(user.nickName ? user.nickName : user.name);
                     img.attr('src', user.head);
+                    showReply.attr('data-topicid', topic._id);
+                    replyFabu.attr('data-topicid', topic._id);
                     content.text(topic.content);
                     time.text(topic.create_time);
 
