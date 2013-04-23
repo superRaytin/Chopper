@@ -46,7 +46,7 @@ define(['jquery', 'alertify'], function($, alertify){
                             if(res){
                                 //con = con.replace('@'+userName, '<a rel="'+res+'(@'+userName+')" href="/user/'+userName+'">'+res+'</a>');
                                 con = con.replace(new RegExp('([^\\(])@('+userName + ')', 'g'), function(a, prefix){
-                                    return prefix + '<a rel="'+res+'(@'+userName+')" href="/user/'+userName+'">'+res+'</a>';
+                                    return prefix + '<a rel="'+res+'(@'+userName+')" href="/user/'+userName+'" class="J-userLink">'+res+'</a>';
                                 });
                             }
 
@@ -80,12 +80,13 @@ define(['jquery', 'alertify'], function($, alertify){
                     replyRepeat = $('#J-replyRepeat'),
                     btn_replyFabu = $('.J-reply-fabu'),
                     btn_replyAt = $('.J-reply-at'),
-                    replyWrap, that;
+                    replyWrap, pushArea, that;
 
                 // 点击评论
                 showReply.on('click', function(){
                     that = $(this);
                     replyWrap = that.parent().parent().next('.J-reply-wrapper');
+                    pushArea = replyWrap.find('textarea');
 
                     if(replyWrap.is(':visible')){
                         replyWrap.addClass('hide');
@@ -113,11 +114,14 @@ define(['jquery', 'alertify'], function($, alertify){
 
                                         if(i == res.length - 1){
                                             replyWrap.removeClass('hide');
-                                            replyWrap.find('textarea').val('').focus();
+                                            pushArea.val('').focus();
                                         }
                                     });
                                 })(replyItem, replyItemTemplate);
                             });
+                        }else{
+                            replyWrap.removeClass('hide');
+                            pushArea.val('').focus();
                         }
                     });
                 });

@@ -40,7 +40,7 @@
                   </div>
                   <div class="topic-body">
                       <div class="topic-content">
-                          <a href="" class="topic-user J-topic-authorName" title=""></a>&nbsp;&nbsp;<span class="J-topic-content"></span>
+                          <a href="" class="topic-user J-topic-authorName J-userLink" title=""></a>&nbsp;&nbsp;<span class="J-topic-content"></span>
                       </div>
                       <div class="topic-updown clearfix">
                           <span class="pull-left topic-time J-topic-time"></span>
@@ -67,7 +67,7 @@
                       <a class="reply-head pull-left">
                           <img src="img/nopic.jpg" class="media-object img30 J-reply-head">
                       </a>
-                      <a href="" class="J-reply-user topic-user" rel=""></a>&nbsp;&nbsp;<span class="J-reply-con"></span>
+                      <a href="" class="J-reply-user J-userLink topic-user" rel=""></a>&nbsp;&nbsp;<span class="J-reply-con"></span>
                   </div>
                   <div class="reply-at"><a class="J-reply-at" data-user="">回复</a></div>
               </div>
@@ -117,7 +117,7 @@
                       </div>
                       <div class="topic-body">
                           <div class="topic-content">
-                              <a href="/user/<%= curTopic.author_name %>" class="topic-user J-topic-authorName" title="<%= curTopic.author_nickName %>"><%= curTopic.author_nickName %></a>&nbsp;&nbsp;<span class="J-topic-content"><%= curTopic.content %></span>
+                              <a href="/user/<%= curTopic.author_name %>" class="topic-user J-topic-authorName J-userLink" title="<%= curTopic.author_nickName %>"><%= curTopic.author_nickName %></a>&nbsp;&nbsp;<span class="J-topic-content"><%= curTopic.content %></span>
                           </div>
                           <div class="topic-updown clearfix">
                               <span class="pull-left topic-time J-topic-time"><%= curTopic.create_time %></span>
