@@ -23,7 +23,7 @@
                             <span class="topic-time"><i class="icon-envelope"></i> <%=cur.time%></span><br>
                             <a href="/user/<%=cur.name%>" title="<%=cur.nickName%>"><span class="label label-info"><%=cur.nickName%></span></a> 偷偷地取消了对你的关注
                         </div>
-                        <% }else if(type == 'up'){ %>
+                        <% }else if(type == 'support'){ %>
                         <div class="message-item<% if(cur.readed === false){ %> message-item-new<%}%>">
                             <span class="topic-time"><i class="icon-envelope"></i> <%=cur.time%></span><br>
                             你的吐槽 <span class="message-topic"><%=cur.topic%></span> 太精彩了，被 <a href="/user/<%=cur.name%>"><span class="label label-info"><%=cur.nickName%></span></a> 激动地赞了一下

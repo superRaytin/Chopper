@@ -57,9 +57,9 @@ User.find({ name: { $in: names } }, callback)  批量查数据 names为数组
 [
     'fansIn|time|nickName|username', // 有人关注了你
     'fansOut|time|nickName|username', // 取消关注
-    'up|time|nickName|username|topicId', // 有人赞了你
-    'down|time|nickName|username|topicId', // 有人踩了你
-    'comment|time|nickName|username|topicId' // 有人评论
+    'support|time|nickName|username|topic', // 有人赞了你
+    'down|time|nickName|username|topic', // 有人踩了你
+    'comment|time|nickName|username|topic' // 有人评论
 ]
 关注：
 time  XXX 关注了你

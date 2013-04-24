@@ -42,6 +42,7 @@ function getTopicCount(condition, callback){
         callback = condition;
         condition = {};
     }
+    condition['$where'] = 'this.replyTo === undefined';
     modelTopic.count(condition, callback);
 };
 
@@ -51,7 +52,8 @@ function getTopicCount(condition, callback){
  * - err, 数据库异常
  * - topics, 话题
  * @param {String} id 话题id
- * @param {Object} opt 字段
+ * @param {String} condi 字段
+ * @param {Object} opt 筛选条件
  * @param {Function} callback 回调函数
  */
 function getOneTopicById(id, condi, opt, callback){
@@ -62,9 +64,37 @@ function getOneTopicById(id, condi, opt, callback){
     modelTopic.findOne({_id: id}, condi, opt, callback);
 };
 
+/**
+ * 更新话题
+ * Callback:
+ * - err, 数据库异常
+ * - topics, 话题
+ * @param {String} id 话题id
+ * @param {Object} opt 筛选条件
+ * @param {Function} callback 回调函数
+ */
+function updateTopicById(id, opt, callback){
+    modelTopic.update({_id: id}, {$set: opt}, callback);
+};
+
+/**
+ * 获取所有不是评论的话题
+ * Callback:
+ * - err, 数据库异常
+ * - topics, 话题
+ * @param {Object} opt 筛选条件
+ * @param {Object} fields 字段
+ * @param {Function} callback 回调函数
+ */
+function getMainTopic(fields, opt, callback){
+    modelTopic.find({$where: 'this.replyTo === undefined'}, fields, opt, callback);
+};
+
 module.exports = {
     getTopicList: getTopicList,
     getTopicListByName: getTopicListByName,
     getTopicCount: getTopicCount,
-    getOneTopicById: getOneTopicById
+    getOneTopicById: getOneTopicById,
+    updateTopicById: updateTopicById,
+    getMainTopic: getMainTopic
 };

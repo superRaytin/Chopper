@@ -67,7 +67,7 @@ exports.index = function(req, res, next){
     });
     ep.fail(next);
 
-    topicProxy.getTopicList('', opt, ep.done(function(topicList){
+    topicProxy.getMainTopic('', opt, ep.done(function(topicList){
         var topicLen = topicList.length, arr = [];
         for(var i = 0; i < topicLen; i++){
             if(!topicList[i].replyTo){
@@ -111,7 +111,6 @@ exports.index = function(req, res, next){
     topicProxy.getTopicCount(ep.done(function(totalCount){
         ep.emit('totalCount', Math.ceil(totalCount / limit));
     }));
-
 };
 
 // 以下代码仅为测试之用

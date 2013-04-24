@@ -146,6 +146,8 @@ function newComment(req, res, next){
     if( !util.checkUserStatusAsync(res, '先登录啊亲 (╯_╰)') ) return;
 
     var topicid = req.body.topicid,
+        topicuser = req.body.topicuser,
+        topicCon = req.body.topicCon,
         content = req.body.content,
         current_user = res.locals.current_user;
 
@@ -159,8 +161,7 @@ function newComment(req, res, next){
             create_time: new Date().format('yyyy/MM/dd hh:mm:ss')
         });
 
-    ep.all('getUser', 'saveTopic', function(user, topic){
-        console.log(999);
+    ep.all('getUser', 'saveTopic', 'msgPushed', function(user, topic){
         var params = {
             head: user.head ? user.head : config.nopic,
             author_name: current_user,
@@ -182,105 +183,105 @@ function newComment(req, res, next){
     ep.after('getTopic', 1, function(reply){
         // 更新吐槽信息
         topicProxy.getOneTopicById(topicid, '', ep.done(function(topic){
-            //topic.replys.push(reply[0]._id);
-            /*topic.replys.push({
-                a
-            });
-            console.log(222);
-            console.log(topic);
-            console.log(topic.replys);
-            topic.replyCount += 1;
-            topic.markModified('replys');
-            topic.save(ep.done(function(topic){
-                console.log(111111);
-                console.log(topic);
-                ep.emit('saveTopic', topic);
-            }));*/
             ep.emit('saveTopic', topic);
         }));
     });
 
-    // 更新用户信息与评论
-    userProxy.getOneUserInfo({name: current_user}, '_id name nickName head topic_count', ep.done(function(user){
-        newTopic.author_id = user._id;
-        ep.emit('getUser', user);
+    // 更新用户信息与评论 || 推送消息
+    //userProxy.getOneUserInfo({name: current_user}, '_id name nickName head topic_count', ep.done(function(user){
+    userProxy.getUserListBy({name: {$in: [topicuser, current_user]}}, '_id name nickName head topic_count message newMessage', ep.done(function(user){
+        var curUser = user[0],
+            tarUser = user[1];
+
+        // 检查校正返回用户顺序
+        if(curUser.name != current_user){
+            curUser = user[1];
+            tarUser = user[0];
+        }
+
+        // 向目标用户推送消息
+        var msgBody = {
+            msgType: 'comment',
+            topic: topicCon,
+            time: new Date().format('MM月dd日 hh:mm'),
+            name: current_user,
+            nickName: curUser.nickName ? curUser.nickName : current_user,
+            readed: false
+        };
+        util.pushMessage(tarUser, msgBody, function(){
+            ep.emit('msgPushed');
+        });
+
+        newTopic.author_id = curUser._id;
+        ep.emit('getUser', curUser);
         newTopic.save(ep.done(function(reply){
             console.log(reply);
             // 更新用户吐槽数
-            user.topic_count += 1;
-            user.save(function(err){
+            curUser.topic_count += 1;
+            curUser.save(function(err){
                 if(err) return err;
-                console.log(4444);
                 ep.emit('getTopic', reply);
             });
         }));
     }));
 };
 
-/* 话题广场首页
-function index(req, res, next){
-    // 查询话题信息
-    topicProxy.getTopicList(function(err, topics){
-        if(err) return next(err);
-        if(topics && topics.length != 0){
-            console.log(topics);
-            res.render('topic/index', {
-                title: '话题广场',
-                topics: topics
-            });
-        }
-        // 无话题
-        else{
-            res.render('topic/index', {
-                title: '话题广场',
-                topics: null
-            });
-        };
-    });
-};
+// 赞 & 踩
+function supportdown(req, res, next){
+    if( !util.checkUserStatusAsync(res, '先登录啊亲 (╯_╰)') ) return;
 
-// 发表话题
-function addTopic(req, res, next){
-    //var session = req.session;
-    var currentUser = res.locals.current_user,
-        content = req.body['content'],
-        desc;
+    var type = req.body.type,
+        topicid = req.body.topicid,
+        topicuser = req.body.topicuser,
+        topicCon = req.body.topicCon,
+        current_user = res.locals.current_user,
+        ep = new EventProxy();
 
-    if(!currentUser || content == ''){
-        desc = !currentUser ? '请先登录，才能发表话题。' : '话题内容不能为空。';
-        res.render('notice/normal', {
-            title: '出错了',
-            desc: desc,
-            layout: null
-        })
-        return;
-    };
-
-    var ep = new EventProxy(),
-        newTopic = new topicModel();
-
-    newTopic.content = content;
-    newTopic.author_name = currentUser;
-    newTopic.create_time = new Date().format('yyyy/MM/dd hh:mm:ss');
-
-    ep.all('getUserId', function(user){
-        user.topic_count += 1;
-        user.save();
-        res.redirect('/');
+    ep.all('topicsave', 'msgPushed', function(topic){
+        res.json({
+            success: true,
+            data: topic[type]
+        });
     }).fail(next);
 
-    userProxy.getOneUserInfo({name: currentUser}, '_id topic_count', ep.done(function(user){
-        newTopic.author_id = user._id;
-        newTopic.save();
-        ep.emit('getUserId', user);
+    // 更新赞&踩数据
+    topicProxy.getOneTopicById(topicid, 'support down', ep.done(function(topic){
+        topic[type]++;
+        topic.save(ep.done(function(topic){
+            ep.emit('topicsave', topic);
+        }));
     }));
-};*/
+
+    // 推送消息
+    userProxy.getUserListBy({name: {$in: [topicuser, current_user]}}, 'name nickName message newMessage', ep.done(function(user){
+        var curUser = user[0],
+            tarUser = user[1];
+
+        // 检查校正返回用户顺序
+        if(curUser.name != current_user){
+            curUser = user[1];
+            tarUser = user[0];
+        }
+
+        // 向目标用户推送消息
+        var msgBody = {
+            msgType: type,
+            topic: topicCon,
+            time: new Date().format('MM月dd日 hh:mm'),
+            name: current_user,
+            nickName: curUser.nickName ? curUser.nickName : current_user,
+            readed: false
+        };
+        util.pushMessage(tarUser, msgBody, function(){
+            ep.emit('msgPushed');
+        });
+    }));
+};
 
 module.exports = {
-    //addTopic: addTopic,
-    //index: index,
     myTopic: myTopic,
     newTopic: newTopic,
     getComments: getComments,
-    newComment: newComment
+    newComment: newComment,
+    supportdown: supportdown
 };

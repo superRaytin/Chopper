@@ -58,7 +58,7 @@ define(['jquery', 'alertify'], function($, alertify){
                     })(userName);
                 }
             }else{
-                callback(null);
+                callback(content);
             };
         },
         // @回复前处理
@@ -79,6 +79,7 @@ define(['jquery', 'alertify'], function($, alertify){
                     showReply = $('.J-topic-showreply'),
                     replyRepeat = $('#J-replyRepeat'),
                     btn_replyFabu = $('.J-reply-fabu'),
+                    btn_supportdown = $('.J-topic-up, .J-topic-down'),
                     btn_replyAt = $('.J-reply-at'),
                     replyWrap, pushArea, that;
 
@@ -135,10 +136,14 @@ define(['jquery', 'alertify'], function($, alertify){
                         replyWrap = that.parents('.J-reply-wrapper'),
                         replyNumArea = replyWrap.prev().find('.J-topic-replyNum'),
                         topicid = that.attr('data-topicid'),
+                        topicuser = that.attr('data-user'),
+                        topicCon = that.parents('.topic-body').find('.J-topic-content'),
                         replyAuthorTopic = $('#J-userInfor-topicCount');
 
                     _util.doAsync('/newComment.json', 'post', {
                         topicid: topicid,
+                        topicuser: topicuser,
+                        topicCon: _util.beforeAt(topicCon.html()),
                         content: content
                     }, function(res){
                         var replyItemTemplate = replyRepeat.clone(true).removeAttr('id').removeClass('hide');
@@ -170,6 +175,26 @@ define(['jquery', 'alertify'], function($, alertify){
                     area.val(' || @' + atUserName + ': ' + atCon);
                     area.get(0).setSelectionRange(0, 0);
                     area.focus();
+                });
+
+                // 赞 & 踩
+                btn_supportdown.on('click', function(){
+                    var that = $(this),
+                        type = that.attr('data-type'),
+                        numWrap = type === 'support' ? '.J-topic-upNum' : '.J-topic-downNum',
+                        topicid = that.attr('data-topicid'),
+                        topicuser = that.attr('data-user'),
+                        topicCon = that.parents('.topic-body').find('.J-topic-content');
+
+                    _util.doAsync('/supportdown.json', 'post', {
+                        type: type,
+                        topicid: topicid,
+                        topicuser: topicuser,
+                        topicCon: _util.beforeAt(topicCon.html())
+                    }, function(res){
+                        console.log(res);
+                        that.find(numWrap).text('('+ res +')');
+                    });
                 });
 
                 // hover
@@ -204,7 +229,7 @@ define(['jquery', 'alertify'], function($, alertify){
                         $count = $('#J-userInfor-topicCount'),
                         template = $('#J-topicItemTemplate'),
                         newTopic, content, authorName, time,
-                        img, showReply, replyFabu;
+                        img, showReply, replyFabu, support, down;
 
                     newTopic = template.clone(true);
                     content = newTopic.find('.J-topic-content');
@@ -212,12 +237,16 @@ define(['jquery', 'alertify'], function($, alertify){
                     time = newTopic.find('.J-topic-time');
                     img = newTopic.find('.J-topic-img');
                     showReply = newTopic.find('.J-topic-showreply');
+                    support = newTopic.find('.J-topic-up');
+                    down = newTopic.find('.J-topic-down');
                     replyFabu = newTopic.find('.J-reply-fabu');
 
                     authorName.text(user.nickName ? user.nickName : user.name);
                     img.attr('src', user.head);
-                    showReply.attr('data-topicid', topic._id);
-                    replyFabu.attr('data-topicid', topic._id);
+                    showReply.attr({'data-topicid': topic._id, 'data-user': user.name});
+                    support.attr({'data-topicid': topic._id, 'data-user': user.name});
+                    down.attr({'data-topicid': topic._id, 'data-user': user.name});
+                    replyFabu.attr({'data-topicid': topic._id, 'data-user': user.name});
                     content.text(topic.content);
                     time.text(topic.create_time);
 
