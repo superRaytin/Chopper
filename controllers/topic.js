@@ -103,7 +103,7 @@ function myTopic(req, res, next){
     }));
 
     // 获取右侧资源
-    common.getSidebarNeed(res, next, {fields: 'name nickName head fans followed topic_count sign lastLogin_time'}, function(need){
+    common.getSidebarNeed(res, next, {fields: 'name nickName head fans followed gold topic_count sign lastLogin_time'}, function(need){
         ep.emit('sidebar', need);
     });
 
@@ -232,19 +232,24 @@ function supportdown(req, res, next){
     if( !util.checkUserStatusAsync(res, '先登录啊亲 (╯_╰)') ) return;
 
     var type = req.body.type,
+        zan = type === 'support',
         topicid = req.body.topicid,
         topicuser = req.body.topicuser,
         topicCon = req.body.topicCon,
         current_user = res.locals.current_user,
         ep = new EventProxy();
 
-    // 不能对自己发表的主题操作
-    if(topicuser === current_user){
-        var msg = type === 'support' ? '节操掉了 (╯_╰)' : '你这是要自踩么亲，算你狠...';
+    ep.on('wrong', function(msg){
         res.json({
             success: false,
             data: msg
         });
+    }).fail(next);
+
+    // 不能对自己发表的主题操作
+    if(topicuser === current_user){
+        var msg = zan ? '节操掉了 (╯_╰)' : '你这是要自踩么亲，算你狠...';
+        ep.emit('wrong', msg);
         return;
     }
 
@@ -253,40 +258,56 @@ function supportdown(req, res, next){
             success: true,
             data: topic[type]
         });
-    }).fail(next);
+    });
 
     // 更新赞&踩数据
-    topicProxy.getOneTopicById(topicid, 'support down', ep.done(function(topic){
+    topicProxy.getOneTopicById(topicid, 'support down supporter downer', ep.done(function(topic){
         topic[type]++;
+        var arr = topic[type+'er'];
+
+        if(arr){
+            // 检查当前用户是否已操作过
+            if(arr.contains(current_user)){
+                ep.emit('wrong', zan ? '赞了又赞，会怀孕的 (╯_╰)' : '出来混，总是要还的 →_→');
+                return;
+            }
+            arr.push(current_user);
+        }else{
+            topic[type+'er'] = [current_user];
+        }
+
         topic.save(ep.done(function(topic){
             ep.emit('topicsave', topic);
+            ep.emit('goPush');
         }));
     }));
 
     // 推送消息
-    userProxy.getUserListBy({name: {$in: [topicuser, current_user]}}, 'name nickName message newMessage', ep.done(function(user){
-        var curUser = user[0],
-            tarUser = user[1];
+    ep.on('goPush', function(){
+        userProxy.getUserListBy({name: {$in: [topicuser, current_user]}}, 'name nickName message newMessage', ep.done(function(user){
+            var curUser = user[0],
+                tarUser = user[1];
 
-        // 检查校正返回用户顺序
-        if(curUser.name != current_user){
-            curUser = user[1];
-            tarUser = user[0];
-        }
+            // 检查校正返回用户顺序
+            if(curUser.name != current_user){
+                curUser = user[1];
+                tarUser = user[0];
+            }
 
-        // 向目标用户推送消息
-        var msgBody = {
-            msgType: type,
-            topic: topicCon,
-            time: new Date().format('MM月dd日 hh:mm'),
-            name: current_user,
-            nickName: curUser.nickName ? curUser.nickName : current_user,
-            readed: false
-        };
-        util.pushMessage(tarUser, msgBody, function(){
-            ep.emit('msgPushed');
-        });
-    }));
+            // 向目标用户推送消息
+            var msgBody = {
+                msgType: type,
+                topic: topicCon,
+                time: new Date().format('MM月dd日 hh:mm'),
+                name: current_user,
+                nickName: curUser.nickName ? curUser.nickName : current_user,
+                readed: false
+            };
+            util.pushMessage(tarUser, msgBody, function(){
+                ep.emit('msgPushed');
+            });
+        }));
+    });
 };
 
 module.exports = {

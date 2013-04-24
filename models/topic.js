@@ -19,6 +19,8 @@ var topicSchema = new Schema({
     replyCount: {type: Number, default: 0}, // 评论数
     support: {type: Number, default: 0}, // 赞
     down: {type: Number, default: 0}, // 踩
+    supporter: [], // 赞的人
+    downer: [], // 踩的人
     topic_Type: {type: String} // 所属话题
 });
 

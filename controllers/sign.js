@@ -72,13 +72,19 @@ exports.doReg = function(req, res, next){
                 userModel.name = userName;
                 userModel.pass = util.encrypt(passWord);
                 userModel.reg_time = new Date().format('yyyy/MM/dd hh:mm:ss');
-                userModel.save(function(err){
-                    if(err){
-                        return next(err);
-                    }
+                userModel.gold = 10;
+
+                // 向用户推送消息
+                var msgBody = {
+                    msgType: 'newuser',
+                    time: new Date().format('MM月dd日 hh:mm'),
+                    name: userName,
+                    readed: false
+                };
+                util.pushMessage(userModel, msgBody, function(){
                     req.session.user = userName;
                     res.redirect('/');
-                })
+                });
             }
         });
     };

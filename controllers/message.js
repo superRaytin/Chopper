@@ -38,7 +38,7 @@ function page(req, res, next){
     }).fail(next);
 
     // 获取右侧资源
-    common.getSidebarNeed(res, next, {fields: 'name nickName head fans followed topic_count sign lastLogin_time'}, function(need){
+    common.getSidebarNeed(res, next, {fields: 'name nickName head fans followed gold topic_count sign lastLogin_time'}, function(need){
         ep.emit('sidebar', need);
     });
 

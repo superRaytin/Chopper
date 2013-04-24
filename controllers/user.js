@@ -43,11 +43,11 @@ function accountPage(req, res, next, settings){
     });
 };
 function account(req, res, next){
-    accountPage(req, res, next, {page: 'user/account', title: '资料设置', fields: 'name nickName head follower followed topic_count sign lastLogin_time email'});
+    accountPage(req, res, next, {page: 'user/account', title: '资料设置', fields: 'name nickName head follower followed gold topic_count sign lastLogin_time email'});
 };
 // 修改密码
 function pass(req, res, next){
-    accountPage(req, res, next, {page: 'user/pass', title: '修改密码', fields: 'name nickName head follower followed topic_count sign lastLogin_time email'});
+    accountPage(req, res, next, {page: 'user/pass', title: '修改密码', fields: 'name nickName head follower followed gold topic_count sign lastLogin_time email'});
 };
 
 // 保存资料
@@ -60,7 +60,7 @@ function account_save(req, res, next){
     // 删除时间戳
     if(req.body.random) delete req.body.random;
 
-    ep.all('updateUserInfo', 'getUserInfo', function(update, user){
+    ep.all('getUserInfo', function(user){
         res.json({
             success: true,
             data: user
@@ -74,8 +74,12 @@ function account_save(req, res, next){
                 data: '(╯_╰) 【'+req.body.nickName+'】坑已被占，换一个'
             });
         }
-        userProxy.updateUserInfoByName(username, req.body, ep.done('updateUserInfo'));
-        userProxy.getUserInfoByName(username, 'sign nickName', ep.done('getUserInfo'));
+        userProxy.updateUserInfoByName(username, req.body, ep.done(function(){
+            ep.emit('updateUserInfo');
+        }));
+        ep.on('updateUserInfo', function(){
+            userProxy.getUserInfoByName(username, 'sign nickName', ep.done('getUserInfo'));
+        });
     }));
 
 };
@@ -108,7 +112,7 @@ function pass_save(req, res, next){
 
 //上传头像
 function avatar(req, res, next){
-    accountPage(req, res, next, {page: 'user/avatar', title: '上传头像', fields: 'name nickName head follower followed topic_count sign head lastLogin_time email'});
+    accountPage(req, res, next, {page: 'user/avatar', title: '上传头像', fields: 'name nickName head follower followed gold topic_count sign head lastLogin_time email'});
 };
 function avatar_save(req, res, next){
     if( !util.checkUserStatus(res, '先登录啊亲 (╯_╰)') ) return;
@@ -202,7 +206,7 @@ function myTopic(req, res, next){
     }));
 
     // 获取右侧资源
-    common.getSidebarNeed(res, next, {fields: 'name nickName head fans followed topic_count sign lastLogin_time'}, function(need){
+    common.getSidebarNeed(res, next, {fields: 'name nickName head fans followed gold topic_count sign lastLogin_time'}, function(need){
         ep.emit('sidebar', need);
     });
 
@@ -271,7 +275,7 @@ function user_center(req, res, next){
             }));
 
             // 获取右侧资源
-            common.getSidebarNeed(res, next, {current_user: userName, fields: 'name nickName head fans followed topic_count sign lastLogin_time'}, function(need){
+            common.getSidebarNeed(res, next, {current_user: userName, fields: 'name nickName head fans followed gold topic_count sign lastLogin_time'}, function(need){
                 ep.emit('sidebar', need);
             });
         }else{

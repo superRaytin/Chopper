@@ -19,6 +19,7 @@ IE9以下提示 ***
 回复，顶 ***
 评论后通知用户 ***
 不能赞或踩自己主题 ***
+不能重复赞或踩 ***
 
 改造路由规则
 回到顶部
@@ -29,7 +30,6 @@ IE9以下提示 ***
 批量灌水功能
 一键数据校准
 缓存评论请求与hover请求
-不能重复赞或踩
 评论增加图片功能
 我的粉丝
 私信
@@ -61,6 +61,7 @@ User.find({ name: { $in: names } }, callback)  批量查数据 names为数组
     'support|time|nickName|username|topic', // 有人赞了你
     'down|time|nickName|username|topic', // 有人踩了你
     'comment|time|nickName|username|topic' // 有人评论
+    'newuser|time|username' // 新用户
 ]
 关注：
 time  XXX 关注了你

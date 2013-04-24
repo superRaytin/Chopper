@@ -22,7 +22,7 @@
                             </h4>
                             <p class="theCurrentSign"><%= userInfo.sign %></p>
                             <p>粉丝：<span class="badge badge-important"><%= userInfo.fans.length %></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;吐槽：<a href="/mine"><span class="badge badge-info" id="J-userInfor-topicCount"><%= userInfo.topic_count %></span></a></p>
-                            <p>金币：<span class="badge">0</span></p>
+                            <p>金币：<span class="badge"><% if(userInfo.gold){ %><%= userInfo.gold %><% }else{ %>0<% } %></span></p>
                         </div>
                     </div>
                 </div>
