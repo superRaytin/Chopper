@@ -212,6 +212,7 @@ function newComment(req, res, next){
             ep.emit('msgPushed');
         });
 
+        // 保存评论
         newTopic.author_id = curUser._id;
         ep.emit('getUser', curUser);
         newTopic.save(ep.done(function(reply){
@@ -236,6 +237,16 @@ function supportdown(req, res, next){
         topicCon = req.body.topicCon,
         current_user = res.locals.current_user,
         ep = new EventProxy();
+
+    // 不能对自己发表的主题操作
+    if(topicuser === current_user){
+        var msg = type === 'support' ? '节操掉了 (╯_╰)' : '你这是要自踩么亲，算你狠...';
+        res.json({
+            success: false,
+            data: msg
+        });
+        return;
+    }
 
     ep.all('topicsave', 'msgPushed', function(topic){
         res.json({
