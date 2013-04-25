@@ -44,6 +44,7 @@ exports.index = function(req, res, next){
     console.log( deciphered + decipher.final('utf8') )
      */
     console.log(req.session);
+    console.log(util.timeBucket(new Date('2013/4/2 22:32:39')))
 
     var ep = new EventProxy(),
         page = parseInt(req.query.page) || 1,

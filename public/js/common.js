@@ -284,12 +284,13 @@ define(['jquery', 'alertify'], function($, alertify){
                 fill = false;
 
             account_btn.on('click', function(){
-                var nickVal = nickName.val(),
+                var nick = nickName,
+                    nickVal = nick.val(),
                     emailVal = email.val(),
                     signVal = sign.val();
 
                 params.random = new Date().getTime();
-                if($.trim(nickVal) != ''){
+                if($.trim(nickVal) != '' && nick.attr('disabled') != 'disabled'){
                     params.nickName = nickVal;
                     fill = true;
                 }

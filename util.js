@@ -50,6 +50,27 @@ Array.prototype.remove = function(item){
 };
 
 /**
+ * 产生指定范围的随机数
+ * @param {String} min 最小数
+ * @param {String} max 最大数
+ */
+function random(min, max){
+    return Math.min(max, Math.floor(Math.random() * max + min));
+};
+
+/**
+ * 计算时间段（是否当天）
+ * @param {String} date 要计算的日期
+ */
+function timeBucket(date){
+    var now = new Date(),
+        nowed = now.getFullYear() + now.getMonth() + now.getDay(),
+        dated = date.getFullYear() + date.getMonth() + date.getDay();
+
+    return nowed - dated > 0
+};
+
+/**
  * 检查用户状态
  * @param {String} msg 未登录提示信息
  */
@@ -112,7 +133,7 @@ function decrypt(will){
  * @param {Number} totalCount 总页数
  */
 function pagination(page, totalCount){
-    var pageRange = config.pageRange,
+    var pageRange = config.pageRange;
         showNum = pageRange * 2 + 1, // 页码显示个数
         currentRange = Math.ceil(page / showNum); // 当前区间，从1开始
 
@@ -147,5 +168,7 @@ module.exports = {
     encrypt: encrypt,
     decrypt: decrypt,
     pagination: pagination,
-    pushMessage: pushMessage
+    pushMessage: pushMessage,
+    random: random,
+    timeBucket: timeBucket
 };
