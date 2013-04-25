@@ -55,6 +55,7 @@ function account_save(req, res, next){
     if( !util.checkUserStatusAsync(res, '先登录啊亲 (╯_╰)') ) return;
 
     var username = res.locals.current_user,
+        nickName = req.body.nickName,
         ep = new EventProxy();
 
     // 删除时间戳
@@ -67,21 +68,29 @@ function account_save(req, res, next){
         });
     }).fail(next);
 
-    userProxy.getUserListBy({nickName: req.body.nickName}, 'name nickName', {}, ep.done(function(user){
-        if(user.length > 1 || (user.length == 1 && user[0].name != username)){
-            return res.json({
-                success: false,
-                data: '(╯_╰) 【'+req.body.nickName+'】坑已被占，换一个'
-            });
-        }
+    ep.on('afterCheckNick', function(){
         userProxy.updateUserInfoByName(username, req.body, ep.done(function(){
             ep.emit('updateUserInfo');
         }));
         ep.on('updateUserInfo', function(){
             userProxy.getUserInfoByName(username, 'sign nickName', ep.done('getUserInfo'));
         });
-    }));
+    });
 
+    // 检查花名合法性
+    if(nickName){
+        userProxy.getUserListBy({nickName: nickName}, 'name nickName', {}, ep.done(function(user){
+            if(user.length > 1 || (user.length == 1 && user[0].name != username)){
+                res.json({
+                    success: false,
+                    data: '(╯_╰) 【'+nickName+'】坑已被占，换一个'
+                });
+                return
+            }
+        }));
+    }else{
+        ep.emit('afterCheckNick');
+    }
 };
 
 // 修改密码前端接口

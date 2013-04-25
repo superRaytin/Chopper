@@ -2,7 +2,6 @@
  * 配置文件
  * User: chihuohuo
  * Date: 13-3-27
- * Time: 上午10:34
  */
  exports.config = {
      name: '小微吐槽',

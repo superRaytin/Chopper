@@ -13,7 +13,12 @@
                     <div class="control-group">
                         <label for="J-nickName" class="control-label">花名：</label>
                         <div class="controls">
-                            <input type="text" id="J-nickName" name="nickName" value="<% if(userInfo.nickName){ %><%= userInfo.nickName %><% } %>">
+                            <% if(userInfo.nickName){ %>
+                            <input type="text" id="J-nickName" name="nickName" value="<% if(userInfo.nickName){ %><%= userInfo.nickName %><% } %>" disabled>
+                            <% }else{ %>
+                            <input type="text" id="J-nickName" name="nickName">
+                            <% } %>
+                            <span class="help-inline"><i class="icon-exclamation-sign"></i>设置之后不可更改</span>
                         </div>
                     </div>
                     <div class="control-group">

@@ -192,7 +192,6 @@ define(['jquery', 'alertify'], function($, alertify){
                         topicuser: topicuser,
                         topicCon: _util.beforeAt(topicCon.html())
                     }, function(res){
-                        console.log(res);
                         that.find(numWrap).text('('+ res +')');
                     });
                 });
@@ -304,7 +303,7 @@ define(['jquery', 'alertify'], function($, alertify){
                         fill = true;
                     }
                 }
-                if($.trim(signVal) != ''){
+                if($.trim(signVal) != '' && signVal != '这家伙很懒，还没有签名'){
                     params.sign = signVal;
                     fill = true;
                 }
