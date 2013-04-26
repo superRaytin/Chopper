@@ -82,6 +82,40 @@ function myTopic(req, res, next){
         });
     }).fail(next);
 
+    // 当前为评论时，获取吐槽主体用户信息
+    ep.on('getReplyTopicInfo', function(topic, cur, emitName){
+        userProxy.getOneUserInfo({_id: topic.author_id}, 'name nickName head', function(err, replyToUser){
+            var nickName = replyToUser.nickName, time = topic.create_time;
+
+            topic.author_nickName = nickName ? nickName : replyToUser.name;
+            topic.head = replyToUser.head ? replyToUser.head : config.nopic;
+            topic.create_time = new Date(time).format('MM月dd日 hh:mm');
+
+            cur.replyTopic = topic;
+            ep.emit(emitName);
+        });
+    });
+
+    // 取得每个吐槽的用户信息
+    ep.on('getEveryTopicInfo', function(cur){
+        userProxy.getOneUserInfo({_id : cur.author_id}, 'name nickName head', ep.done(function(user){
+            var nickName = user.nickName, time = cur.create_time;
+
+            cur.author_nickName = nickName ? nickName : user.name;
+            cur.head = user.head ? user.head : config.nopic;
+            cur.create_time = new Date(time).format('MM月dd日 hh:mm');
+
+            if(cur.replyTo){
+                topicProxy.getOneTopicById(cur.replyTo, '', function(err, topic){
+                    if(err) return next(err);
+                    ep.emit('getReplyTopicInfo', topic, cur, 'toAll');
+                });
+            }else{
+                ep.emit('toAll');
+            };
+        }));
+    });
+
     // 取得用户吐槽列表
     topicProxy.getTopicList({author_name: current_user}, opt, ep.done(function(topicList){
         // 获取当前主题的作者昵称与头像
@@ -90,15 +124,7 @@ function myTopic(req, res, next){
         });
 
         topicList.forEach(function(cur){
-            userProxy.getOneUserInfo({_id : cur.author_id}, 'name nickName head', ep.done(function(user){
-                var nickName = user.nickName, time = cur.create_time;
-
-                cur.author_nickName = nickName ? nickName : user.name;
-                cur.head = user.head ? user.head : config.nopic;
-                cur.create_time = new Date(time).format('MM月dd日 hh:mm');
-
-                ep.emit('toAll');
-            }));
+            ep.emit('getEveryTopicInfo', cur);
         });
     }));
 

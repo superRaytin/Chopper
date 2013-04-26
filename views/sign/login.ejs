@@ -37,8 +37,8 @@
           padding: 7px 9px;
       }
       .back{
-          max-width: 300px;
-          margin: 0px auto;
+          width: 360px;
+          margin: -10px auto 0;
           text-align: center;
       }
       .back-to{
@@ -46,21 +46,32 @@
           font-size: 14px;
           padding: 8px 10px;
           background: #eee;
+          display: block;
+      }
+      .alert{
+          margin: auto;
+          width: 310px;
       }
     </style>
 </head>
 <body>
     <% if( typeof error == 'object' ){ %>
-    <div class="notice-error">
-        <div class="msg-inner">
-            (￣﹏￣) hey，有错误了。
-            <ul>
-                <% for(var i = 0, len = error.length; i < len; i++){ %>
-                <li><%= error[i] %></li>
-                <% } %>
-            </ul>
+        <% if(error.length == 1 ){ %>
+        <div class="alert alert-error">
+            <h4>hey，有错误了。</h4>(￣﹏￣) <%= error[0] %>
         </div>
-    </div>
+        <% }else{ %>
+        <div class="notice-error">
+            <div class="msg-inner">
+                (￣﹏￣) hey，有错误了。
+                <ul>
+                    <% for(var i = 0, len = error.length; i < len; i++){ %>
+                    <li><%= error[i] %></li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+        <% } %>
     <% } %>
     <div class="container fn-mt10">
         <form id="J-logForm" class="form-signin" method="post">

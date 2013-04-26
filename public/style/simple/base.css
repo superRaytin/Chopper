@@ -391,6 +391,12 @@ hr{
 .topic-reply:last-child{
     border-bottom: none;
 }
+.topic-replyto{
+    margin: 20px 20px 0px 90px;
+    padding: 20px 0px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+}
 .reply-border{
     height: 1px;
     background: #EBEAEA;

@@ -172,66 +172,6 @@ function avatar_save(req, res, next){
     }));
 };
 
-// 我的吐槽
-function myTopic(req, res, next){
-    if( !util.checkUserStatus(res, '先登录啊亲 (╯_╰)') ) return;
-
-    var current_user = res.locals.current_user,
-        ep = new EventProxy(),
-        page = parseInt(req.query.page) || 1,
-        limit = config.limit,
-        opt = {skip: (page - 1) * limit, limit: limit, sort: [['_id', 'desc']]};
-
-    ep.all('topicList', 'sidebar', 'topbar', 'totalCount', function(topicList, sidebar, topbar, totalCount){
-        var pagination = util.pagination(page, totalCount);
-        res.render('user/myTopic', {
-            title: config.name,
-            config: config,
-            topics: topicList,
-            topInfo: topbar.topInfo,
-            users: sidebar.users,
-            userInfo: sidebar.userInfo,
-            usersByCount: sidebar.usersByCount,
-            pagination: pagination
-        });
-    }).fail(next);
-
-    // 取得用户吐槽列表
-    topicProxy.getTopicList({author_name: current_user}, opt, ep.done(function(topicList){
-        // 获取当前主题的作者昵称与头像
-        ep.after('toAll', topicList.length, function(){
-            ep.emit('topicList', topicList);
-        });
-
-        topicList.forEach(function(cur){
-            userProxy.getOneUserInfo({_id : cur.author_id}, 'name nickName head', ep.done(function(user){
-                var nickName = user.nickName, time = cur.create_time;
-
-                cur.author_nickName = nickName ? nickName : user.name;
-                cur.head = user.head ? user.head : config.nopic;
-                cur.create_time = new Date(time).format('MM月dd日 hh:mm');
-
-                ep.emit('toAll');
-            }));
-        });
-    }));
-
-    // 获取右侧资源
-    common.getSidebarNeed(res, next, {fields: 'name nickName head fans followed gold topic_count sign lastLogin_time'}, function(need){
-        ep.emit('sidebar', need);
-    });
-
-    // 获取顶部资源
-    common.getTopbarNeed(res, next, function(need){
-        ep.emit('topbar', need);
-    });
-
-    // 取得总页数
-    topicProxy.getTopicCount({author_name: current_user}, ep.done(function(totalCount){
-        ep.emit('totalCount', Math.ceil(totalCount / limit));
-    }));
-};
-
 // 用户中心
 function user_center(req, res, next){
     var userName = req.params.name,
@@ -262,6 +202,40 @@ function user_center(req, res, next){
         });
     }).fail(next);
 
+    // 当前为评论时，获取吐槽主体用户信息
+    ep.on('getReplyTopicInfo', function(topic, cur, emitName){
+        userProxy.getOneUserInfo({_id: topic.author_id}, 'name nickName head', function(err, replyToUser){
+            var nickName = replyToUser.nickName, time = topic.create_time;
+
+            topic.author_nickName = nickName ? nickName : replyToUser.name;
+            topic.head = replyToUser.head ? replyToUser.head : config.nopic;
+            topic.create_time = new Date(time).format('MM月dd日 hh:mm');
+
+            cur.replyTopic = topic;
+            ep.emit(emitName);
+        });
+    });
+
+    // 取得每个吐槽的用户信息
+    ep.on('getEveryTopicInfo', function(cur){
+        userProxy.getOneUserInfo({_id : cur.author_id}, 'name nickName head', ep.done(function(user){
+            var nickName = user.nickName, time = cur.create_time;
+
+            cur.author_nickName = nickName ? nickName : user.name;
+            cur.head = user.head ? user.head : config.nopic;
+            cur.create_time = new Date(time).format('MM月dd日 hh:mm');
+
+            if(cur.replyTo){
+                topicProxy.getOneTopicById(cur.replyTo, '', function(err, topic){
+                    if(err) return next(err);
+                    ep.emit('getReplyTopicInfo', topic, cur, 'toAll');
+                });
+            }else{
+                ep.emit('toAll');
+            };
+        }));
+    });
+
     // 验证用户是否存在
     userProxy.getUserInfoByName(userName, 'name nickName head fans', ep.done(function(user){
         if(user){
@@ -273,16 +247,14 @@ function user_center(req, res, next){
             }
             // 取得用户吐槽列表
             topicProxy.getTopicList({author_name: userName}, opt, ep.done(function(topicList){
-                // 如果用户设置了昵称，则优先显示昵称
-                var nickName = user.nickName;
-
-                topicList.forEach(function(cur, i){
-                    cur.author_nickName = nickName ? nickName : user.name;
-                    cur.head = user.head ? user.head : config.nopic;
-                    cur.create_time = new Date(cur.create_time).format('MM月dd日 hh:mm');
+                // 获取当前主题的作者昵称与头像
+                ep.after('toAll', topicList.length, function(){
+                    ep.emit('topicList', topicList);
                 });
 
-                ep.emit('topicList', topicList);
+                topicList.forEach(function(cur){
+                    ep.emit('getEveryTopicInfo', cur);
+                });
             }));
 
             // 获取右侧资源
@@ -389,7 +361,6 @@ module.exports = {
     pass_save: pass_save,
     avatar: avatar,
     avatar_save: avatar_save,
-    myTopic: myTopic,
     user_center: user_center,
     follow: follow,
     getNickName: getNickName
