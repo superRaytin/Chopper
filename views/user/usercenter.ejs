@@ -13,7 +13,7 @@
                   </div>
                   <div class="person-infor-data">
                       <h4><% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %></h4>
-                      <p><a href="/user/<%= userInfo.name %>">http://localhost:3000/user/<%= userInfo.name %></a></p>
+                      <p><a href="/user/<%= userInfo.name %>">http://<%= config.domain %>:<%= config.port %>/user/<%= userInfo.name %></a></p>
                       <p>粉丝：<strong class="fn-color-F66F6F" id="J-personInfor-fans"><%= userInfo.fans.length %></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;吐槽：<strong id="J-userInfor-topicCount"><%= userInfo.topic_count %></strong></p>
                       <% if(!myself){ %>
                       <p>
@@ -28,33 +28,7 @@
               <% }else{ %>
               <h3 class="titleBar">TA的吐槽</h3>
               <% } %>
-              <div id="J-topic-wrap">
-                  <% if(topics && topics.length){ %>
-                  <% for(var i = 0, len = topics.length; i < len; i++){ %>
-                  <% var curTopic = topics[i] %>
-                  <div class="topic-item J-topicUser-<%= curTopic.author_name %>">
-                      <div class="topic-left">
-                          <img src="<%= curTopic.head %>" class="media-object img50" title="<%= curTopic.author_nickName %>">
-                      </div>
-                      <div class="topic-body">
-                          <div class="topic-content">
-                              <a href="/user/<%= curTopic.author_name %>" class="topic-user J-topic-authorName"><%= curTopic.author_nickName %></a>&nbsp;&nbsp;<span class="J-topic-content"><%= curTopic.content %></span>
-                          </div>
-                          <div class="topic-updown clearfix">
-                              <span class="pull-left topic-time J-topic-time"><%= curTopic.create_time %></span>
-                          <span class="pull-right">
-                              <a href="#this">顶(+12)</a>&nbsp;
-                              <a href="#this">踩(-19)</a>&nbsp;
-                              <a href="#this" class="fn-ml10">评论(9)</a>
-                          </span>
-                          </div>
-                      </div>
-                  </div>
-                  <% } %>
-                  <% }else{ %>
-                  <div class="fn-pl20 fn-pb20 fn-pt20">暂无吐槽信息。</div>
-                  <% } %>
-              </div>
+              <%- partial('topic/topicBlock', {topics: topics}) %>
               <!-- page start -->
               <%- partial('pagination', {pre: "user/" + userInfo.name, pagination: pagination}) %>
               <!-- page end -->

@@ -22,6 +22,7 @@ var userSchema = new Schema({
     followed: [String], // 关注
     fans: [String], // 粉丝
     gold: {type: Number, default: 0}, // 金币
+    lastGetGold: {type: String}, // 最后取得金币时间
     message: [{}], // 消息
     newMessage: {type: Number, default: 0} // 新的消息
 });

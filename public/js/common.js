@@ -204,6 +204,16 @@ define(['jquery', 'alertify'], function($, alertify){
                     $(this).find('.J-topic-updown').addClass('hide');
                 });*/
             }
+        },
+        // 处理吐槽内容
+        replaceContent: function(){
+            var wrap = $('.J-topic-content');
+            wrap.each(function(){
+                var that = $(this);
+                _util.BeforeShow(that.text(), function(con){
+                    that.html(con);
+                });
+            });
         }
     };
 
@@ -375,6 +385,8 @@ define(['jquery', 'alertify'], function($, alertify){
         init: function(){
             this.saveData();
             this.savePass();
+            public.reply.domEventInit();
+            public.replaceContent();
         }
     };
 
@@ -411,6 +423,8 @@ define(['jquery', 'alertify'], function($, alertify){
         },
         init: function(){
             this.follow();
+            public.reply.domEventInit();
+            public.replaceContent();
         }
     };
 

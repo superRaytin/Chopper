@@ -33,7 +33,6 @@
                   </div>
               </div>
 
-
               <div id="J-topicItemTemplate" class="topic-item J-topic-item hide">
                   <div class="topic-left">
                       <img src="/img/nopic.jpg" class="media-object J-topic-img img50" alt="" title="">
@@ -58,18 +57,6 @@
                           </div>
                       </div>
                   </div>
-              </div>
-
-
-
-              <div id="J-replyRepeat" class="topic-reply clearfix hide">
-                  <div class="reply-body">
-                      <a class="reply-head pull-left">
-                          <img src="img/nopic.jpg" class="media-object img30 J-reply-head">
-                      </a>
-                      <a href="" class="J-reply-user J-userLink topic-user" rel=""></a>&nbsp;&nbsp;<span class="J-reply-con"></span>
-                  </div>
-                  <div class="reply-at"><a class="J-reply-at" data-user="">回复</a></div>
               </div>
 
               <div class="topic-item hide">
@@ -106,42 +93,7 @@
                       </div>
                   </div>
               </div>
-
-              <div id="J-topic-wrap" class="topic-wrap">
-                  <% if(topics && topics.length){ %>
-                  <% for(var i = 0, len = topics.length; i < len; i++){ %>
-                  <% var curTopic = topics[i] %>
-                  <div class="topic-item J-topic-item">
-                      <div class="topic-left">
-                          <img src="<%= curTopic.head %>" class="media-object J-topic-img img50" alt="<%= curTopic.author_nickName %>" title="<%= curTopic.author_nickName %>">
-                      </div>
-                      <div class="topic-body">
-                          <div class="topic-content">
-                              <a href="/user/<%= curTopic.author_name %>" class="topic-user J-topic-authorName J-userLink" title="<%= curTopic.author_nickName %>"><%= curTopic.author_nickName %></a>&nbsp;&nbsp;<span class="J-topic-content"><%= curTopic.content %></span>
-                          </div>
-                          <div class="topic-updown clearfix">
-                              <span class="pull-left topic-time J-topic-time"><%= curTopic.create_time %></span>
-                              <span class="pull-right J-topic-updown hidde">
-                                  <a class="topic-up J-topic-up" data-topicid="<%= curTopic._id %>" data-user="<%= curTopic.author_name %>" data-type="support"><i class="icon-thumbs-up"></i> 赞 <span class="J-topic-upNum"><% if(curTopic.support){ %> (<%= curTopic.support %>)<% } %></span></a>&nbsp;
-                                  <a class="topic-down J-topic-down" data-topicid="<%= curTopic._id %>" data-user="<%= curTopic.author_name %>" data-type="down"><i class="icon-thumbs-down"></i> 踩 <span class="J-topic-downNum"><% if(curTopic.down){ %> (<%= curTopic.down %>)<% } %></span></a>&nbsp;
-                                  <a class="topic-showreply J-topic-showreply" data-topicid="<%= curTopic._id %>" data-user="<%= curTopic.author_name %>"><i class="icon-user"></i> 评论 <span class="J-topic-replyNum"><% if(curTopic.replyCount){ %>(<%= curTopic.replyCount %>)<% } %></span></a>
-                              </span>
-                          </div>
-                          <div class="J-reply-wrapper hide">
-                              <div class="reply-border"></div>
-                              <div class="reply-push">
-                                  <textarea rows="1"></textarea>
-                                  <div class="text-right pull-right"><input type="button" value="发 布" class="btn btn-large btn-inverse J-reply-fabu" data-topicid="<%= curTopic._id %>" data-user="<%= curTopic.author_name %>"></div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-
-                  <% } %>
-                  <% }else{ %>
-                  <div>暂无吐槽信息。</div>
-                  <% } %>
-              </div>
+              <%- partial('topic/topicBlock', {topics: topics}) %>
               <!-- page start -->
               <%- partial('pagination', {pre: "", pagination: pagination}) %>
               <!-- page end -->
@@ -149,10 +101,29 @@
           <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>
       </div>
   </div>
+<% if(gold){ %>
+<div id="J-timeMachine" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">每天登录奖励</h3>
+  </div>
+  <div class="modal-body">
+      <p>亲爱的 <span class="label label-success"><%= topInfo.nickName %></span>，根据你的人品指数，你获得系统随机送出的 <span class="badge badge-info"><%= gold %></span> 个金币~ <(￣︶￣)></p>
+  </div>
+  <div class="modal-footer">
+      <a id="J-howgetgold" title="" data-content="系统根据你的 粉丝数量、关注的人、吐槽数量 计算出人品指数" data-placement="bottom" data-toggle="popover" class="btn" href="#" data-original-title="人品指数">什么是人品指数</a>
+      <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">知道了</button>
+  </div>
+</div>
+<% } %>
 <script type="text/javascript">
   duckJS.use(['jquery', 'common'], function($, common){
       $(function(){
           common.indexObj.init();
       });
+      <% if(gold){ %>
+          $('#J-timeMachine').modal('toggle');
+          $('#J-howgetgold').popover();
+      <% } %>
   });
 </script>

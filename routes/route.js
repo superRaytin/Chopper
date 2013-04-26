@@ -23,8 +23,6 @@ module.exports = function(app){
     app.get('/logout', sign.logout);
 
     // 发表话题 | 我的吐槽 | 获取评论 | 赞踩
-    //app.get('/topic', topic.index);
-    //app.post('/topic', topic.addTopic);
     app.post('/newTopic.json', topic.newTopic);
     app.get('/mine', topic.myTopic);
     app.post('/getComments.json', topic.getComments);
@@ -45,7 +43,4 @@ module.exports = function(app){
     // 消息中心
     app.get('/message', message.page);
     app.post('/message_empty', message.message_empty);
-
-    // test
-    app.get('/test', home.test);
 };

@@ -44,14 +44,14 @@ exports.index = function(req, res, next){
     console.log( deciphered + decipher.final('utf8') )
      */
     console.log(req.session);
-    console.log(util.timeBucket(new Date('2013/4/2 22:32:39')))
 
     var ep = new EventProxy(),
+        current_user = res.locals.current_user,
         page = parseInt(req.query.page) || 1,
         limit = config.limit,
         opt = {skip: (page - 1) * limit, limit: limit, sort: [['_id', 'desc']]};
 
-    ep.all( 'topicList', 'sidebar', 'topbar', 'totalCount', function(topicList, sidebar, topbar, totalCount){
+    ep.all( 'goldCoins', 'topicList', 'sidebar', 'topbar', 'totalCount', function(goldCoins, topicList, sidebar, topbar, totalCount){
         var pagination = util.pagination(page, totalCount);
         res.render('index',
             {
@@ -62,7 +62,8 @@ exports.index = function(req, res, next){
                 users: sidebar.users,
                 userInfo: sidebar.userInfo,
                 usersByCount: sidebar.usersByCount,
-                pagination: pagination
+                pagination: pagination,
+                gold: goldCoins
             }
         );
     });
@@ -99,8 +100,10 @@ exports.index = function(req, res, next){
     }));
 
     // 获取右侧资源
-    common.getSidebarNeed(res, next, {fields: 'name nickName head fans followed gold topic_count sign lastLogin_time'}, function(need){
-        ep.emit('sidebar', need);
+    ep.on('afterGold', function(){
+        common.getSidebarNeed(res, next, {fields: 'name nickName head fans followed gold topic_count sign lastLogin_time'}, function(need){
+            ep.emit('sidebar', need);
+        });
     });
 
     // 获取顶部资源
@@ -112,11 +115,35 @@ exports.index = function(req, res, next){
     topicProxy.getTopicCount(ep.done(function(totalCount){
         ep.emit('totalCount', Math.ceil(totalCount / limit));
     }));
-};
 
-// 以下代码仅为测试之用
-exports.test = function(req, res, next){
-    res.render('test', {
-        title: 'test'
-    });
+    // 随机送金币
+    if(current_user){
+        userProxy.getUserInfoByName(current_user, 'lastLogin_time lastGetGold fans followed gold topic_count', ep.done(function(user){
+            var compare = user.lastGetGold ? user.lastGetGold : user.lastLogin_time;
+
+            if(user.lastLogin_time && util.timeBucket(compare)){
+                // 计算人品指数
+                var add = user.fans.length + Math.ceil(user.followed.length/2) + Math.ceil(user.topic_count/5),
+                    coins = util.random(5, 20 + add);
+
+                if(user.gold){
+                    user.gold += coins;
+                }else{
+                    user.gold = coins;
+                }
+                user.lastGetGold = new Date().format('yyyy-MM-dd hh:mm:ss');
+                user.save(function(err){
+                    if(err) return next(err);
+                    ep.emit('goldCoins', coins);
+                    ep.emit('afterGold');
+                });
+            }else{
+                ep.emit('goldCoins', null);
+                ep.emit('afterGold');
+            }
+        }));
+    }else{
+        ep.emit('goldCoins', null);
+        ep.emit('afterGold');
+    }
 };

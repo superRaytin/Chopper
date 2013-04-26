@@ -31,7 +31,7 @@
             <div class="nav-collapse collapse">
                 <div class="navbar-text pull-right dropdown">
                     <% if(locals.current_user){ %>
-                    欢迎你，<span class="theCurrentName label label-success"><% if(topInfo.nickName){ %><%= topInfo.nickName %><% }else{ %><%= locals.current_user %><% } %></span>
+                    欢迎你，<span class="theCurrentName label label-success"><%= topInfo.nickName %></span>
                     <% if(topInfo.msgCount != 0){ %> <a href="/message" title="新的消息"><span class="label label-warning"><i class="icon-envelope icon-white"></i> 消息(<%= topInfo.msgCount %>)</span></a> <% } %>
                     <% if(topInfo.lastLogin_time != '0'){ %>上次登录：<%= topInfo.lastLogin_time %><% }else{ %>新人登录，速报三围~<% } %> <a class="dropdown-toggle" data-toggle="dropdown" role="button" href="#"><i class=" icon-wrench icon-white"></i> 设置<b class="caret"></b></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">

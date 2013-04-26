@@ -64,6 +64,7 @@ function random(min, max){
  */
 function timeBucket(date){
     var now = new Date(),
+        date = new Date(date),
         nowed = now.getFullYear() + now.getMonth() + now.getDay(),
         dated = date.getFullYear() + date.getMonth() + date.getDay();
 

@@ -7,6 +7,7 @@
      name: '小微吐槽',
      description: '这里没有节操可言',
      version: '0.0.1',
+     domain: 'localhost',
      db: 'mongodb://127.0.0.1/chihuohuo',
      port: 3000,
      uploadDir: './public/upload/', // 图片上传目录

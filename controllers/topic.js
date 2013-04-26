@@ -248,7 +248,7 @@ function supportdown(req, res, next){
 
     // 不能对自己发表的主题操作
     if(topicuser === current_user){
-        var msg = zan ? '节操掉了 (╯_╰)' : '你这是要自踩么亲，算你狠...';
+        var msg = zan ? '喂，节操掉了 (╯_╰)' : '你这是要自踩么亲，算你狠...';
         ep.emit('wrong', msg);
         return;
     }
