@@ -16,6 +16,8 @@ mongoose.connect(config.db, function(err){
 
 require('./user');
 require('./topic');
+require('./category');
 
 exports.User = mongoose.model('User');
 exports.Topic = mongoose.model('Topic');
+exports.Category = mongoose.model('Category');

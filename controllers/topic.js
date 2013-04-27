@@ -7,7 +7,9 @@ var proxy = require('../proxy'),
     common = proxy.common,
     util = require('../util'),
     topicModel = require('../models').Topic,
+    categoryModel = require('../models').Category,
     topicProxy = proxy.Topic,
+    categoryProxy = proxy.Category,
     userProxy = proxy.User,
     config = require('../config').config,
     EventProxy = require("eventproxy");
@@ -19,6 +21,7 @@ function newTopic(req, res, next){
     //var session = req.session;
     var currentUser = res.locals.current_user,
         content = req.body['content'],
+        category = req.body['category'],
         desc;
 
     if(content == ''){
@@ -36,8 +39,11 @@ function newTopic(req, res, next){
     newTopic.content = content;
     newTopic.author_name = currentUser;
     newTopic.create_time = new Date().format('yyyy/MM/dd hh:mm:ss');
+    if(category){
+        newTopic.topic_Type = category;
+    }
 
-    ep.all('getUserId', function(user){
+    ep.all('getUserId', 'afterSaveCate', function(user, cateid){
         newTopic.create_time = new Date(newTopic.create_time).format('MM月dd日 hh:mm');
         user.topic_count += 1;
         user.save();
@@ -45,15 +51,50 @@ function newTopic(req, res, next){
             success: true,
             data: {
                 topic: newTopic,
-                user: user
+                user: user,
+                cateid: cateid
             }
         });
     }).fail(next);
 
+    // 保存话题分类之后需要
+    // 保存话题分类
+    ep.on('saveCategory', function(topic){
+        if(category){
+            categoryProxy.getCategoryByName(category, {}, ep.done(function(cate){
+                // 更新
+                if(cate){
+                    cate.count++;
+                    cate.topics.push(topic._id);
+                    cate.save(function(err){
+                        if(err) return next(err);
+                        ep.emit('afterSaveCate', cate._id);
+                    });
+                }
+                // 新增
+                else{
+                    var newCate = new categoryModel({
+                        name: category,
+                        count: 1,
+                        topics: [topic._id]
+                    });
+
+                    newCate.save(function(err, cate){
+                        if(err) return next(err);
+                        ep.emit('afterSaveCate', cate._id);
+                    });
+                }
+            }));
+        }else{
+            ep.emit('afterSaveCate', null);
+        }
+    });
+
     userProxy.getOneUserInfo({name: currentUser}, '_id name nickName head topic_count', ep.done(function(user){
         newTopic.author_id = user._id;
-        newTopic.save(ep.done(function(){
+        newTopic.save(ep.done(function(topic){
             ep.emit('getUserId', user);
+            ep.emit('saveCategory', topic);
         }));
     }));
 }

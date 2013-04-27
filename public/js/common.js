@@ -214,6 +214,12 @@ define(['jquery', 'alertify'], function($, alertify){
                     that.html(con);
                 });
             });
+        },
+        // 附加话题分类
+        replaceToCate: function(content, cateid){
+            return content.replace(/#[^#]+#/, function(str){
+                return '<a href="/category/'+ cateid +'">'+ str +'</a>';
+            });
         }
     };
 
@@ -221,17 +227,46 @@ define(['jquery', 'alertify'], function($, alertify){
     var indexObj = {
         fabu: function(){
             var btn = $('#J-fabu'),
-                con = $('#J-topic-content');
+                join = $('#J-joinCategory'),
+                con = $('#J-topic-content'),
+                param = {},
+                reg = /#([^#]+)#/,
+                conVal, mat, category;
+
+            join.on('click', function(){
+                con.val('#' + category + '# ').focus();
+                return false;
+            });
 
             btn.on('click', function(){
+                conVal = con.val();
+                mat = conVal.match(reg);
+
                 if($.trim(con.val()) == ''){
                     alertify.alert('别闹了，随便写点吧~');
                     return;
                 };
 
+                // 匹配是否有话题分类 # #
+                if(mat){
+                    category = mat[1];
+                    // 话题最大长度20个字
+                    if(category.length > 20){
+                        alertify.alert('话题分类最大长度为20个字，精减一下吧~');
+                        return;
+                    }
+                    // 只能是汉字与英文数字
+                    else if(!/^[\u2E80-\uFE4F\w-]*$/g.test(category)){
+                        alertify.alert('话题分类不能有特殊字符的啊~');
+                        return;
+                    }
+                    param.category = category;
+                }
+
                 //var content = con.val().toString().replace(/(\r)*\n/g,"<br>").replace(/\s/g," ");
 
-                _util.doAsync('/newTopic.json', 'POST', {content: con.val()}, function(data){
+                param.content = con.val();
+                _util.doAsync('/newTopic.json', 'POST', param, function(data){
                     var topic = data.topic,
                         user = data.user,
                         topic_wrap = $('#J-topic-wrap'),
@@ -256,7 +291,7 @@ define(['jquery', 'alertify'], function($, alertify){
                     support.attr({'data-topicid': topic._id, 'data-user': user.name});
                     down.attr({'data-topicid': topic._id, 'data-user': user.name});
                     replyFabu.attr({'data-topicid': topic._id, 'data-user': user.name});
-                    content.text(topic.content);
+                    content.html(mat ? public.replaceToCate(topic.content, data.cateid) : topic.content);
                     time.text(topic.create_time);
 
                     topic_wrap.prepend(newTopic);
@@ -320,7 +355,7 @@ define(['jquery', 'alertify'], function($, alertify){
                 }
 
                 if(fill){
-                    _util.doAsync('/account', 'post', params, function(data){
+                    _util.doAsync('/accountSave.json', 'post', params, function(data){
                         // 同步页面数据
                         if(data.nickName) $('.theCurrentName').text(data.nickName);
                         if(data.sign) $('.theCurrentSign').text(data.sign);
@@ -368,7 +403,7 @@ define(['jquery', 'alertify'], function($, alertify){
                 }
 
                 if(error == 0){
-                    _util.doAsync('/pass', 'post', params, function(data){
+                    _util.doAsync('/passSave.json', 'post', params, function(data){
                         if(data == 'ok'){
                             alertify.alert('密码什么的已经成功被你篡改 \\^o^/');
                             passWrap.removeClass('error');
@@ -443,7 +478,7 @@ define(['jquery', 'alertify'], function($, alertify){
         },
         empty: function(){
             var msgbody = $('#J-message-body');
-            _util.doAsync('/message_empty', 'post', function(res){
+            _util.doAsync('/emptyMessage.json', 'post', function(res){
                 msgbody.empty();
                 msgbody.append('<div class="message-item">没有新的消息。</div>');
                 alertify.success('已清空消息中心。');

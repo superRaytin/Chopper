@@ -5,4 +5,5 @@
  */
 exports.User = require('./user');
 exports.Topic = require('./topic');
+exports.Category = require('./category');
 exports.common = require('./common');

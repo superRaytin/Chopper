@@ -236,6 +236,13 @@ hr{
 .user-infor-name{
     font-weight: normal;
 }
+.user-infor-goldtip{
+    color: #eee;
+    background: #f60;
+    display: inline-block;
+    padding: 0px 5px;
+    margin-left: 5px;
+}
 .navbar-text .caret{
     margin-top: 19px;
     margin-left: 10px;
@@ -351,7 +358,8 @@ hr{
     border-bottom: 1px dotted #DDD;
 }
 .topic-item:hover{
-    background: #f9f9f9;
+    background: #F8F8F8;
+    box-shadow: 0px 0px 10px #ddd inset;
 }
 .topic-body{
     overflow: hidden;
@@ -519,4 +527,8 @@ hr{
 }
 .sidebar-newmessage{
     background: #EED29B;
+}
+
+.modal-backdrop.fade.in{
+    opacity: 0.2;
 }

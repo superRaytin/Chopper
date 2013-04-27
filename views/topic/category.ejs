@@ -1,0 +1,19 @@
+<div class="container">
+      <div class="row">
+          <div class="span8">
+              <h3 class="titleBar">与 #<%= cate.name %># 有关的吐槽 (<%= cate.count %>)</h3>
+              <%- partial('topic/topicBlock', {topics: topics}) %>
+              <!-- page start -->
+              <%- partial('pagination', {pre: "category/"+ cate._id +"/", pagination: pagination}) %>
+              <!-- page end -->
+          </div>
+          <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>
+      </div>
+  </div>
+<script type="text/javascript">
+    duckJS.use(['jquery', 'common'], function($, common){
+        $(function(){
+            common.myTopic.init();
+        });
+    });
+</script>

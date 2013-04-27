@@ -7,6 +7,7 @@ var controllers = require('../controllers'),
     sign = controllers.sign,
     user = controllers.user,
     topic = controllers.topic,
+    category = controllers.category,
     message = controllers.message,
     home = controllers.home;
 
@@ -29,11 +30,14 @@ module.exports = function(app){
     app.post('/newComment.json', topic.newComment);
     app.post('/supportdown.json', topic.supportdown);
 
+    // 话题分类
+    app.get('/category/:cateid', category.index);
+
     // 个人中心
     app.get('/account', user.account);
-    app.post('/account', user.account_save);
+    app.post('/accountSave.json', user.account_save);
     app.get('/pass', user.pass);
-    app.post('/pass', user.pass_save);
+    app.post('/passSave.json', user.pass_save);
     app.get('/user/:name', user.user_center);
     app.get('/avatar', user.avatar);
     app.post('/avatar', user.avatar_save);
@@ -42,5 +46,5 @@ module.exports = function(app){
 
     // 消息中心
     app.get('/message', message.page);
-    app.post('/message_empty', message.message_empty);
+    app.post('/emptyMessage.json', message.message_empty);
 };
