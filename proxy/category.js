@@ -22,7 +22,15 @@ function getCategoryById(id, opt, callback){
     }
     modelCategory.findOne({_id: id}, '', opt, callback);
 };
+function getCategoryByName(name, opt, callback){
+    if(typeof opt == 'function'){
+        callback = opt;
+        opt = {};
+    }
+    modelCategory.findOne({name: name}, '', opt, callback);
+};
 
 module.exports = {
-    getCategoryById: getCategoryById
+    getCategoryById: getCategoryById,
+    getCategoryByName: getCategoryByName
 };

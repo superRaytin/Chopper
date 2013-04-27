@@ -21,7 +21,8 @@ var topicSchema = new Schema({
     down: {type: Number, default: 0}, // 踩
     supporter: [], // 赞的人
     downer: [], // 踩的人
-    topic_Type: {type: String} // 所属话题
+    topic_Type: {type: String}, // 所属话题名称
+    category: {type: String} // 所属话题ID
 });
 
 mongoose.model('Topic', topicSchema);

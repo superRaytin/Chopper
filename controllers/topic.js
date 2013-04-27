@@ -43,7 +43,7 @@ function newTopic(req, res, next){
         newTopic.topic_Type = category;
     }
 
-    ep.all('getUserId', 'afterSaveCate', function(user, cateid){
+    ep.all('getUserId', 'cateTopicOk', function(user, cateid){
         newTopic.create_time = new Date(newTopic.create_time).format('MM月dd日 hh:mm');
         user.topic_count += 1;
         user.save();
@@ -57,18 +57,30 @@ function newTopic(req, res, next){
         });
     }).fail(next);
 
-    // 保存话题分类之后需要
+    // 保存话题分类之后需要更新topic的category
+    ep.on('afterSaveCate', function(cateid, topic){
+        if(topic && cateid){
+            topic.category = cateid;
+            topic.save(function(err){
+                if(err) return next(err);
+                ep.emit('cateTopicOk', cateid);
+            });
+        }else{
+            ep.emit('cateTopicOk', cateid);
+        }
+    });
+
     // 保存话题分类
     ep.on('saveCategory', function(topic){
         if(category){
-            categoryProxy.getCategoryByName(category, {}, ep.done(function(cate){
+            categoryProxy.getCategoryByName(category, ep.done(function(cate){
                 // 更新
                 if(cate){
                     cate.count++;
                     cate.topics.push(topic._id);
                     cate.save(function(err){
                         if(err) return next(err);
-                        ep.emit('afterSaveCate', cate._id);
+                        ep.emit('afterSaveCate', cate._id, topic);
                     });
                 }
                 // 新增
@@ -81,7 +93,7 @@ function newTopic(req, res, next){
 
                     newCate.save(function(err, cate){
                         if(err) return next(err);
-                        ep.emit('afterSaveCate', cate._id);
+                        ep.emit('afterSaveCate', cate._id, topic);
                     });
                 }
             }));

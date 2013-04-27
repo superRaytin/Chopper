@@ -81,6 +81,8 @@ function index(req, res, next){
                 });
 
                 topicList.forEach(function(cur){
+                    cur.cateid = cateid;
+                    cur.testhtml = '<strong>testhtml</strong>';
                     ep.emit('getEveryTopicInfo', cur);
                 });
             }));
