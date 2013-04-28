@@ -1,8 +1,7 @@
 body{
     padding-top: 40px;
     font-family: 'microsoft Yahei',simsun;
-    /*background: #d1d8de;*/
-    background: url("../img/background.png") repeat;
+    background: #eee;
 }
 li{
     list-style: none;
@@ -37,8 +36,25 @@ hr{
 }
 
 #wrapper{
-    min-height: 500px;
+    min-height: 400px;
 }
 .content{
     padding: 20px;
+}
+.blank{
+    width: 100%;
+}
+.table{
+    background: #fff;
+}
+.table th{
+    background: -moz-linear-gradient(top, #fff, #eee);
+    background:-webkit-linear-gradient(top, #fff, #eee);
+}
+.table td{
+    font-size: 12px
+}
+.table tr:hover{
+    background: #F8F8F8;
+    box-shadow: 0px 0px 10px #dedede inset;
 }

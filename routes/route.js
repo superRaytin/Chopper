@@ -51,4 +51,5 @@ module.exports = function(app){
 
     // 后台管理
     app.get('/admin', admin.index);
+    app.post('/admin/delTopic.json', admin.delTopic);
 };

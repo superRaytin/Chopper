@@ -90,11 +90,23 @@ function getMainTopic(fields, opt, callback){
     modelTopic.find({$where: 'this.replyTo === undefined'}, fields, opt, callback);
 };
 
+/**
+ * 删除话题
+ * Callback:
+ * - err, 数据库异常
+ * @param {String} id 话题id
+ * @param {Function} callback 回调函数
+ */
+function delTopicById(id, callback){
+    modelTopic.findOneAndRemove({_id: id}, callback);
+};
+
 module.exports = {
     getTopicList: getTopicList,
     getTopicListByName: getTopicListByName,
     getTopicCount: getTopicCount,
     getOneTopicById: getOneTopicById,
     updateTopicById: updateTopicById,
-    getMainTopic: getMainTopic
+    getMainTopic: getMainTopic,
+    delTopicById: delTopicById
 };

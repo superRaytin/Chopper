@@ -329,90 +329,6 @@ define(['jquery', 'alertify'], function($, alertify){
 
     // 首页
     var indexObj = {
-        /*fabu: function(){
-            var btn = $('#J-fabu'),
-                join = $('#J-joinCategory'),
-                con = $('#J-topic-content'),
-                param = {},
-                reg = /#([^#]+)#/,
-                conVal, mat, category;
-
-            join.on('click', function(){
-                con.val('#' + $(this).attr('data-category') + '# ').focus();
-                return false;
-            });
-
-            btn.on('click', function(){
-                var topic_wrap = $('#J-topic-wrap'),
-                    $count = $('#J-userInfor-topicCount'),
-                    template = $('#J-topicItemTemplate');
-
-                conVal = con.val();
-                mat = conVal.match(reg);
-
-                if($.trim(con.val()) == ''){
-                    alertify.alert('别闹了，随便写点吧~');
-                    return;
-                };
-
-                // 匹配是否有话题分类 # #
-                if(mat){
-                    category = mat[1];
-                    // 话题最大长度20个字
-                    if(category.length > 20){
-                        alertify.alert('话题分类最大长度为20个字，精减一下吧~');
-                        return;
-                    }
-                    // 只能是汉字与英文数字
-                    else if(!/^[\u2E80-\uFE4F\w-]*$/g.test(category)){
-                        alertify.alert('话题分类不能有特殊字符的啊~');
-                        return;
-                    }
-                    param.category = category;
-                }
-
-                //var content = con.val().toString().replace(/(\r)*\n/g,"<br>").replace(/\s/g," ");
-
-                param.content = con.val();
-                _util.doAsync('/newTopic.json', 'POST', param, function(data){
-                    var topic = data.topic,
-                        user = data.user,
-                        newTopic, content, authorName, time,
-                        img, topicbtn;
-
-                    newTopic = template.clone(true);
-                    newTopic.removeAttr('id');
-
-                    content = newTopic.find('.J-topic-content');
-                    authorName = newTopic.find('.J-topic-authorName');
-                    time = newTopic.find('.J-topic-time');
-                    img = newTopic.find('.J-topic-img');
-                    topicbtn = newTopic.find('.J-topic-showreply, .J-topic-up, .J-topic-down, .J-reply-fabu');
-
-                    authorName.text(user.nickName ? user.nickName : user.name);
-                    img.attr('src', user.head);
-                    topicbtn.attr({'data-topicid': topic._id, 'data-user': user.name});
-                    mat && newTopic.attr('data-cateid', data.cateid);
-                    content.html(mat ? public.replaceToCate(topic.content, data.cateid) : topic.content);
-                    time.text(topic.create_time);
-
-                    topic_wrap.prepend(newTopic);
-                    setTimeout(function(){
-                        newTopic.slideDown(800, function(){
-                            newTopic.removeClass('hide');
-                            topic_wrap.find('.topic-item').last().remove();
-                        });
-                    },300);
-
-                    // 清空吐槽框
-                    con.val('');
-                    con.focus();
-
-                    // 个人信息区域同步吐槽数
-                    $count.text(user.topic_count);
-                });
-            });
-        },*/
         init: function(){
             public.topic.fabu();
             public.topic.domEventInit();
@@ -609,12 +525,44 @@ define(['jquery', 'alertify'], function($, alertify){
         }
     };
 
+    // 后台管理
+    var admin = {
+        domEventInit: function(){
+            var btn_remove = $('.J-remove'),
+                btn_update = $('.J-update');
+
+            btn_remove.on('click', function(){
+                if(!confirm('确定删除？')) return;
+
+                var that = $(this),
+                    tr = that.parent().parent(),
+                    replyCount = tr.find('.J-replyCount').text(),
+                    id = that.attr('data-id');
+
+                if(replyCount != 0){
+                    alertify.alert('该吐槽拥有评论，须先删除评论');
+                    return
+                }
+
+                _util.doAsync('/admin/delTopic.json', 'post', {topicid: id}, function(res){
+                    tr.fadeOut(600, function(){
+                        tr.remove();
+                    });
+                });
+            });
+        },
+        init: function(){
+            this.domEventInit();
+        }
+    }
+
     var exports = {
         indexObj: indexObj,
         account: account,
         myTopic: myTopic,
         category: category,
-        message: message
+        message: message,
+        admin: admin
     };
 
     return exports;
