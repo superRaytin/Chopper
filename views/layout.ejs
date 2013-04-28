@@ -3,6 +3,7 @@
 <head>
     <title><% if(title){ %><%= title %><% }else{ %><%= config.name %><% } %></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
     <!-- Bootstrap -->
     <link href="/css/bootstrap.css" rel="stylesheet" media="screen">
     <link id="J-skin" href="/style/simple/base.css" rel="stylesheet" media="screen">
@@ -27,7 +28,7 @@
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
-            <a class="brand" href="/"><i class="icon-home icon-white"></i><%= config.name %><i class="navbar-version">v <%= config.version %></i></a><span class="navbar-dec pull-left"><%= config.description %></span>
+            <a class="brand" href="/"><img src="/img/whatisjc.png"> <%= config.name %><i class="navbar-version">v <%= config.version %></i></a><span class="navbar-dec pull-left"><%= config.description %></span>
             <div class="nav-collapse collapse">
                 <div class="navbar-text pull-right dropdown">
                     <% if(locals.current_user){ %>

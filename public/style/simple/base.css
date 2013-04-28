@@ -73,10 +73,6 @@ hr{
 .navbar .btn{
     margin-top: 0px;
 }
-.navbar-text{
-    /*color: #F1d115;*/
-    color: #FAe171;
-}
 .navbar-link{
     color: #ddd;
 }
@@ -123,7 +119,7 @@ hr{
     margin-left: 20px;
     text-shadow: 1px 1px 0px #000;
     font-size: 16px;
-    line-height: 40px;
+    line-height: 48px;
 }
 /*.navbar-inverse .navbar-inner{
     background-image: -moz-linear-gradient(center top , #444, #222);
@@ -156,6 +152,14 @@ hr{
 }
 .widget-list .media-heading a:hover{
     color: #0088CC;
+}
+.widget-category li a{
+    display: inline-block;
+    vertical-align: middle;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 156px;
 }
 .list-users li{
     float: left;
@@ -243,8 +247,13 @@ hr{
     padding: 0px 5px;
     margin-left: 5px;
 }
+.navbar-text{
+    /*color: #F1d115;*/
+    color: #FAe171;
+    line-height: 48px;
+}
 .navbar-text .caret{
-    margin-top: 19px;
+    margin-top: 23px;
     margin-left: 10px;
     border-top: 4px solid #fff;
 }

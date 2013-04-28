@@ -18,7 +18,7 @@ function index(req, res, next){
     var ep = new EventProxy(),
         page = parseInt(req.query.page) || 1,
         limit = config.limit,
-        opt = {skip: (page - 1) * limit, limit: limit, sort: [['_id', 'desc']]};
+        opt = {skip: (page - 1) * limit, limit: limit, sort: [['_id', -1]]};
 
     ep.all('topicList', 'cate', 'sidebar', 'topbar', 'totalCount', function(topicList, cate, sidebar, topbar, totalCount){
         var pagination = util.pagination(page, totalCount);
@@ -73,7 +73,7 @@ function index(req, res, next){
     categoryProxy.getCategoryById(cateid, opt, ep.done(function(category){
         // 分类存在, 取得分类下所有话题
         if(category){
-            topicProxy.getTopicList({_id: {$in: category.topics}}, {}, ep.done(function(topicList){
+            topicProxy.getTopicList({_id: {$in: category.topics}}, {sort: [['_id', -1]]}, ep.done(function(topicList){
                 // 获取当前主题的作者昵称与头像
                 ep.after('toAll', topicList.length, function(){
                     ep.emit('topicList', topicList);

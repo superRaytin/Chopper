@@ -122,7 +122,7 @@ exports.index = function(req, res, next){
         userProxy.getUserInfoByName(current_user, 'lastLogin_time lastGetGold fans followed gold topic_count', ep.done(function(user){
             var compare = user.lastGetGold ? user.lastGetGold : user.lastLogin_time;
 
-            if(user.lastLogin_time && util.timeBucket(compare)){
+            if(user.lastLogin_time != '0' && util.timeBucket(compare)){
                 // 计算人品指数
                 var add = user.fans.length + Math.ceil(user.followed.length/2) + Math.ceil(user.topic_count/5),
                     coins = util.random(5, 20 + add);

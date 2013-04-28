@@ -1,0 +1,44 @@
+body{
+    padding-top: 40px;
+    font-family: 'microsoft Yahei',simsun;
+    /*background: #d1d8de;*/
+    background: url("../img/background.png") repeat;
+}
+li{
+    list-style: none;
+}
+hr{
+    border-color: #DDDDDD -moz-use-text-color #FFFFFF;
+}
+.fn-mt10{
+    margin-top: 10px;
+}
+.fn-mt20{
+    margin-top: 20px;
+}
+.fn-mt30{
+    margin-top: 30px;
+}
+.fn-ml10{
+    margin-left: 10px;
+}
+.fn-pl20{
+    padding-left: 20px;
+}
+.fn-posi-re{
+    position: relative;
+}
+.fn-posi-ab{
+    position: absolute;
+}
+
+.navbar .brand{
+    margin-left: 0px;
+}
+
+#wrapper{
+    min-height: 500px;
+}
+.content{
+    padding: 20px;
+}

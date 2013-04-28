@@ -9,7 +9,8 @@ var controllers = require('../controllers'),
     topic = controllers.topic,
     category = controllers.category,
     message = controllers.message,
-    home = controllers.home;
+    home = controllers.home,
+    admin = controllers.admin;
 
 module.exports = function(app){
     app.get('/', home.index);
@@ -47,4 +48,7 @@ module.exports = function(app){
     // 消息中心
     app.get('/message', message.page);
     app.post('/emptyMessage.json', message.message_empty);
+
+    // 后台管理
+    app.get('/admin', admin.index);
 };

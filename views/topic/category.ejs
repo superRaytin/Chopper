@@ -1,6 +1,37 @@
 <div class="container">
       <div class="row">
           <div class="span8">
+              <div class="push clearfix">
+                  <textarea id="J-topic-content" rows="2" placeholder="说点儿什么...">#<%= cate.name %># </textarea>
+                  <div class="text-left"><input type="button" class="btn btn-large btn-success" id="J-fabu" value="一吐为快"> Ctrl+Enter快速发布 </div>
+              </div>
+
+              <div id="J-topicItemTemplate" class="topic-item J-topic-item hide">
+                  <div class="topic-left">
+                      <img src="/img/nopic.jpg" class="media-object J-topic-img img50" alt="" title="">
+                  </div>
+                  <div class="topic-body">
+                      <div class="topic-content">
+                          <a href="" class="topic-user J-topic-authorName J-userLink" title=""></a>&nbsp;&nbsp;<span class="J-topic-content"></span>
+                      </div>
+                      <div class="topic-updown clearfix">
+                          <span class="pull-left topic-time J-topic-time"></span>
+                              <span class="pull-right J-topic-updown">
+                                  <a class="topic-up J-topic-up" data-topicid="" data-user="" data-type="support"><i class="icon-thumbs-up"></i> 赞 <span class="J-topic-upNum"></span></a>&nbsp;
+                                  <a class="topic-down J-topic-down" data-topicid="" data-user="" data-type="down"><i class="icon-thumbs-down"></i> 踩 <span class="J-topic-downNum"></span></a>&nbsp;
+                                  <a class="topic-showreply J-topic-showreply" data-topicid="" data-user=""><i class="icon-user"></i> 评论 <span class="J-topic-replyNum"></span></a>
+                              </span>
+                      </div>
+                      <div class="J-reply-wrapper hide">
+                          <div class="reply-border"></div>
+                          <div class="reply-push">
+                              <textarea rows="1"></textarea>
+                              <div class="text-right pull-right"><input type="button" value="发 布" class="btn btn-large btn-inverse J-reply-fabu" data-topicid="" data-user=""></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
               <h3 class="titleBar">与 #<%= cate.name %># 有关的吐槽 (<%= cate.count %>)</h3>
               <%- partial('topic/topicBlock', {topics: topics}) %>
               <!-- page start -->
@@ -13,7 +44,7 @@
 <script type="text/javascript">
     duckJS.use(['jquery', 'common'], function($, common){
         $(function(){
-            common.myTopic.init();
+            common.category.init();
         });
     });
 </script>

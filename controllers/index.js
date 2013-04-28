@@ -8,7 +8,8 @@ var user = require("../controllers/user"),
     category = require("../controllers/category"),
     sign = require("../controllers/sign"),
     message = require("../controllers/message"),
-    home = require("../controllers/home");
+    home = require("../controllers/home"),
+    admin = require("../controllers/admin");
 
 module.exports = {
     home: home,
@@ -16,5 +17,6 @@ module.exports = {
     topic: topic,
     category: category,
     sign: sign,
-    message: message
+    message: message,
+    admin: admin
 };
