@@ -30,7 +30,25 @@ function getCategoryByName(name, opt, callback){
     modelCategory.findOne({name: name}, '', opt, callback);
 };
 
+/**
+ * 获取所有分类
+ * Callback:
+ * - err, 数据库异常
+ * - topics, 话题
+ * @param {String} id 分类id
+ * @param {Object} opt 过滤条件
+ * @param {Function} callback 回调函数
+ */
+function getCategoryList(query, opt, callback){
+    if(typeof opt == 'function'){
+        callback = opt;
+        opt = {};
+    }
+    modelCategory.find(query, '', opt, callback);
+}
+
 module.exports = {
     getCategoryById: getCategoryById,
-    getCategoryByName: getCategoryByName
+    getCategoryByName: getCategoryByName,
+    getCategoryList: getCategoryList
 };

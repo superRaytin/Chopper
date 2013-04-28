@@ -4,6 +4,7 @@
  * Date: 13-4-5
  */
 var userProxy = require('../proxy').User,
+    categoryProxy = require('../proxy').Category,
     EventProxy = require('eventproxy');
 
 // 获取右侧资源
@@ -11,15 +12,15 @@ exports.getSidebarNeed = function(res, next, settings, callback){
     var ep = new EventProxy(),
         target_user = settings.current_user ? settings.current_user : res.locals.current_user;
 
-    ep.all('userList', 'current_user', 'userListByCount', function(userList, current_user, userListByCount){
+    ep.all('userList', 'current_user', 'userListByCount', 'categoryList', function(userList, current_user, userListByCount, categoryList){
         if(current_user){
             current_user.sign = current_user.sign && current_user.sign != '' ? current_user.sign : '这家伙很懒，还没有签名';
         };
-
         callback({
             users: userList,
             userInfo: current_user,
-            usersByCount: userListByCount
+            usersByCount: userListByCount,
+            categories: categoryList
         });
     }).fail(next);
 
@@ -40,6 +41,9 @@ exports.getSidebarNeed = function(res, next, settings, callback){
 
     // 最新加入
     userProxy.getUserList('name nickName head', ep.done('userList'));
+
+    // 最热话题
+    categoryProxy.getCategoryList({}, {limit: 10, sort: [['count', -1]]}, ep.done('categoryList'));
 };
 
 // 获取顶部资源

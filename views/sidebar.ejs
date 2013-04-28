@@ -62,15 +62,18 @@
             <h5 class="widget-head"><i class="icon-certificate"></i> 最热话题 | Hot</h5>
             <div class="media-body">
                 <ul>
-                    <li><a href="#this">#有没有人告诉你#</a>&nbsp;(87)</li>
-                    <li><a href="#this">#这是一个#</a>&nbsp;(87)</li>
-                    <li><a href="#this">#假数据#</a>&nbsp;(87)</li>
+                    <% if(locals.categories && categories.length){ %>
+                        <% for(var j = 0, len = categories.length; j < len; j++){ %>
+                        <% var currentCate = categories[j] %>
+                        <li><a href="/category/<%= currentCate._id %>"><%= currentCate.name %></a>&nbsp;(<%= currentCate.count %>)</li>
+                        <% } %>
+                    <% } %>
                 </ul>
             </div>
         </div>
         <div class="widget-list">
             <h5 class="widget-head"><i class="icon-star"></i> 吐槽之星 | Star</h5>
-            <% if(usersByCount && usersByCount.length){ %>
+            <% if(locals.usersByCount && usersByCount.length){ %>
             <div class="list-users">
                 <ul class="clearfix">
                     <% for(var j = 0, len = usersByCount.length; j < len; j++){ %>

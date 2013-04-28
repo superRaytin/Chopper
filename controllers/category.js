@@ -30,6 +30,7 @@ function index(req, res, next){
             users: sidebar.users,
             userInfo: sidebar.userInfo,
             usersByCount: sidebar.usersByCount,
+            categories: sidebar.categories,
             pagination: pagination,
             cate: cate
         });
@@ -70,7 +71,6 @@ function index(req, res, next){
     });
 
     categoryProxy.getCategoryById(cateid, opt, ep.done(function(category){
-        console.log(category);
         // 分类存在, 取得分类下所有话题
         if(category){
             topicProxy.getTopicList({_id: {$in: category.topics}}, {}, ep.done(function(topicList){

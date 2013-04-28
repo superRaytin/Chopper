@@ -12,7 +12,7 @@
     <% if(topics && topics.length){ %>
     <% for(var i = 0, len = topics.length; i < len; i++){ %>
     <% var curTopic = topics[i] %>
-    <div class="topic-item J-topic-item" <% if(curTopic.topic_Type){ %>data-cateid="<%= curTopic.category %>"<% } %>>
+    <div class="topic-item J-topic-item" <% if(curTopic.category){ %>data-cateid="<%= curTopic.category %>"<% } %>>
         <div class="topic-left">
             <img src="<%= curTopic.head %>" class="media-object J-topic-img img50" alt="<%= curTopic.author_nickName %>" title="<%= curTopic.author_nickName %>">
         </div>

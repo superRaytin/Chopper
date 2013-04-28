@@ -131,6 +131,7 @@ function myTopic(req, res, next){
             users: sidebar.users,
             userInfo: sidebar.userInfo,
             usersByCount: sidebar.usersByCount,
+            categories: sidebar.categories,
             pagination: pagination
         });
     }).fail(next);

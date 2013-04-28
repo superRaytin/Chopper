@@ -177,7 +177,7 @@ hr{
 }
 
 .row .media-body{
-    min-height: 64px;
+    /*min-height: 64px;*/
 }
 .media-heading{
     color: #006a92;

@@ -197,6 +197,7 @@ function user_center(req, res, next){
             users: sidebar.users,
             userInfo: sidebar.userInfo,
             usersByCount: sidebar.usersByCount,
+            categories: sidebar.categories,
             followIn: followIn,
             pagination: pagination
         });

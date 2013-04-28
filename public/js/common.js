@@ -73,7 +73,7 @@ define(['jquery', 'alertify'], function($, alertify){
     };
 
     var public = {
-        reply: {
+        topic: {
             domEventInit: function(){
                 var topicItem = $('.J-topic-item'),
                     showReply = $('.J-topic-showreply'),
@@ -82,6 +82,17 @@ define(['jquery', 'alertify'], function($, alertify){
                     btn_supportdown = $('.J-topic-up, .J-topic-down'),
                     btn_replyAt = $('.J-reply-at'),
                     replyWrap, pushArea, that;
+
+                // #xxx# => <a href="/category/xxx">#xxx#</a>
+                topicItem.each(function(){
+                    var that = $(this),
+                        content = that.find('.J-topic-content'),
+                        cateid = that.attr('data-cateid');
+
+                    if(cateid){
+                        content.html(public.replaceToCate(content.text(), cateid));
+                    }
+                });
 
                 // 点击评论
                 showReply.on('click', function(){
@@ -210,7 +221,7 @@ define(['jquery', 'alertify'], function($, alertify){
             var wrap = $('.J-topic-content');
             wrap.each(function(){
                 var that = $(this);
-                _util.BeforeShow(that.text(), function(con){
+                _util.BeforeShow(that.html(), function(con){
                     that.html(con);
                 });
             });
@@ -234,11 +245,15 @@ define(['jquery', 'alertify'], function($, alertify){
                 conVal, mat, category;
 
             join.on('click', function(){
-                con.val('#' + category + '# ').focus();
+                con.val('#' + $(this).attr('data-category') + '# ').focus();
                 return false;
             });
 
             btn.on('click', function(){
+                var topic_wrap = $('#J-topic-wrap'),
+                    $count = $('#J-userInfor-topicCount'),
+                    template = $('#J-topicItemTemplate');
+
                 conVal = con.val();
                 mat = conVal.match(reg);
 
@@ -269,28 +284,22 @@ define(['jquery', 'alertify'], function($, alertify){
                 _util.doAsync('/newTopic.json', 'POST', param, function(data){
                     var topic = data.topic,
                         user = data.user,
-                        topic_wrap = $('#J-topic-wrap'),
-                        $count = $('#J-userInfor-topicCount'),
-                        template = $('#J-topicItemTemplate'),
                         newTopic, content, authorName, time,
-                        img, showReply, replyFabu, support, down;
+                        img, topicbtn;
 
                     newTopic = template.clone(true);
+                    newTopic.removeAttr('id');
+
                     content = newTopic.find('.J-topic-content');
                     authorName = newTopic.find('.J-topic-authorName');
                     time = newTopic.find('.J-topic-time');
                     img = newTopic.find('.J-topic-img');
-                    showReply = newTopic.find('.J-topic-showreply');
-                    support = newTopic.find('.J-topic-up');
-                    down = newTopic.find('.J-topic-down');
-                    replyFabu = newTopic.find('.J-reply-fabu');
+                    topicbtn = newTopic.find('.J-topic-showreply, .J-topic-up, .J-topic-down, .J-reply-fabu');
 
                     authorName.text(user.nickName ? user.nickName : user.name);
                     img.attr('src', user.head);
-                    showReply.attr({'data-topicid': topic._id, 'data-user': user.name});
-                    support.attr({'data-topicid': topic._id, 'data-user': user.name});
-                    down.attr({'data-topicid': topic._id, 'data-user': user.name});
-                    replyFabu.attr({'data-topicid': topic._id, 'data-user': user.name});
+                    topicbtn.attr({'data-topicid': topic._id, 'data-user': user.name});
+                    mat && newTopic.attr('data-cateid', data.cateid);
                     content.html(mat ? public.replaceToCate(topic.content, data.cateid) : topic.content);
                     time.text(topic.create_time);
 
@@ -313,7 +322,7 @@ define(['jquery', 'alertify'], function($, alertify){
         },
         init: function(){
             this.fabu();
-            public.reply.domEventInit();
+            public.topic.domEventInit();
         }
     };
 
@@ -420,7 +429,7 @@ define(['jquery', 'alertify'], function($, alertify){
         init: function(){
             this.saveData();
             this.savePass();
-            public.reply.domEventInit();
+            public.topic.domEventInit();
             public.replaceContent();
         }
     };
@@ -458,7 +467,7 @@ define(['jquery', 'alertify'], function($, alertify){
         },
         init: function(){
             this.follow();
-            public.reply.domEventInit();
+            public.topic.domEventInit();
             public.replaceContent();
         }
     };

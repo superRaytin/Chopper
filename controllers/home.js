@@ -62,6 +62,7 @@ exports.index = function(req, res, next){
                 users: sidebar.users,
                 userInfo: sidebar.userInfo,
                 usersByCount: sidebar.usersByCount,
+                categories: sidebar.categories,
                 pagination: pagination,
                 gold: goldCoins
             }
