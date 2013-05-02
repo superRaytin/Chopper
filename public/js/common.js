@@ -105,12 +105,12 @@ define(['jquery', 'alertify'], function($, alertify){
                         category = mat[1];
                         // 话题最大长度20个字
                         if(category.length > 20){
-                            alertify.alert('话题分类最大长度为20个字，精减一下吧~');
+                            alertify.alert('#话题#最大长度为20个字，精减一下吧~');
                             return;
                         }
                         // 只能是汉字与英文数字
                         else if(!/^[\u2E80-\uFE4F\w-]*$/g.test(category)){
-                            alertify.alert('话题分类不能有特殊字符的啊~');
+                            alertify.alert('#话题#不能有特殊字符的啊~');
                             return;
                         }
                         param.category = category;
@@ -241,7 +241,7 @@ define(['jquery', 'alertify'], function($, alertify){
                         replyAuthorTopic = $('#J-userInfor-topicCount');
 
                     if($.trim(content) == ''){
-                        alertify.alert('别闹了，随机写点吧~');
+                        alertify.alert('别闹了，随便写点吧~');
                         return;
                     }
                     _util.doAsync('/newComment.json', 'post', {
@@ -261,7 +261,9 @@ define(['jquery', 'alertify'], function($, alertify){
                             pushArea.val('');
 
                             // 同步页面数据
-                            replyNumArea.text( parseInt(replyNumArea.text()) + 1 );
+                            var originNum = replyNumArea.text();
+                                num = originNum == '' ? 1 : (parseInt(originNum.replace(/[\(\)]/g, '')) + 1);
+                            replyNumArea.text(' ('+ num +')');
                             replyAuthorTopic.text( replyAuthorTopic.text() + 1 );
                         });
                     });
@@ -375,7 +377,10 @@ define(['jquery', 'alertify'], function($, alertify){
                 if(fill){
                     _util.doAsync('/accountSave.json', 'post', params, function(data){
                         // 同步页面数据
-                        if(data.nickName) $('.theCurrentName').text(data.nickName);
+                        if(data.nickName){
+                            $('.theCurrentName').text(data.nickName);
+                            nickName.attr('disabled', 'disabled');
+                        }
                         if(data.sign) $('.theCurrentSign').text(data.sign);
 
                         emailWrap.removeClass('error');
@@ -531,20 +536,24 @@ define(['jquery', 'alertify'], function($, alertify){
             var btn_remove = $('.J-remove'),
                 btn_update = $('.J-update');
 
+            var delMap = {
+                topic: 'delTopic.json',
+                category: 'delCategory.json'
+            };
             btn_remove.on('click', function(){
                 if(!confirm('确定删除？')) return;
 
                 var that = $(this),
                     tr = that.parent().parent(),
                     replyCount = tr.find('.J-replyCount').text(),
-                    id = that.attr('data-id');
+                    id = that.attr('data-id'),
+                    type = that.attr('data-type');
 
                 if(replyCount != 0){
-                    alertify.alert('该吐槽拥有评论，须先删除评论');
-                    return
+                    if(!confirm('该吐槽拥有评论，评论将会一同被删除')) return;
                 }
 
-                _util.doAsync('/admin/delTopic.json', 'post', {topicid: id}, function(res){
+                _util.doAsync('/admin/' + delMap[type], 'post', {id: id}, function(res){
                     tr.fadeOut(600, function(){
                         tr.remove();
                     });

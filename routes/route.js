@@ -52,4 +52,6 @@ module.exports = function(app){
     // 后台管理
     app.get('/admin', admin.index);
     app.post('/admin/delTopic.json', admin.delTopic);
+    app.get('/admin/category', admin.categoryManage);
+    app.post('/admin/delCategory.json', admin.delCategory);
 };

@@ -87,7 +87,7 @@ function account_save(req, res, next){
                 });
                 return
             }
-            delete req.body.nickName;
+            //delete req.body.nickName;
             ep.emit('afterCheckNick');
         }));
     }else{

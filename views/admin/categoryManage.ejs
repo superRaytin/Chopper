@@ -1,0 +1,35 @@
+<div id="wrapper" class="content">
+    <div class="blank">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th width="20%">id</th>
+                <th width="20%">名称</th>
+                <th width="30%">话题成员</th>
+                <th width="10%">数量</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+                <% if(categories && categories.length){ %>
+                <% for(var i = 0, len = categories.length; i < len; i++){ %>
+                <% var curCate = categories[i] %>
+                <tr>
+                    <td><%= curCate._id %></td>
+                    <td><%= curCate.name %></td>
+                    <td><%= curCate.topics %></td>
+                    <td><%= curCate.count %></td>
+                    <td>
+                        <button class="btn btn-info J-update" type="button" data-type="category" data-id="<%= curCate._id %>">修改</button>
+                        <button class="btn btn-danger J-remove" type="button" data-type="category" data-id="<%= curCate._id %>">删除</button>
+                    </td>
+                </tr>
+                <% } %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+    <!-- page start -->
+    <%- partial('pagination', {pre: "admin/category", pagination: pagination}) %>
+    <!-- page end -->
+</div>

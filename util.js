@@ -110,6 +110,42 @@ function checkUserStatusAsync(res, msg){
 };
 
 /**
+ * 检查管理用户状态
+ * @param {String} msg 未登录提示信息
+ */
+function checkAdminAsyc(res, msg){
+    if( !checkUserStatusAsync(res, '先登录啊亲') ) return;
+
+    var current_user = res.locals.current_user;
+
+    if( current_user !== 'admin' ){
+        res.json({
+            success: false,
+            data: msg
+        });
+        return
+    };
+
+    return true;
+}
+function checkAdmin(res, msg){
+    if( !checkUserStatus(res, '先登录啊亲') ) return;
+
+    var current_user = res.locals.current_user;
+
+    if( current_user !== 'admin' ){
+        res.render('notice/normal', {
+            title: '出错了',
+            desc: msg,
+            layout: null
+        })
+        return false;
+    };
+
+    return true;
+};
+
+/**
  * 加密解密
  * @param {String} will 待加密或解密的字符串
  */
@@ -166,6 +202,8 @@ function pushMessage(user, params, callback){
 module.exports = {
     checkUserStatus: checkUserStatus,
     checkUserStatusAsync: checkUserStatusAsync,
+    checkAdmin: checkAdmin,
+    checkAdminAsyc: checkAdminAsyc,
     encrypt: encrypt,
     decrypt: decrypt,
     pagination: pagination,

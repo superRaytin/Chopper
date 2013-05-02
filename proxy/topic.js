@@ -100,6 +100,9 @@ function getMainTopic(fields, opt, callback){
 function delTopicById(id, callback){
     modelTopic.findOneAndRemove({_id: id}, callback);
 };
+function delTopic(condition, callback){
+    modelTopic.findOneAndRemove(condition, callback);
+}
 
 module.exports = {
     getTopicList: getTopicList,
@@ -108,5 +111,6 @@ module.exports = {
     getOneTopicById: getOneTopicById,
     updateTopicById: updateTopicById,
     getMainTopic: getMainTopic,
-    delTopicById: delTopicById
+    delTopicById: delTopicById,
+    delTopic: delTopic
 };

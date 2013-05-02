@@ -44,11 +44,41 @@ function getCategoryList(query, opt, callback){
         callback = opt;
         opt = {};
     }
+    !opt.sort && (opt.sort = [['_id', -1]]);
     modelCategory.find(query, '', opt, callback);
 }
+
+/**
+ * 获取分类数
+ * Callback:
+ * - err, 数据库异常
+ * - count, 分类数
+ * @param {Object} condition 条件
+ * @param {Function} callback 回调函数
+ */
+function getCount(condition, callback){
+    if(typeof condition == 'function'){
+        callback = condition;
+        condition = {};
+    }
+    modelCategory.count(condition, callback);
+};
+
+/**
+ * 删除分类
+ * Callback:
+ * - err, 数据库异常
+ * @param {String} id 分类id
+ * @param {Function} callback 回调函数
+ */
+function delCategoryById(id, callback){
+    modelCategory.findOneAndRemove({_id: id}, callback);
+};
 
 module.exports = {
     getCategoryById: getCategoryById,
     getCategoryByName: getCategoryByName,
-    getCategoryList: getCategoryList
+    getCategoryList: getCategoryList,
+    getCount: getCount,
+    delCategoryById: delCategoryById
 };
