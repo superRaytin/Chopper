@@ -207,7 +207,7 @@ function getComments(req, res, next){
     ep.fail(next);
 
     topicProxy.getOneTopicById(topicid, 'replys', {limit: 10}, ep.done(function(list){
-        if(list.replys){
+        if(list && list.replys){
             res.json({
                 success: true,
                 data: list.replys

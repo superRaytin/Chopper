@@ -65,8 +65,19 @@ function random(min, max){
 function timeBucket(date){
     var now = new Date(),
         date = new Date(date),
-        nowed = now.getFullYear() + now.getMonth() + now.getDate(),
-        dated = date.getFullYear() + date.getMonth() + date.getDate();
+        nowMonth = now.getMonth() + 1,
+        dateMonth = date.getMonth() + 1,
+        nowDate = now.getDate(),
+        dateDate = date.getDate();
+
+    nowMonth = nowMonth > 12 ? nowMonth - 12 : nowMonth;
+    dateMonth = dateMonth > 12 ? dateMonth - 12 : dateMonth;
+
+    nowMonth = nowMonth < 10 ? '0' + nowMonth : nowMonth;
+    dateMonth = dateMonth < 10 ? '0' + dateMonth : dateMonth;
+
+    var nowed = [now.getFullYear(), nowMonth, nowDate < 10 ? '0' + nowDate : nowDate].join(''),
+        dated = [date.getFullYear(), dateMonth, dateDate < 10 ? '0' + dateDate : dateDate].join('');
 
     return nowed - dated > 0
 };

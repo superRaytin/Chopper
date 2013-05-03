@@ -64,11 +64,23 @@ define(['jquery', 'alertify'], function($, alertify){
         // @回复前处理
         // <a rel="xxx(@aaa)" href="/user/aaa">xxx</a> => @aaa
         beforeAt: function(content){
-            var reg = /<a rel=\"[^\(]*\(([^\)]*)\)\"[^>]*>[^<]*<\/a>/g;
+            content = this.filter(content);
+
+            var reg = /<a rel=\"[^\(]*\(([^\)]*)\)\"[^>]*>[^<]*<\/a>/g,
+                regForCate = /<a[^>]*>(#[^#]*#)<\/a>/g;
 
             return content.replace(reg, function(str, atUser){
                 return atUser;
+            }).replace(regForCate, function(str, cate){
+                return cate;
             });
+        },
+        // 过滤恶意代码
+        filter: function(con){
+            var reg1 = /<style[^>]*>.*<\/style>/g,
+                reg2 = /<script[^>]*>.*<\/script>/g;
+
+            return con.replace(reg1, '').replace(reg2, '');
         }
     };
 
@@ -118,7 +130,7 @@ define(['jquery', 'alertify'], function($, alertify){
 
                     //var content = con.val().toString().replace(/(\r)*\n/g,"<br>").replace(/\s/g," ");
 
-                    param.content = con.val();
+                    param.content = _util.filter(con.val());
                     _util.doAsync('/newTopic.json', 'POST', param, function(data){
                         var topic = data.topic,
                             user = data.user,
@@ -244,6 +256,7 @@ define(['jquery', 'alertify'], function($, alertify){
                         alertify.alert('别闹了，随便写点吧~');
                         return;
                     }
+
                     _util.doAsync('/newComment.json', 'post', {
                         topicid: topicid,
                         topicuser: topicuser,
@@ -264,7 +277,7 @@ define(['jquery', 'alertify'], function($, alertify){
                             var originNum = replyNumArea.text();
                                 num = originNum == '' ? 1 : (parseInt(originNum.replace(/[\(\)]/g, '')) + 1);
                             replyNumArea.text(' ('+ num +')');
-                            replyAuthorTopic.text( replyAuthorTopic.text() + 1 );
+                            replyAuthorTopic.text( parseInt(replyAuthorTopic.text()) + 1 );
                         });
                     });
                 });

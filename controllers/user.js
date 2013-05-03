@@ -205,20 +205,25 @@ function user_center(req, res, next){
 
     // 当前为评论时，获取吐槽主体用户信息
     ep.on('getReplyTopicInfo', function(topic, cur, emitName){
-        userProxy.getOneUserInfo({_id: topic.author_id}, 'name nickName head', function(err, replyToUser){
-            var nickName = replyToUser.nickName, time = topic.create_time;
+        if(topic){
+            userProxy.getOneUserInfo({_id: topic.author_id}, 'name nickName head', function(err, replyToUser){
+                var nickName = replyToUser.nickName, time = topic.create_time;
 
-            topic.author_nickName = nickName ? nickName : replyToUser.name;
-            topic.head = replyToUser.head ? replyToUser.head : config.nopic;
-            topic.create_time = new Date(time).format('MM月dd日 hh:mm');
+                topic.author_nickName = nickName ? nickName : replyToUser.name;
+                topic.head = replyToUser.head ? replyToUser.head : config.nopic;
+                topic.create_time = new Date(time).format('MM月dd日 hh:mm');
 
-            cur.replyTopic = topic;
+                cur.replyTopic = topic;
+                ep.emit(emitName);
+            });
+        }else{
             ep.emit(emitName);
-        });
+        }
     });
 
     // 取得每个吐槽的用户信息
     ep.on('getEveryTopicInfo', function(cur){
+        console.log(321);
         userProxy.getOneUserInfo({_id : cur.author_id}, 'name nickName head', ep.done(function(user){
             var nickName = user.nickName, time = cur.create_time;
 
@@ -229,6 +234,7 @@ function user_center(req, res, next){
             if(cur.replyTo){
                 topicProxy.getOneTopicById(cur.replyTo, '', function(err, topic){
                     if(err) return next(err);
+                    if(topic) console.log(cur.replyTo);
                     ep.emit('getReplyTopicInfo', topic, cur, 'toAll');
                 });
             }else{

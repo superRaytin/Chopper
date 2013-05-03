@@ -86,92 +86,20 @@ function delTopic(req, res, next){
     }).fail(next);
 
     topicProxy.delTopicById(topicid, ep.done(function(topic){
-        _withDelTopic(ep, function(){
+        _withDelTopic(topic, function(){
             ep.emit('final');
         });
-        ep.emit('updateUser', topic);
     }));
 };
-function _withDelTopic(ep, callback){
-    // 如果此主题下有评论则删除之
-    ep.on('delComment', function(topic){
-        topicProxy.getTopicList({replyTo: topic._id}, {}, ep.done(function(topics){
-            var num = topics.length;
 
-            // 更新各评论用户的吐槽数
-            topics.forEach(function(topic){
-                topicProxy.delTopicById(topic._id, ep.done(function(topicd){
-                    userProxy.getOneUserInfo({_id: topicd.author_id}, 'topic_count', ep.done(function(user){
-                        var topic_count = user.topic_count,
-                            hashCount = hash['topic_count'];
-
-                        user.topic_count = (hashCount ? hashCount : topic_count) - 1;
-
-                        // 防止时间差导致数据更新不准确
-                        hash['topic_count'] = user.topic_count;
-
-                        user.save(ep.done(function(){
-                            console.log(333)
-                            num--;
-                            if(num == 0){
-                                callback();
-                                //ep.emit('final');
-                            }
-                        }));
-                    }));
-                }));
-            });
-        }));
-    });
-
-    // 同步更新话题
-    ep.on('updateCate', function(topic){
-        categoryProxy.getCategoryById(topic.category, ep.done(function(category){
-            category.count--;
-            category.topics.remove(topic._id);
-            category.save(ep.done(function(){
-                console.log(222)
-                if(topic.replys && topic.replys.length){
-                    ep.emit('delComment', topic);
-                }
-                else{
-                    callback();
-                    //ep.emit('final');
-                }
-            }));
-        }));
-    });
-
-    // 同步更新用户吐槽数
-    ep.on('updateUser', function(topic, fromCate){
-        userProxy.getOneUserInfo({_id: topic.author_id}, 'topic_count', ep.done(function(user){
-            user.topic_count--;
-            user.save(ep.done(function(){
-                console.log(111)
-                if(topic.category && !fromCate){ // 删除话题时不用再更新主题
-                    ep.emit('updateCate', topic);
-                }
-                else if(topic.replys && topic.replys.length){
-                    console.log(999);
-                    ep.emit('delComment', topic);
-                }
-                else{
-                    callback();
-                    //ep.emit('final');
-                }
-            }));
-        }));
-    });
-}
-function errHandler(err){
-    if(err){
-        console.log(err);
-        return;
-    }
-}
-function _withDelTopic_(topic, callback, fromCate){
+function _withDelTopic(topic, callback, fromCate){
     var ep = new EventProxy();
-    ep.fail(errHandler);
+    ep.fail(function(err){
+        if(err){
+            console.log(err);
+            return;
+        }
+    });
 
     // 如果此主题下有评论则删除之
     function delComment(topic){
@@ -181,21 +109,19 @@ function _withDelTopic_(topic, callback, fromCate){
             // 更新各评论用户的吐槽数
             topics.forEach(function(topic){
                 topicProxy.delTopicById(topic._id, ep.done(function(topicd){
-                    userProxy.getOneUserInfo({_id: topicd.author_id}, 'topic_count', ep.done(function(user){
+                    userProxy.getOneUserInfo({_id: topicd.author_id}, 'name topic_count', ep.done(function(user){
                         var topic_count = user.topic_count,
-                            hashCount = hash['topic_count'];
+                            hashCount = hash[user.name + 'topic_count'];
 
                         user.topic_count = (hashCount ? hashCount : topic_count) - 1;
 
                         // 防止时间差导致数据更新不准确
-                        hash['topic_count'] = user.topic_count;
+                        hash[user.name + 'topic_count'] = user.topic_count;
 
                         user.save(ep.done(function(){
-                            console.log(333)
                             num--;
                             if(num == 0){
                                 callback();
-                                //ep.emit('final');
                             }
                         }));
                     }));
@@ -210,45 +136,37 @@ function _withDelTopic_(topic, callback, fromCate){
             category.count--;
             category.topics.remove(topic._id);
             category.save(ep.done(function(){
-                console.log(222)
                 if(topic.replys && topic.replys.length){
-                    //ep.emit('delComment', topic);
                     delComment(topic);
                 }
                 else{
                     callback();
-                    //ep.emit('final');
                 }
             }));
         }));
     };
 
     // 同步更新用户吐槽数
-    //ep.on('updateUser', function(topic, fromCate){
-        userProxy.getOneUserInfo({_id: topic.author_id}, 'topic_count', ep.done(function(user){
-            var topic_count = user.topic_count,
-                hashCount = hash['topic_count1'];
+    userProxy.getOneUserInfo({_id: topic.author_id}, 'name topic_count', ep.done(function(user){
+        var topic_count = user.topic_count,
+            hashCount = hash[user.name + 'topic_count1'];
 
-            user.topic_count = (hashCount ? hashCount : topic_count) - 1;
-            // 防止时间差导致数据更新不准确
-            hash['topic_count1'] = user.topic_count;
+        user.topic_count = (hashCount ? hashCount : topic_count) - 1;
+        // 防止时间差导致数据更新不准确
+        hash[user.name + 'topic_count1'] = user.topic_count;
 
-            user.save(ep.done(function(){
-                console.log(111)
-                if(topic.category && !fromCate){ // 删除话题时不用再更新主题
-                    updateCate(topic);
-                }
-                else if(topic.replys && topic.replys.length){
-                    console.log(999);
-                    delComment(topic);
-                }
-                else{
-                    callback();
-                    //ep.emit('final');
-                }
-            }));
+        user.save(ep.done(function(){
+            if(topic.category && !fromCate){ // 删除话题时不用再更新主题
+                updateCate(topic);
+            }
+            else if(topic.replys && topic.replys.length){
+                delComment(topic);
+            }
+            else{
+                callback();
+            }
         }));
-    //});
+    }));
 }
 
 // 分类管理
@@ -282,7 +200,7 @@ function categoryManage(req, res, next){
     }));
 }
 
-// 删除分类
+// 删除话题
 function delCategory(req, res, next){
     var categoryid = req.body.id;
     if( !util.checkAdminAsyc(res, '无权限') || !categoryid ) return;
@@ -303,11 +221,10 @@ function delCategory(req, res, next){
             var num = category.topics.length;
             category.topics.forEach(function(topicid){
                 topicProxy.delTopicById(topicid, ep.done(function(topic){
-                    _withDelTopic_(topic, function(){
+                    _withDelTopic(topic, function(){
                         num--;
                         num == 0 && ep.emit('final');
                     }, true);
-                    //ep.emit('updateUser', topic, true);
                 }));
             });
         }
