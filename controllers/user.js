@@ -223,7 +223,6 @@ function user_center(req, res, next){
 
     // 取得每个吐槽的用户信息
     ep.on('getEveryTopicInfo', function(cur){
-        console.log(321);
         userProxy.getOneUserInfo({_id : cur.author_id}, 'name nickName head', ep.done(function(user){
             var nickName = user.nickName, time = cur.create_time;
 
