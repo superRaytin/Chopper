@@ -210,22 +210,27 @@ define(['jquery', 'alertify'], function($, alertify){
                     _util.doAsync('/getComments.json', 'post', {
                         topicid: that.attr('data-topicid')
                     }, function(res){
+                        var replys = res.replys,
+                            user = res.user;
+
                         // 先清空之前数据
                         replyWrap.find('.topic-reply').remove();
 
-                        if(res.length){
-                            $.each(res, function(i, replyItem){
-                                var replyItemTemplate = replyRepeat.clone(true).removeAttr('id').removeClass('hide');
-                                replyItemTemplate.find('.J-reply-head').attr('src', replyItem.head);
-                                replyItemTemplate.find('.J-reply-user').attr({'href': '/user/' + replyItem.author_name,'rel' : replyItem.author_name}).text(replyItem.author_nickName);
-                                replyItemTemplate.find('.J-reply-at').attr('data-user', replyItem.author_nickName);
+                        if(replys.length){
+                            $.each(replys, function(i, replyItem){
+                                var replyItemTemplate = replyRepeat.clone(true).removeAttr('id').removeClass('hide'),
+                                    userInfo = user[replyItem.author_name];
+
+                                replyItemTemplate.find('.J-reply-head').attr('src', userInfo.head);
+                                replyItemTemplate.find('.J-reply-user').attr({'href': '/user/' + replyItem.author_name,'rel' : replyItem.author_name}).text(userInfo.nickName);
+                                replyItemTemplate.find('.J-reply-at').attr('data-user', userInfo.nickName);
 
                                 (function(replyItem, replyItemTemplate){
                                     _util.BeforeShow(replyItem.content, function(con){
                                         replyItemTemplate.find('.J-reply-con').html(con ? con : replyItem.content);
                                         replyWrap.append(replyItemTemplate);
 
-                                        if(i == res.length - 1){
+                                        if(i == replys.length - 1){
                                             replyWrap.removeClass('hide');
                                             pushArea.val('').focus();
                                         }
@@ -277,7 +282,7 @@ define(['jquery', 'alertify'], function($, alertify){
                             var originNum = replyNumArea.text();
                                 num = originNum == '' ? 1 : (parseInt(originNum.replace(/[\(\)]/g, '')) + 1);
                             replyNumArea.text(' ('+ num +')');
-                            replyAuthorTopic.text( parseInt(replyAuthorTopic.text()) + 1 );
+                            //replyAuthorTopic.text( parseInt(replyAuthorTopic.text()) + 1 );
                         });
                     });
                 });

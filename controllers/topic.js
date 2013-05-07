@@ -8,8 +8,10 @@ var proxy = require('../proxy'),
     util = require('../util'),
     topicModel = require('../models').Topic,
     categoryModel = require('../models').Category,
+    replyModel = require('../models').Reply,
     topicProxy = proxy.Topic,
     categoryProxy = proxy.Category,
+    replyProxy = proxy.Reply,
     userProxy = proxy.User,
     config = require('../config').config,
     EventProxy = require("eventproxy");
@@ -206,11 +208,27 @@ function getComments(req, res, next){
 
     ep.fail(next);
 
-    topicProxy.getOneTopicById(topicid, 'replys', {limit: 10}, ep.done(function(list){
-        if(list && list.replys){
-            res.json({
-                success: true,
-                data: list.replys
+    replyProxy.getReplysByTopicId(topicid, ep.done(function(list){
+        if(list){
+            var replyUsers = {};
+            ep.after('afterUserInfo', list.length, function(){
+                res.json({
+                    success: true,
+                    data: {
+                        replys: list,
+                        user: replyUsers
+                    }
+                });
+            });
+
+            list.forEach(function(reply){
+                userProxy.getOneUserInfo({_id: reply.author_id}, 'name nickName head', ep.done(function(user){
+                    replyUsers[user.name] = {
+                        nickName: user.nickName ? user.nickName : user.name,
+                        head: user.head ? user.head : config.nopic
+                    };
+                    ep.emit('afterUserInfo');
+                }));
             });
         }else{
             res.json({
@@ -229,38 +247,40 @@ function newComment(req, res, next){
         topicuser = req.body.topicuser,
         topicCon = req.body.topicCon,
         content = req.body.content,
-        current_user = res.locals.current_user;
+        current_user = res.locals.current_user,
+        selfUser = topicuser == current_user,
+        queryUserArray = selfUser ? [topicuser] : [topicuser, current_user];
 
     var ep = new EventProxy();
     ep.fail(next);
 
-    var newTopic = new topicModel({
-            author_name: current_user,
-            replyTo: topicid,
-            content: content,
-            create_time: new Date().format('yyyy/MM/dd hh:mm:ss')
-        });
-
     ep.all('getUser', 'saveTopic', 'msgPushed', function(user, topic){
-        var params = {
-            head: user.head ? user.head : config.nopic,
+        var replyParam = {
+            author_id: user._id,
             author_name: current_user,
-            author_nickName: user.nickName ? user.nickName : user.name,
+            create_time: new Date().format('yyyy/MM/dd hh:mm:ss'),
+            topic_id: topicid,
+            topic_user: topicuser,
             content: content
-        };
-        topic.replys.push(params);
-        topic.replyCount += 1;
-        topic.markModified('replys');
-        topic.save(ep.done(function(){
-            res.json({
-                success: true,
-                data: params
-            });
-        }));
+        },
+        newReply = new replyModel(replyParam);
 
+        // 更新吐槽数量
+        topic.replyCount++;
+        topic.save(ep.done(function(){
+            // 保存至评论表
+            newReply.save(ep.done(function(reply){
+                replyParam.head = user.head ? user.head : config.nopic;
+                replyParam.author_nickName = user.nickName ? user.nickName : user.name;
+                res.json({
+                    success: true,
+                    data: replyParam
+                });
+            }));
+        }));
     });
 
-    ep.after('getTopic', 1, function(reply){
+    ep.on('getTopic', function(){
         // 更新吐槽信息
         topicProxy.getOneTopicById(topicid, '', ep.done(function(topic){
             ep.emit('saveTopic', topic);
@@ -268,10 +288,15 @@ function newComment(req, res, next){
     });
 
     // 更新用户信息与评论 || 推送消息
-    //userProxy.getOneUserInfo({name: current_user}, '_id name nickName head topic_count', ep.done(function(user){
-    userProxy.getUserListBy({name: {$in: [topicuser, current_user]}}, '_id name nickName head topic_count message newMessage', ep.done(function(user){
-        var curUser = user[0],
+    userProxy.getUserListBy({name: {$in: queryUserArray}}, '_id name nickName head topic_count reply_count message newMessage', ep.done(function(user){
+        var curUser, tarUser;
+
+        if(!selfUser){
+            curUser = user[0];
             tarUser = user[1];
+        }else{
+            tarUser = curUser = user[0];
+        }
 
         // 检查校正返回用户顺序
         if(curUser.name != current_user){
@@ -279,31 +304,34 @@ function newComment(req, res, next){
             tarUser = user[0];
         }
 
-        // 向目标用户推送消息
-        var msgBody = {
-            msgType: 'comment',
-            topic: topicCon,
-            time: new Date().format('MM月dd日 hh:mm'),
-            name: current_user,
-            nickName: curUser.nickName ? curUser.nickName : current_user,
-            readed: false
-        };
-        util.pushMessage(tarUser, msgBody, function(){
-            ep.emit('msgPushed');
-        });
-
-        // 保存评论
-        newTopic.author_id = curUser._id;
-        ep.emit('getUser', curUser);
-        newTopic.save(ep.done(function(reply){
-            console.log(reply);
-            // 更新用户吐槽数
-            curUser.topic_count += 1;
-            curUser.save(function(err){
-                if(err) return err;
-                ep.emit('getTopic', reply);
+        // 向目标用户推送消息, 评论自己不发消息
+        if(!selfUser){
+            var msgBody = {
+                msgType: 'comment',
+                topic: topicCon,
+                time: new Date().format('MM月dd日 hh:mm'),
+                name: current_user,
+                nickName: curUser.nickName ? curUser.nickName : current_user,
+                readed: false
+            };
+            util.pushMessage(tarUser, msgBody, function(){
+                ep.emit('msgPushed');
             });
-        }));
+        }else{
+            ep.emit('msgPushed');
+        }
+
+        // 更新用户吐槽数
+        if(curUser.reply_count){
+            curUser.reply_count++;
+        }else{
+            curUser.reply_count = 1;
+        }
+
+        curUser.save(function(err){
+            ep.emit('getUser', curUser);
+            ep.emit('getTopic');
+        });
     }));
 };
 
