@@ -8,6 +8,7 @@ var proxy = require("../proxy"),
     userProxy = proxy.User,
     topicProxy = proxy.Topic,
     categoryProxy = proxy.Category,
+    replyProxy = proxy.Reply,
     config = require('../config').config,
     EventProxy = require("eventproxy"),
     util = require('../util');
@@ -103,20 +104,20 @@ function _withDelTopic(topic, callback, fromCate){
 
     // 如果此主题下有评论则删除之
     function delComment(topic){
-        topicProxy.getTopicList({replyTo: topic._id}, {}, ep.done(function(topics){
-            var num = topics.length;
+        replyProxy.getReplysByTopicId(topic._id, ep.done(function(replys){
+            var num = replys.length;
 
-            // 更新各评论用户的吐槽数
-            topics.forEach(function(topic){
-                topicProxy.delTopicById(topic._id, ep.done(function(topicd){
-                    userProxy.getOneUserInfo({_id: topicd.author_id}, 'name topic_count', ep.done(function(user){
-                        var topic_count = user.topic_count,
-                            hashCount = hash[user.name + 'topic_count'];
+            // 更新各评论用户的评论数
+            replys.forEach(function(reply){
+                replyProxy.delReplyById(reply._id, ep.done(function(curReply){
+                    userProxy.getOneUserInfo({_id: curReply.author_id}, 'name reply_count', ep.done(function(user){
+                        var reply_count = user.reply_count,
+                            hashCount = hash[user.name + 'reply_count'];
 
-                        user.topic_count = (hashCount ? hashCount : topic_count) - 1;
+                        user.reply_count = (hashCount ? hashCount : reply_count) - 1;
 
                         // 防止时间差导致数据更新不准确
-                        hash[user.name + 'topic_count'] = user.topic_count;
+                        hash[user.name + 'reply_count'] = user.reply_count;
 
                         user.save(ep.done(function(){
                             num--;
@@ -136,7 +137,7 @@ function _withDelTopic(topic, callback, fromCate){
             category.count--;
             category.topics.remove(topic._id);
             category.save(ep.done(function(){
-                if(topic.replys && topic.replys.length){
+                if(topic.replyCount && topic.replyCount > 0){
                     delComment(topic);
                 }
                 else{
@@ -159,7 +160,7 @@ function _withDelTopic(topic, callback, fromCate){
             if(topic.category && !fromCate){ // 删除话题时不用再更新主题
                 updateCate(topic);
             }
-            else if(topic.replys && topic.replys.length){
+            else if(topic.replyCount && topic.replyCount > 0){
                 delComment(topic);
             }
             else{

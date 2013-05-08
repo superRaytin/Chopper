@@ -90,7 +90,6 @@ define(['jquery', 'alertify'], function($, alertify){
                 var btn = $('#J-fabu'),
                     join = $('#J-joinCategory'),
                     con = $('#J-topic-content'),
-                    param = {},
                     reg = /#([^#]+)#/,
                     conVal, mat, category;
 
@@ -102,7 +101,8 @@ define(['jquery', 'alertify'], function($, alertify){
                 btn.on('click', function(){
                     var topic_wrap = $('#J-topic-wrap'),
                         $count = $('#J-userInfor-topicCount'),
-                        template = $('#J-topicItemTemplate');
+                        template = $('#J-topicItemTemplate'),
+                        param = {};
 
                     conVal = con.val();
                     mat = conVal.match(reg);

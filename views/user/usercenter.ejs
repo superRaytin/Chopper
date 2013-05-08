@@ -23,11 +23,21 @@
                       <div><%= userInfo.sign %></div>
                   </div>
               </div>
-              <% if(myself){ %>
-              <h3 class="titleBar">我的吐槽</h3>
-              <% }else{ %>
-              <h3 class="titleBar">TA的吐槽</h3>
-              <% } %>
+              <%
+                if(myself){
+                    var text = '我';
+                }else{
+                    var text = 'TA';
+                }
+              %>
+              <div class="navbar titles">
+                  <div class="navbar-inner">
+                      <ul class="nav">
+                          <li class="active"><a><%= text %>的吐槽</a></li>
+                          <li><a href="#"><%= text %>的评论</a></li>
+                      </ul>
+                  </div>
+              </div>
               <%- partial('topic/topicBlock', {topics: topics}) %>
               <!-- page start -->
               <%- partial('pagination', {pre: "user/" + userInfo.name, pagination: pagination}) %>
