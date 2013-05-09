@@ -7,6 +7,20 @@ var models = require('../models'),
     modelReply = models.Reply;
 
 /**
+ * 获取所有评论
+ * Callback:
+ * - err, 数据库异常
+ * - topics, 话题
+ * @param {String} id 吐槽id
+ * @param {Object} opt 过滤条件
+ * @param {Function} callback 回调函数
+ */
+function getAllReplys(opt, callback){
+    opt.sort = [['_id', 'desc']];
+    modelReply.find({}, '', opt, callback);
+};
+
+/**
  * 获取指定吐槽下所有评论
  * Callback:
  * - err, 数据库异常
@@ -71,5 +85,6 @@ module.exports = {
     getReplysByTopicId: getReplysByTopicId,
     getReplysByUserName: getReplysByUserName,
     getCount: getCount,
-    delReplyById: delReplyById
+    delReplyById: delReplyById,
+    getAllReplys: getAllReplys
 };

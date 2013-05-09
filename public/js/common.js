@@ -556,7 +556,8 @@ define(['jquery', 'alertify'], function($, alertify){
 
             var delMap = {
                 topic: 'delTopic.json',
-                category: 'delCategory.json'
+                category: 'delCategory.json',
+                reply: 'delReply.json'
             };
             btn_remove.on('click', function(){
                 if(!confirm('确定删除？')) return;

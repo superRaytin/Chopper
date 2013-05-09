@@ -54,4 +54,6 @@ module.exports = function(app){
     app.post('/admin/delTopic.json', admin.delTopic);
     app.get('/admin/category', admin.categoryManage);
     app.post('/admin/delCategory.json', admin.delCategory);
+    app.get('/admin/reply', admin.replyManage);
+    app.post('/admin/delReply.json', admin.delReply);
 };

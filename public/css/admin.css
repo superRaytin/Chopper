@@ -58,3 +58,9 @@ hr{
     background: #F8F8F8;
     box-shadow: 0px 0px 10px #dedede inset;
 }
+.replyTopicContent{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 200px;
+}
