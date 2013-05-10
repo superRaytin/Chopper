@@ -32,7 +32,7 @@
             <li<% if(locals.topics){ %> class="active"<% } %>><a href="/admin">吐槽管理<% if(locals.topics){ %> (<%= total %>)<% } %></a></li>
             <li<% if(locals.categories){ %> class="active"<% } %>><a href="/admin/category">话题管理<% if(locals.categories){ %> (<%= total %>)<% } %></a></li>
             <li<% if(locals.replys){ %> class="active"<% } %>><a href="/admin/reply">评论管理<% if(locals.replys){ %> (<%= total %>)<% } %></a></li>
-            <li><a href="#xuanran">用户管理</a></li>
+            <li<% if(locals.users){ %> class="active"<% } %>><a href="/admin/user">用户管理<% if(locals.users){ %> (<%= total %>)<% } %></a></li>
             <li><a href="#xuanran">全局配置</a></li>
             <li><a href="#youjian">工 具</a></li>
         </ul>

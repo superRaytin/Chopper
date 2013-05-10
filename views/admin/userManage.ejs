@@ -1,0 +1,51 @@
+<div id="wrapper" class="content">
+    <div class="blank">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th width="8%">用户名</th>
+                <th width="8%">花名</th>
+                <th width="10%">注册时间</th>
+                <th width="6%">吐槽数</th>
+                <th width="6%">评论数</th>
+                <th width="6%">粉丝</th>
+                <th width="5%">关注</th>
+                <th width="5%">金币</th>
+                <th width="10%">邮箱</th>
+                <th width="6%">新消息</th>
+                <th width="10%">上次登录</th>
+                <th width="8%">签名</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+                <% if(locals.users && users.length){ %>
+                <% for(var i = 0, len = users.length; i < len; i++){ %>
+                <% var cur = users[i] %>
+                <tr>
+                    <td><%= cur.name %></td>
+                    <td><% if(cur.nickName){ %><%= cur.nickName %><% } %></td>
+                    <td><%= cur.reg_time %></td>
+                    <td><%= cur.topic_count %></td>
+                    <td><%= cur.reply_count %></td>
+                    <td><%= cur.fans %></td>
+                    <td><%= cur.followed %></td>
+                    <td><%= cur.gold %></td>
+                    <td><% if(cur.email){ %><%= cur.email %><% } %></td>
+                    <td><%= cur.newMessage %></td>
+                    <td><%= cur.lastLogin_time %></td>
+                    <td><% if(cur.sign){ %><%= cur.sign %><% } %></td>
+                    <td>
+                        <button class="btn btn-info J-update" type="button" data-type="user" data-id="<%= cur._id %>">修改</button>
+                        <button class="btn btn-danger J-remove" type="button" data-type="user" data-id="<%= cur._id %>">删除</button>
+                    </td>
+                </tr>
+                <% } %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+    <!-- page start -->
+    <%- partial('pagination', {pre: "admin/user", pagination: pagination}) %>
+    <!-- page end -->
+</div>

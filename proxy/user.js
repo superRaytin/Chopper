@@ -49,6 +49,10 @@ function getUserInfoByName(name, fields, opt, callback, temp){
  * @param {Function} callback 回调函数
  */
 function getUserListBy(query, fields, opt, callback){
+    if(typeof opt == 'function'){
+        callback = opt;
+        opt = {};
+    }
     UserModel.find(query, fields, opt, callback);
 };
 
@@ -61,8 +65,6 @@ function getUserListBy(query, fields, opt, callback){
  */
 function getUserList(fields, callback){
     getUserListBy({}, fields, {limit: 20, sort: [['_id', -1]]}, callback);
-    //UserModel.findOne({name : 'aaa'}, callback);
-    //UserModel.find({}, 'name pass', {limit: 5}, callback);
     //UserModel.find({}, fields, {limit: 10, sort: [['_id', -1]]}, callback);
     //UserModel.find({ name: { $in: names } }, callback);
 };
@@ -116,6 +118,33 @@ function updateUserInfoByName(userName, opt, callback){
     UserModel.update({name: userName}, {$set: opt}, callback);
 };
 
+/**
+ * 删除用户
+ * Callback:
+ * - err, 数据库异常
+ * @param {String} id 用户id
+ * @param {Function} callback 回调函数
+ */
+function delUserById(id, callback){
+    UserModel.findOneAndRemove({_id: id}, callback);
+};
+
+/**
+ * 获取用户数
+ * Callback:
+ * - err, 数据库异常
+ * - count, 用户数
+ * @param {Object} condition 条件
+ * @param {Function} callback 回调函数
+ */
+function getCount(condition, callback){
+    if(typeof condition == 'function'){
+        callback = condition;
+        condition = {};
+    }
+    UserModel.count(condition, callback);
+};
+
 module.exports = {
     getOneUserInfo: getOneUserInfo,
     getUserInfoByName: getUserInfoByName,
@@ -124,5 +153,7 @@ module.exports = {
     getUserListBy: getUserListBy,
     getUserList: getUserList,
     updateUserInfo: updateUserInfo,
-    updateUserInfoByName: updateUserInfoByName
+    updateUserInfoByName: updateUserInfoByName,
+    delUserById: delUserById,
+    getCount: getCount
 };

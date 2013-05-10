@@ -17,8 +17,6 @@ var hash = {};
 
 // 管理首页（默认是吐槽管理）
 function index(req, res, next){
-    console.log(hash);
-    console.log(333);
     if( !util.checkAdmin(res, '无权限') ) return;
 
     var ep = new EventProxy(),
@@ -77,8 +75,6 @@ function index(req, res, next){
 // 评论管理
 function replyManage(req, res, next){
     if( !util.checkAdmin(res, '无权限') ) return;
-    console.log(hash);
-    console.log(444);
     var ep = new EventProxy(),
         page = parseInt(req.query.page) || 1,
         limit = config.limit,
@@ -87,7 +83,7 @@ function replyManage(req, res, next){
     ep.all('replyList', 'totalCount', 'totalNum', function(replyList, totalCount, totalNum){
         var pagination = util.pagination(page, totalCount);
         res.render('admin/replyManage', {
-            title: '后台管理 - '+ config.name,
+            title: '评论管理 - '+ config.name,
             config: config,
             replys: replyList,
             pagination: pagination,
@@ -338,11 +334,75 @@ function delCategory(req, res, next){
     }));
 };
 
+// 用户管理
+function userManage(req, res, next){
+    if( !util.checkAdmin(res, '无权限') ) return;
+
+    var ep = new EventProxy(),
+        page = parseInt(req.query.page) || 1,
+        limit = config.limit,
+        opt = {skip: (page - 1) * limit, limit: limit, sort: [['_id', 'desc']]};
+
+    ep.all('list', 'totalCount', 'totalNum', function(list, totalCount, totalNum){
+        var pagination = util.pagination(page, totalCount);
+        res.render('admin/userManage', {
+            title: '用户管理 - '+ config.name,
+            config: config,
+            users: list,
+            pagination: pagination,
+            total: totalNum,
+            layout: 'admin/admin_layout'
+        });
+    });
+    ep.fail(next);
+
+    userProxy.getUserListBy({}, '', opt, ep.done('list'));
+
+    // 取得总页数
+    userProxy.getCount(ep.done(function(totalCount){
+        ep.emit('totalCount', Math.ceil(totalCount / limit));
+        ep.emit('totalNum', totalCount);
+    }));
+};
+
+// 删除用户
+function delUser(req, res, next){
+    var userid = req.body.id;
+    if( !util.checkAdminAsyc(res, '无权限') || !userid ) return;
+
+    var ep = new EventProxy();
+
+    ep.on('final', function(){
+        res.json({
+            success: true,
+            data: 'ok'
+        });
+    }).fail(next);
+
+    userProxy.delUserById(userid, ep.done(function(user){
+        if(user.count == 0){
+            ep.emit('final');
+        }else{
+            var num = category.topics.length;
+            user.topics.forEach(function(topicid){
+                topicProxy.delTopicById(topicid, ep.done(function(topic){
+                    _withDelTopic(topic, function(){
+                        num--;
+                        num == 0 && ep.emit('final');
+                    }, true);
+                }));
+            });
+        }
+    }));
+};
+
 module.exports = {
     index: index,
     delTopic: delTopic,
     categoryManage: categoryManage,
     delCategory: delCategory,
     replyManage: replyManage,
-    delReply: delReply
+    delReply: delReply,
+    userManage: userManage,
+    delUser: delUser
 }
