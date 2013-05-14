@@ -15,6 +15,10 @@ var models = require('../models'),
  * @param {Function} callback 回调函数
  */
 function getTopicList(query, opt, callback){
+    if(typeof opt == 'function'){
+        callback = opt;
+        opt = {};
+    }
     modelTopic.find(query, '', opt, callback);
 };
 

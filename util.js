@@ -210,6 +210,18 @@ function pushMessage(user, params, callback){
     });
 }
 
+/**
+ * 返回错误（异步）
+ * @param {Object} res 响应
+ * @param {String} msg 错误信息
+ */
+function showErrAsyc(res, msg){
+    res.json({
+        success: false,
+        data: msg
+    });
+}
+
 module.exports = {
     checkUserStatus: checkUserStatus,
     checkUserStatusAsync: checkUserStatusAsync,
@@ -220,5 +232,6 @@ module.exports = {
     pagination: pagination,
     pushMessage: pushMessage,
     random: random,
-    timeBucket: timeBucket
+    timeBucket: timeBucket,
+    showErrAsyc: showErrAsyc
 };
