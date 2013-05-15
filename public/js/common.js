@@ -552,7 +552,8 @@ define(['jquery', 'alertify'], function($, alertify){
     var admin = {
         domEventInit: function(){
             var btn_remove = $('.J-remove'),
-                btn_update = $('.J-update');
+                btn_update = $('.J-update'),
+                tr = $('#J-tableData tr');
 
             var delMap = {
                 topic: 'delTopic.json',
@@ -560,7 +561,7 @@ define(['jquery', 'alertify'], function($, alertify){
                 reply: 'delReply.json',
                 user: 'delUser.json'
             };
-            btn_remove.on('click', function(){
+            btn_remove.on('click', function(e){
                 if(!confirm('确定删除？')) return;
 
                 var that = $(this),
@@ -578,6 +579,12 @@ define(['jquery', 'alertify'], function($, alertify){
                         tr.remove();
                     });
                 });
+                e.stopPropagation();
+            });
+
+            tr.click(function(){
+                tr.removeClass('on');
+                $(this).addClass('on');
             });
         },
         init: function(){

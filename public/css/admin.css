@@ -58,6 +58,10 @@ hr{
     background: #F8F8F8;
     box-shadow: 0px 0px 10px #dedede inset;
 }
+.table tr.on{
+    background: #C3ECC0;
+    box-shadow: 0px 0px 10px #b0d4ad inset;
+}
 .replyTopicContent{
     text-overflow: ellipsis;
     overflow: hidden;

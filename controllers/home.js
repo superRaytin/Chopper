@@ -12,7 +12,8 @@ var proxy = require("../proxy"),
     EventProxy = require("eventproxy"),
     util = require('../util');
 
-//var fs = require('fs');
+var fs = require('fs');
+var iconv = require('iconv-lite');
 //var crypto = require('crypto');
 
 exports.index = function(req, res, next){
@@ -43,6 +44,38 @@ exports.index = function(req, res, next){
     var deciphered = decipher.update(encrypted, 'hex', 'utf8');
     console.log( deciphered + decipher.final('utf8') )
      */
+   /*fs.readFile('./test.txt', function(err, files){
+        if(err){
+            return console.log(err);
+        }
+        console.log(files);
+        console.log(iconv.decode(files));
+        fs.write('./test.txt', 'hello world', function(err, data){
+            if(err){
+                return console.log(err);
+            }
+            console.log(222);
+            console.log(data);
+        });
+    });*/
+    fs.open('./test4.txt', 'a', 0644, function(err, fd){
+        if(err) throw err;
+        console.log(fd);
+        fs.write(fd, 'four', null, 'utf8', function(e){
+            if(e) throw e;
+            fs.closeSync(fd);
+        })
+    });
+    fs.watchFile('./test.txt', function(cur, prev){
+        console.log(444);
+        console.log(cur);
+        console.log(prev);
+    });
+    fs.watchFile('./test2.txt', function(cur, prev){
+        console.log(555);
+        console.log(cur);
+        console.log(prev);
+    });
     console.log(req.session);
 
     var ep = new EventProxy(),
