@@ -87,3 +87,9 @@ time 你人品爆发，获得10个系统随机赠送的金币
 ========================
 初探文件上传
 node利器—事件代理模块eventproxy
+
+========================
+node needle
+node cheerio
+node async
+node request

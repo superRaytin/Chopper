@@ -14,68 +14,153 @@ var proxy = require("../proxy"),
 
 var fs = require('fs');
 var iconv = require('iconv-lite');
+var request = require('request');
+var sysutil = require('util');
 //var crypto = require('crypto');
-
-exports.index = function(req, res, next){
-    /*
-    //console.log(req.params);
-    //req.session.info = 'ubssss';
-    //req.session.handa = 'dddyyy';
-    //req.session.handa = null;
-    fs.readdir('./public/csss', function(err, files){
-        if(err) return console.log(999999999999999);
-        console.log(files);
+exports.test2 = function(req, res, next){
+    var rand = Math.floor(Math.random()*100000000).toString();
+    request(
+        { method: 'PUT'
+            , uri: 'http://mikeal.iriscouch.com/testjs/' + rand
+            , multipart:
+            [ { 'content-type': 'application/json'
+                ,  body: JSON.stringify({foo: 'bar', _attachments: {'./message.txt': {follows: true, length: 18, 'content_type': 'text/plain' }}})
+            }
+                , { body: 'I am an attachment' }
+            ]
+        }
+        , function (error, response, body) {
+            if(response.statusCode == 201){
+                console.log('document saved as: http://mikeal.iriscouch.com/testjs/'+ rand)
+            } else {
+                console.log('error: '+ response.statusCode)
+                console.log(body)
+            }
+        }
+    );
+    res.send('just a test2@');
+};
+exports.test3 = function(req, res, next){
+    //http://mikeal.iriscouch.com/testjs/88017401
+    request({
+        method: 'get',
+        headers: {
+            //'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0'
+        },
+        uri: 'http://www.qiushibaike.com/'
+    }, function(err, res, body){
+        console.log(res.statusCode);
+        if(!err && res.statusCode == 200){
+            console.log(body);
+        }else{
+            console.log(11);
+            console.log(body);
+        }
     });
-    var user = null;
-    if(req.session && req.session.user ){
-        user = req.session.user;
-    }
-    console.log(res.locals);
-    res.locals.user = user;
-    res.locals.testfun = function(str){
-        return '['+str+']';
-    };
+    res.send('just a test3!');
+};
+exports.test = function(req, res, next){
+    /*
+     //console.log(req.params);
+     //req.session.info = 'ubssss';
+     //req.session.handa = 'dddyyy';
+     //req.session.handa = null;
+     fs.readdir('./public/csss', function(err, files){
+     if(err) return console.log(999999999999999);
+     console.log(files);
+     });
+     var user = null;
+     if(req.session && req.session.user ){
+     user = req.session.user;
+     }
+     console.log(res.locals);
+     res.locals.user = user;
+     res.locals.testfun = function(str){
+     return '['+str+']';
+     };
      console.log(req.query);
 
-    var cipher = crypto.createCipher('aes-256-cbc', config.key);
-    var cryptoed = cipher.update('xiao1989jie0106abcdefg', 'binary', 'hex');
-    var encrypted = cryptoed + cipher.final('hex');
-    var decipher = crypto.createDecipher('aes-256-cbc', config.key);
-    var deciphered = decipher.update(encrypted, 'hex', 'utf8');
-    console.log( deciphered + decipher.final('utf8') )
+     var cipher = crypto.createCipher('aes-256-cbc', config.key);
+     var cryptoed = cipher.update('xiao1989jie0106abcdefg', 'binary', 'hex');
+     var encrypted = cryptoed + cipher.final('hex');
+     var decipher = crypto.createDecipher('aes-256-cbc', config.key);
+     var deciphered = decipher.update(encrypted, 'hex', 'utf8');
+     console.log( deciphered + decipher.final('utf8') )
      */
-   /*fs.readFile('./test.txt', function(err, files){
+    console.log(__filename);
+    console.time('aaa');
+    var arrr = [];
+    for(var i = 0; i < 1000000; i++){
+        arrr.push(i);
+    };
+    console.timeEnd('aaa');
+
+    fs.readFile('./test4.txt', function(err, files){
         if(err){
             return console.log(err);
         }
         console.log(files);
-        console.log(iconv.decode(files));
-        fs.write('./test.txt', 'hello world', function(err, data){
-            if(err){
-                return console.log(err);
-            }
-            console.log(222);
-            console.log(data);
-        });
-    });*/
+        //console.log(files.toString());
+        var de = iconv.decode(files);
+        //console.log(de);
+        //console.log(de.split(/\r\n/));
+        /*fs.write('./test4.txt', 'hello world', function(err, data){
+         if(err){
+         return console.log(err);
+         }
+         console.log(222);
+         console.log(data);
+         });*/
+    });
+    request('http://www.baidu.com', function(err, res, body){
+        console.log(res.statusCode);
+        if(!err && res.statusCode == 200){
+            console.log(body);
+        }
+    });
     fs.open('./test4.txt', 'a', 0644, function(err, fd){
         if(err) throw err;
         console.log(fd);
-        fs.write(fd, 'four', null, 'utf8', function(e){
+        fs.write(fd, '\r\nfive', null, 'utf8', function(e){
             if(e) throw e;
             fs.closeSync(fd);
         })
     });
-    fs.watchFile('./test.txt', function(cur, prev){
-        console.log(444);
-        console.log(cur);
-        console.log(prev);
-    });
-    fs.watchFile('./test2.txt', function(cur, prev){
+    fs.watchFile('./test4.txt', function(cur, prev){
         console.log(555);
-        console.log(cur);
-        console.log(prev);
+        //console.log(cur);
+        //console.log(prev);
     });
+    console.log(sysutil.log('haha!'));
+    //var abc = request('https://www.google.com.hk/images/srpr/logo3w.png').pipe(fs.createWriteStream('./public/upload/jjyy2.png'));
+    // 可读流|可写流
+    var rOption = {
+            flags: 'r',
+            encoding: null,
+            mode: 0666
+        },
+        wOption = {
+            flags: 'a',
+            encoding: null,
+            mode: 0666
+        },
+        fileReadStream = fs.createReadStream('./test/verybig.jpg', rOption),
+        fileWriteStream = fs.createWriteStream('./test/output/01.jpg', wOption);
+    if(!fs.existsSync('./test/output/01.jpg')){
+        fileReadStream.on('data', function(chunk){
+            console.log(chunk.length);
+            fileWriteStream.write(chunk);
+        });
+        fileReadStream.on('end', function(){
+            console.log('finished');
+            fileWriteStream.end();
+        });
+    }
+
+    res.send('just a test page!');
+};
+exports.index = function(req, res, next){
     console.log(req.session);
 
     var ep = new EventProxy(),

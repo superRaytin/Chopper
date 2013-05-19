@@ -14,6 +14,9 @@ var controllers = require('../controllers'),
 
 module.exports = function(app){
     app.get('/', home.index);
+    app.get('/test', home.test);
+    app.get('/test2', home.test2);
+    app.get('/test3', home.test3);
 
     // 注册
     app.get('/reg', sign.reg);
