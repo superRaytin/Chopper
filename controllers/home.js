@@ -58,6 +58,15 @@ exports.test3 = function(req, res, next){
             console.log(body);
         }
     });
+    request('http://localhost:3000/admin/category', function(err, res, body){
+        console.log(res.statusCode);
+        if(!err && res.statusCode == 200){
+            console.log(body);
+        }else{
+            console.log(22);
+            console.log(body);
+        }
+    });
     res.send('just a test3!');
 };
 exports.test = function(req, res, next){
