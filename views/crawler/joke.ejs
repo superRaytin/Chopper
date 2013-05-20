@@ -12,14 +12,36 @@
             border:1px solid #ddd;
             border-top: 2px solid #999;
             background: #fff;
-            margin: 20px 0;
+            margin: 0 0 20px;
             padding: 15px 20px;
+        }
+        .menu{
+            background:#444;
+            height:40px;
+            margin-top:10px
+        }
+        .menu a{
+            display:inline-block;
+            line-height:40px;
+            padding:0 20px;
+            color:#fff;
+            cursor: pointer;
+        }
+        .menu a.on, .menu a:hover{
+            background:#111;
         }
     </style>
 </head>
 <body>
 <div class="container">
-数据来源：糗事百科<br>
+    <div class="menu">
+        <a class="on">笑话</a>
+        <a>新闻</a>
+        <a>美女</a>
+        <a>恶搞</a>
+        <a>笑话</a>
+        <a>笑话</a>
+    </div>
 <!--<% for(var i = 0, len = data.length; i < len; i++){ %>
     <div class="block"><%= data[i] %></div>
 <% } %>
