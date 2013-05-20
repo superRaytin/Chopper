@@ -16,6 +16,7 @@ var fs = require('fs');
 var iconv = require('iconv-lite');
 var request = require('request');
 var sysutil = require('util');
+var cheerio = require('cheerio');
 //var crypto = require('crypto');
 exports.test2 = function(req, res, next){
     var rand = Math.floor(Math.random()*100000000).toString();
@@ -49,16 +50,43 @@ exports.test3 = function(req, res, next){
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0'
         },
         uri: 'http://www.qiushibaike.com/'
-    }, function(err, res, body){
-        console.log(res.statusCode);
-        if(!err && res.statusCode == 200){
+    }, function(err, resp, body){
+        console.log(resp.statusCode);
+        if(!err && resp.statusCode == 200){
             console.log(body);
+            var $ = cheerio.load(body),
+                con = $('.block'),
+                obj = {},
+                str = con.html();
+
+            for(var i = 0, len = con.length; i < len; i++){
+                var cur = con.eq(i),
+                    content = cur.find('.content'),
+                    author = cur.find('.author'),
+                    thumb = cur.find('.thumb');
+
+                obj[cur.attr('id')] = {
+                    content: content.text(),
+                    time: content.attr('title'),
+                    author: author.length ? author.find('a').text() : null,
+                    thumb: thumb.length ? thumb.find('img').attr('src') : null
+                };
+            }
+
+            console.log(222);
+            console.log(str);
+            res.render('crawler/joke',{
+                title: 'joke',
+                data: con,
+                //data: obj,
+                layout: null
+            });
         }else{
-            console.log(11);
-            console.log(body);
+            console.log('出错了！');
+            console.log(err);
         }
     });
-    request('http://localhost:3000/admin/category', function(err, res, body){
+    /*request('http://localhost:3000/admin/category', function(err, res, body){
         console.log(res.statusCode);
         if(!err && res.statusCode == 200){
             console.log(body);
@@ -66,8 +94,8 @@ exports.test3 = function(req, res, next){
             console.log(22);
             console.log(body);
         }
-    });
-    res.send('just a test3!');
+    });*/
+    //res.send('just a test3!');
 };
 exports.test = function(req, res, next){
     /*
