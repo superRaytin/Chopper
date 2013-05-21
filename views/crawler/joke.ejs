@@ -8,6 +8,12 @@
     <link href="css/bootstrap.css" rel="stylesheet" media="screen">
     <link href="css/base.css" rel="stylesheet" media="screen">
     <style type="text/css">
+        body{
+            padding-top: 0;
+        }
+        .wrapper{
+            padding-top: 80px;
+        }
         .block{
             border:1px solid #ddd;
             border-top: 2px solid #999;
@@ -16,16 +22,19 @@
             padding: 15px 20px;
         }
         .menu{
+            position: fixed;
+            width: 100%;
             background:#444;
-            height:40px;
-            margin-top:10px
+            padding-left: 10px;
         }
         .menu a{
             display:inline-block;
-            line-height:40px;
-            padding:0 20px;
+            padding:5px 20px 6px;
             color:#fff;
+            border-radius: 5px;
             cursor: pointer;
+            text-decoration: none;
+            margin: 8px 5px;
         }
         .menu a.on, .menu a:hover{
             background:#111;
@@ -36,8 +45,8 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="menu">
+<div class="menu">
+    <div class="container">
         <a class="on">笑话
         <a>新闻
         <a>美女
@@ -45,41 +54,44 @@
         <a>笑话
         <a>笑话</a>
     </div>
-<!--<% for(var i = 0, len = data.length; i < len; i++){ %>
-    <div class="block"><%= data[i] %></div>
-<% } %>
-
-<% for(var key in data){
-    var item = data[key];
-%>
-<div class="block">
-    <p><%= item.time %> <% if(item.author){ %><%= item.author %><% } %></p>
-    <p><%= item.content %></p>
-    <% if(item.thumb){ %>
-    <p><img src="<%= item.thumb %>"></p>
-    <% } %>
 </div>
-<% } %>
--->
-    <%
-        data.each(function(i, item){
-        var cur = data.eq(i),
-            content = cur.find('content').text(),
-            time = cur.find('time').text(),
-            author = cur.find('author').text(),
-            thumb = cur.find('thumb').text();
+<div class="wrapper">
+    <div class="container">
+    <!--<% for(var i = 0, len = data.length; i < len; i++){ %>
+        <div class="block"><%= data[i] %></div>
+    <% } %>
+
+    <% for(var key in data){
+        var item = data[key];
     %>
     <div class="block">
-        <p class="author"><%= time %> <% if(author != 'null'){ %><%= author %><% } %></p>
-        <p><%= content %></p>
-        <% if(thumb != 'null'){ %>
-        <p><img src="<%= thumb %>"></p>
+        <p><%= item.time %> <% if(item.author){ %><%= item.author %><% } %></p>
+        <p><%= item.content %></p>
+        <% if(item.thumb){ %>
+        <p><img src="<%= item.thumb %>"></p>
         <% } %>
     </div>
+    <% } %>
+    -->
+        <%
+            data.each(function(i, item){
+            var cur = data.eq(i),
+                content = cur.find('content').text(),
+                time = cur.find('time').text(),
+                author = cur.find('author').text(),
+                thumb = cur.find('thumb').text();
+        %>
+        <div class="block">
+            <p class="author"><%= time %> <% if(author != 'null'){ %><%= author %><% } %></p>
+            <p><%= content %></p>
+            <% if(thumb != 'null'){ %>
+            <p><img src="<%= thumb %>"></p>
+            <% } %>
+        </div>
 
-    <% }) %>
+        <% }) %>
 
-
+    </div>
 </div>
 </body>
 </html>

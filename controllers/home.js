@@ -77,8 +77,8 @@ exports.test2 = function(req, res, next){
 exports.test3 = function(req, res, next){
     //http://mikeal.iriscouch.com/testjs/88017401
     var ep = new EventProxy(),
-        space = 1 * 60 * 60 * 1000, // 1小时爬一次
-        timerNum = 20;
+        space = 0.1 * 60 * 60 * 1000, // 1小时爬一次
+        timerNum = timerNum || 20;
 
     ep.on('rend', function(con){
         res.render('crawler/joke',{
@@ -121,7 +121,6 @@ exports.test3 = function(req, res, next){
                 console.log('从糗百取得数据。。。');
                 var $ = cheerio.load(body),
                     con = $('.block'),
-                    //obj = {},
                     xml = ['<blocks>\n'];
 
                 for(var i = 0, len = con.length; i < len; i++){
@@ -129,13 +128,6 @@ exports.test3 = function(req, res, next){
                         content = cur.find('.content'),
                         author = cur.find('.author'),
                         thumb = cur.find('.thumb');
-
-                    /*obj[cur.attr('id')] = {
-                        content: content.text(),
-                        time: content.attr('title'),
-                        author: author.length ? author.find('a').text() : null,
-                        thumb: thumb.length ? thumb.find('img').attr('src') : null
-                    };*/
 
                     xml.push('\t<block>\n' +
                         '\t\t<content>'+ content.text().trim() +'</content>\n' +
@@ -178,7 +170,7 @@ exports.test3 = function(req, res, next){
             var $ = cheerio.load(data),
                 lastOnePath = './test/output/qiu-'+ $('lastOne').text() +'.xml',
                 lastTime = $('lastTime').text(),
-                outOfTime = (new Date().getTime() - new Date(lastTime).getTime()) / (1000 * 60 * 60) > 10; // 10 hour
+                outOfTime = (new Date().getTime() - new Date(lastTime).getTime()) / (1000 * 60 * 60) > space;
 
             // 检查配置中最后一次的数据文件是否存在
             if(fs.existsSync(lastOnePath) && !outOfTime){
