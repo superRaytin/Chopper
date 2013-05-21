@@ -30,16 +30,19 @@
         .menu a.on, .menu a:hover{
             background:#111;
         }
+        .author{
+            color: #999;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="menu">
-        <a class="on">笑话</a>
-        <a>新闻</a>
-        <a>美女</a>
-        <a>恶搞</a>
-        <a>笑话</a>
+        <a class="on">笑话
+        <a>新闻
+        <a>美女
+        <a>恶搞
+        <a>笑话
         <a>笑话</a>
     </div>
 <!--<% for(var i = 0, len = data.length; i < len; i++){ %>
@@ -61,15 +64,16 @@
     <%
         data.each(function(i, item){
         var cur = data.eq(i),
-            content = cur.find('.content'),
-            author = cur.find('.author'),
-            thumb = cur.find('.thumb');
+            content = cur.find('content').text(),
+            time = cur.find('time').text(),
+            author = cur.find('author').text(),
+            thumb = cur.find('thumb').text();
     %>
     <div class="block">
-        <p><%= content.attr('title') %> <% if(author.length){ %><%= author.find('a').text() %><% } %></p>
-        <p><%= content.text() %></p>
-        <% if(thumb.length){ %>
-        <p><img src="<%= thumb.find('img').attr('src') %>"></p>
+        <p class="author"><%= time %> <% if(author != 'null'){ %><%= author %><% } %></p>
+        <p><%= content %></p>
+        <% if(thumb != 'null'){ %>
+        <p><img src="<%= thumb %>"></p>
         <% } %>
     </div>
 

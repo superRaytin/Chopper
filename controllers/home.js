@@ -17,9 +17,11 @@ var iconv = require('iconv-lite');
 var request = require('request');
 var sysutil = require('util');
 var cheerio = require('cheerio');
+var url = require('url');
+var http = require('http');
 //var crypto = require('crypto');
 exports.test2 = function(req, res, next){
-    var rand = Math.floor(Math.random()*100000000).toString();
+    /*var rand = Math.floor(Math.random()*100000000).toString();
     request(
         { method: 'PUT'
             , uri: 'http://mikeal.iriscouch.com/testjs/' + rand
@@ -38,54 +40,170 @@ exports.test2 = function(req, res, next){
                 console.log(body)
             }
         }
-    );
+    );*/
+    var ex = 'http://username:password@abcd.com.cn:8080/p/a/t/h?query=string#hash';
+    var par = url.parse(ex);
+    console.log(url.parse(ex));
+    console.log(22);
+    //console.log(url.format(par));
+    //console.log(fs.stat('./test/output/c.xml'));
+    //console.log(' sdfsdf '.trim());
+    fs.stat('./test/output/c.xml', function(err, stat){
+        if(err) return console.log(err);
+        console.log(55);
+        console.log(stat);
+    });
+    res.send('just a test2@');
+    return;
+    request('http://mikeal.iriscouch.com/testjs/88017401', function(err, res, body){
+        if(err) return console.log(err);
+        console.log(res);
+        console.log(333);
+        console.log(body);
+        //res.pipe(fs.createWriteStream('./test/output/abc.txt'));
+    });
+    http.get({
+            host: 'mikeal.iriscouch.com',
+            path: '/testjs/88017401',
+            port: 80
+        }, function(res){
+            console.log(res);
+            res.pipe(fs.createWriteStream('./test/output/abc.txt'));
+    }).on('error', function(e) {
+        console.log("Got error " + e.message);
+    });
     res.send('just a test2@');
 };
 exports.test3 = function(req, res, next){
     //http://mikeal.iriscouch.com/testjs/88017401
-    request({
-        method: 'get',
-        headers: {
-            //'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0'
-        },
-        uri: 'http://www.qiushibaike.com/'
-    }, function(err, resp, body){
-        console.log(resp.statusCode);
-        if(!err && resp.statusCode == 200){
-            console.log(body);
-            var $ = cheerio.load(body),
-                con = $('.block'),
-                obj = {},
-                str = con.html();
+    var ep = new EventProxy(),
+        space = 1 * 60 * 60 * 1000, // 1小时爬一次
+        timerNum = 20;
 
-            for(var i = 0, len = con.length; i < len; i++){
-                var cur = con.eq(i),
-                    content = cur.find('.content'),
-                    author = cur.find('.author'),
-                    thumb = cur.find('.thumb');
+    ep.on('rend', function(con){
+        res.render('crawler/joke',{
+            title: 'joke',
+            data: con,
+            layout: null
+        });
 
-                obj[cur.attr('id')] = {
-                    content: content.text(),
-                    time: content.attr('title'),
-                    author: author.length ? author.find('a').text() : null,
-                    thumb: thumb.length ? thumb.find('img').attr('src') : null
-                };
-            }
-
-            console.log(222);
-            console.log(str);
-            res.render('crawler/joke',{
-                title: 'joke',
-                data: con,
-                //data: obj,
-                layout: null
+        function be(){
+            ep.emit('getData', function(){
+                if(timerNum--){
+                    console.log('还剩' + timerNum + '次');
+                    timer = setTimeout(function(){
+                        be();
+                    }, space);
+                }else{
+                    clearTimeout(timer);
+                    console.log('计时次数完了，结束');
+                }
             });
-        }else{
-            console.log('出错了！');
-            console.log(err);
         }
+        var timer = setTimeout(function(){
+            console.log('计时start');
+            be();
+        }, space);
+    }).fail(next);
+
+    var configPath = './test/output/config.xml';
+
+    ep.on('getData', function(callback){
+        request({
+            method: 'get',
+            headers: {
+                //'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0'
+            },
+            uri: 'http://www.qiushibaike.com/'
+        }, function(err, resp, body){
+            if(!err && resp.statusCode == 200){
+                console.log('从糗百取得数据。。。');
+                var $ = cheerio.load(body),
+                    con = $('.block'),
+                    //obj = {},
+                    xml = ['<blocks>\n'];
+
+                for(var i = 0, len = con.length; i < len; i++){
+                    var cur = con.eq(i),
+                        content = cur.find('.content'),
+                        author = cur.find('.author'),
+                        thumb = cur.find('.thumb');
+
+                    /*obj[cur.attr('id')] = {
+                        content: content.text(),
+                        time: content.attr('title'),
+                        author: author.length ? author.find('a').text() : null,
+                        thumb: thumb.length ? thumb.find('img').attr('src') : null
+                    };*/
+
+                    xml.push('\t<block>\n' +
+                        '\t\t<content>'+ content.text().trim() +'</content>\n' +
+                        '\t\t<time>'+ content.attr("title") +'</time>\n' +
+                        '\t\t<author>'+ (author.length ? author.find("a").text().trim() : null) +'</author>\n' +
+                        '\t\t<thumb>'+ (thumb.length ? thumb.find("img").attr("src") : null) +'</thumb>\n' +
+                        '\t</block>\n\n');
+                };
+                xml.push('</blocks>');
+
+                if(callback){
+                    var $block = cheerio.load(xml);
+                    callback($block('block'));
+                }
+
+                var date = new Date(),
+                    now = date.format('yyyy/MM/dd hh:mm:ss'),
+                    lastOne = date.format('yyyy-MM-dd-hhmmss');
+
+                // 创建一个配置文件
+                fs.writeFile(configPath, '<config>\n' +
+                    '\t<lastTime>'+ now +'</lastTime>\n' +
+                    '\t<lastOne>'+ lastOne +'</lastOne>\n' +
+                    '\t<interVal>'+ 1000 * 60 * 10 +'</interVal>\n' +
+                    '</config>\n\n',
+                    function(err){
+                        fs.createWriteStream('./test/output/qiu-'+ lastOne +'.xml').write(xml.join(''));
+                    }
+                );
+            }else{
+                console.log('出错了！');
+                console.log(err);
+            }
+        });
     });
+
+    // 检查配置文件
+    if(fs.existsSync(configPath)){
+        fs.readFile(configPath, function(err, data){
+            var $ = cheerio.load(data),
+                lastOnePath = './test/output/qiu-'+ $('lastOne').text() +'.xml',
+                lastTime = $('lastTime').text(),
+                outOfTime = (new Date().getTime() - new Date(lastTime).getTime()) / (1000 * 60 * 60) > 10; // 10 hour
+
+            // 检查配置中最后一次的数据文件是否存在
+            if(fs.existsSync(lastOnePath) && !outOfTime){
+                fs.readFile(lastOnePath, function(err, file){
+                    if(err) return console.log(err);
+                    var $lastFile = cheerio.load(file);
+                    return ep.emit('rend', $lastFile('block'));
+                });
+            }else{
+                getData();
+            }
+            //console.log($.html());
+            //console.log($('lastTime').html());
+        });
+    }else{
+        getData();
+    }
+
+    // 不存在数据 或者 时间已超出范围
+    function getData(){
+        ep.emit('getData', function(source){
+            ep.emit('rend', source);
+        });
+    }
+
     /*request('http://localhost:3000/admin/category', function(err, res, body){
         console.log(res.statusCode);
         if(!err && res.statusCode == 200){
