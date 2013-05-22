@@ -48,7 +48,7 @@ var pub = {
             sendUserAgent: true, // 发送客户端标识（糗事百科默认返回手机端页面）
             xmlPath: './test/output/', // 数据输出路径
             xmlPrefix: 'qiu-', // XML数据文件头
-            speed: 1 * 60 * 60 * 1000, // 抓取频率
+            speed: 0.5 * 60 * 60 * 1000, // 抓取频率
             maxTime: 20, // 最多抓取的次数，默认20次，可选
             rule: {
                 blockSelect: '.block', // 目标 区块选择器
