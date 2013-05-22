@@ -10,13 +10,11 @@ var controllers = require('../controllers'),
     category = controllers.category,
     message = controllers.message,
     home = controllers.home,
+    crawler = controllers.crawler,
     admin = controllers.admin;
 
 module.exports = function(app){
     app.get('/', home.index);
-    app.get('/test', home.test);
-    app.get('/test2', home.test2);
-    app.get('/test3', home.test3);
 
     // 注册
     app.get('/reg', sign.reg);
@@ -61,4 +59,9 @@ module.exports = function(app){
     app.post('/admin/delReply.json', admin.delReply);
     app.get('/admin/user', admin.userManage);
     app.post('/admin/delUser.json', admin.delUser);
+
+    // crawler
+    app.get('/test', crawler.test);
+    app.get('/test2', crawler.test2);
+    app.get('/fun/qiushi', crawler.qiushi);
 };

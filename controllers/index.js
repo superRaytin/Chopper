@@ -9,10 +9,12 @@ var user = require("../controllers/user"),
     sign = require("../controllers/sign"),
     message = require("../controllers/message"),
     home = require("../controllers/home"),
+    crawler = require("../controllers/crawler"),
     admin = require("../controllers/admin");
 
 module.exports = {
     home: home,
+    crawler: crawler,
     user: user,
     topic: topic,
     category: category,
