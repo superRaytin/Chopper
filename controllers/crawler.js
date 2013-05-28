@@ -82,7 +82,7 @@ var pub = {
 
         request(opt, function(err, resp, body){
             if(!err && resp.statusCode == 200){
-                console.log('从 %s 取得数据。。。', name);
+                console.log('从 【%s】 取得数据。。。', name);
                 var $ = cheerio.load(body),
                     con = $(blockSelect),
                     xml = ['<blocks>\n'];
@@ -105,7 +105,7 @@ var pub = {
                 // 先渲染再说, 跟进储存数据
                 if(callback){
                     var $block = cheerio.load(xml.join(''));
-                    log('已取得最新数据，对 %s '+ ' 渲染 ...', name);
+                    log('已取得最新数据，对 【%s】 '+ ' 渲染 ...', name);
                     callback($block('block'));
                 }
 
@@ -125,14 +125,14 @@ var pub = {
 
                 // 往配置文件里新增信息
                 fs.readFile(configPath, function(err, file){
-                    log('读取 %s '+ ' 配置 ...', name);
+                    log('读取 【%s】 '+ ' 配置 ...', name);
                     if(err) throw err;
                     var $ = cheerio.load(file),
                         $dataWrap = $(flag);
 
                     // 检查是否已配置糗事
                     if($dataWrap.length){
-                        log('已取得最新数据，更新 %s '+ ' 配置', name);
+                        log('已取得最新数据，更新 【%s】 '+ ' 配置', name);
                         $dataWrap.find('lastTime').text(now);
                         $dataWrap.find('lastOne').text(lastOne);
                         //$dataWrap.find('interVal').text(speed);
@@ -142,7 +142,105 @@ var pub = {
                         });
                     }
                     else{
-                        log('未对 %s '+ ' 进行配置，添加进配置文件', name);
+                        log('未对 【%s】 '+ ' 进行配置，添加进配置文件', name);
+                        fs.writeFile(configPath, $.html() + configString, function(e){
+                            if(e) throw e;
+                            ep.emit('createXML');
+                        });
+                    }
+                });
+            }else{
+                console.log('出错了！');
+                console.log(err);
+            }
+        });
+    },
+    request2: function(flag, callback){
+        var ep = new EventProxy(),
+            opt = {},
+            target = pub.targets[flag],
+            name = target.name,
+            rule = target.rule,
+            xmlPath = target.xmlPath,
+            xmlPrefix = target.xmlPrefix,
+            speed = target.speed,
+            blockSelect = rule.blockSelect,
+            xmlDataItem = rule.xmlDataItem,
+            targetClassForXmlData = rule.targetClassForXmlData,
+            configPath = pub.configPath;
+
+        opt.uri = target.uri;
+        opt.method = 'get';
+        if(target.sendUserAgent){
+            opt.headers = {
+                //'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0'
+            };
+        }
+
+        request(opt, function(err, resp, body){
+            if(!err && resp.statusCode == 200){
+                console.log('从 【%s】 取得数据。。。', name);
+                var $ = cheerio.load(body),
+                    con = $(blockSelect),
+                    xml = ['<blocks>\n'];
+
+                for(var i = 0, len = con.length; i < len; i++){
+                    var cur = con.eq(i);
+
+                    var joinedStr = pub.joinStr(cur, xmlDataItem, targetClassForXmlData);
+                    xml.push(joinedStr);
+
+                    /*xml.push('\t<block>\n' +
+                     '\t\t<content>'+ content.text().trim() +'</content>\n' +
+                     '\t\t<time>'+ content.attr("title") +'</time>\n' +
+                     '\t\t<author>'+ (author.length ? author.find("a").text().trim() : null) +'</author>\n' +
+                     '\t\t<thumb>'+ (thumb.length ? thumb.find("img").attr("src") : null) +'</thumb>\n' +
+                     '\t</block>\n\n');*/
+                };
+                xml.push('</blocks>');
+
+                // 先渲染再说, 跟进储存数据
+                if(callback){
+                    var $block = cheerio.load(xml.join(''));
+                    log('已取得最新数据，对 【%s】 '+ ' 渲染 ...', name);
+                    callback($block('block'));
+                }
+
+                var date = new Date(),
+                    now = date.format('yyyy/MM/dd hh:mm:ss'),
+                    lastOne = date.format('yyyy-MM-dd-hhmmss');
+
+                var configString = '<'+ flag +'>\n' +
+                    '\t<lastTime>'+ now +'</lastTime>\n' +
+                    '\t<lastOne>'+ lastOne +'</lastOne>\n' +
+                    '\t<interVal>'+ speed +'</interVal>\n' +
+                    '</'+ flag +'>\n\n';
+
+                ep.on('createXML', function(){
+                    fs.createWriteStream(xmlPath + xmlPrefix + lastOne +'.xml').write(xml.join(''));
+                });
+
+                // 往配置文件里新增信息
+                fs.readFile(configPath, function(err, file){
+                    log('读取 【%s】 '+ ' 配置 ...', name);
+                    if(err) throw err;
+                    var $ = cheerio.load(file),
+                        $dataWrap = $(flag);
+
+                    // 检查是否已配置糗事
+                    if($dataWrap.length){
+                        log('已取得最新数据，更新 【%s】 '+ ' 配置', name);
+                        $dataWrap.find('lastTime').text(now);
+                        $dataWrap.find('lastOne').text(lastOne);
+                        //$dataWrap.find('interVal').text(speed);
+                        fs.writeFile(configPath, $.html(), function(e){
+                            if(e) throw e;
+                            ep.emit('createXML');
+                        });
+                    }
+                    else{
+                        log('未对 【%s】 '+ ' 进行配置，添加进配置文件', name);
                         fs.writeFile(configPath, $.html() + configString, function(e){
                             if(e) throw e;
                             ep.emit('createXML');
@@ -294,7 +392,7 @@ exports.qiushi = function(req, res, next){
         res.render('crawler/joke',{
             title: '糗事',
             data: con,
-            layout: null
+            layout: 'crawler/layout'
         });
 
         if(!cache.timer){

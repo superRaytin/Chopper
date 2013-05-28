@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="/css/base.css" rel="stylesheet" media="screen">
+    <style type="text/css">
+        body{
+            padding-top: 0;
+        }
+        .wrapper{
+            padding-top: 80px;
+        }
+        .block{
+            border:1px solid #ddd;
+            border-top: 2px solid #999;
+            background: #fff;
+            margin: 0 0 20px;
+            padding: 15px 20px;
+        }
+        .menu{
+            position: fixed;
+            width: 100%;
+            background:#444;
+            padding-left: 10px;
+        }
+        .menu a{
+            display:inline-block;
+            padding:5px 20px 6px;
+            color:#fff;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin: 8px 5px;
+        }
+        .menu a.on, .menu a:hover{
+            background:#111;
+        }
+        .author{
+            color: #999;
+        }
+        .sign{
+            font-size: 30px;
+            display: inline-block;
+            line-height: normal;
+            vertical-align: top;
+            text-shadow: 1px 1px 1px #000;
+            margin-right: 10px;
+            color: #B4C63D;
+        }
+    </style>
+</head>
+<body>
+<div class="menu">
+    <div class="container">
+        <span class="sign">X 聚</span>
+        <a class="on">糗事
+        <a>冷笑话
+        <a>新闻
+        <a>美女
+        <a>恶搞
+        <a>笑话</a>
+    </div>
+</div>
+<div class="wrapper">
+    <%- body %>
+</div>
+</body>
+</html>
