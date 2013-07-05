@@ -63,5 +63,6 @@ module.exports = function(app){
     // crawler
     app.get('/test', crawler.test);
     app.get('/test2', crawler.test2);
-    app.get('/fun/qiushi', crawler.qiushi);
+    app.get('/x/qiushi', crawler.qiushi);
+    app.get('/x/radio', crawler.radio);
 };

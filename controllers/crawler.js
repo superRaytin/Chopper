@@ -392,16 +392,17 @@ exports.qiushi = function(req, res, next){
         res.render('crawler/joke',{
             title: '糗事',
             data: con,
+            cate: 'qiushi',
             layout: 'crawler/layout'
         });
 
-        if(!cache.timer){
+        /*if(!cache.timer){
             log('创建计时器');
             cache.timer = setTimeout(function(){
                 log('计时start');
                 be();
             }, space);
-        };
+        };*/
     }).fail(next);
 
     /*ep.on('getData', function(callback){
@@ -485,6 +486,13 @@ exports.qiushi = function(req, res, next){
             ep.emit('rend', source);
         });
     }
+};
+exports.radio = function(req, res, next){
+    res.render('crawler/radio', {
+        title: '电台',
+        cate: 'radio',
+        layout: 'crawler/layout'
+    });
 };
 exports.test = function(req, res, next){
     /*
