@@ -1,12 +1,20 @@
 #N-MicroBlog
-基于 Nodejs 轻量的多用户微博系统
+轻量的多用户微博系统
+
+前端基于 [https://github.com/superRaytin/duckJS](duckJS) + [http://twitter.github.io/bootstrap/](bootstrap)
+服务端基于 [http://nodejs.org](NodeJS) + Express + MongoDB
+
+---
+
+简略界面图：
 
 首页：
 ![N-MicroBlog](test/z1.png)
 
-登录和注册页：
+注册页：
 ![N-MicroBlog](test/z2.png)
 
+登录页：
 ![N-MicroBlog](test/z3.png)
 
 登录奖励：
@@ -31,4 +39,5 @@
 ![N-MicroBlog](test/z10.png)
 
 侧栏：
+
 ![N-MicroBlog](test/z11.png)
