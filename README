@@ -1,5 +1,5 @@
 #N-MicroBlog
-基于 Nodejs 轻量的微博系统
+基于 Nodejs 轻量的多用户微博系统
 
 首页：
 ![N-MicroBlog](test/z1.png)
