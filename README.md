@@ -2,7 +2,7 @@
 轻量的多用户微博系统
 
 前端基于 [duckJS](https://github.com/superRaytin/duckJS) + [bootstrap](http://twitter.github.io/bootstrap/)
-服务端基于 [http://nodejs.org](NodeJS) + Express + MongoDB
+服务端基于 [NodeJS](http://nodejs.org) + Express + MongoDB
 
 ---
 
