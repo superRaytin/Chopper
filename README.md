@@ -4,11 +4,6 @@
 前端基于 [duckJS](https://github.com/superRaytin/duckJS) + [bootstrap](http://twitter.github.io/bootstrap/)
 服务端基于 [NodeJS](http://nodejs.org) + Express + MongoDB
 
----
-
-# Preview
-![N-MicroBlog](test/thumb.png)
-
 # Quick Start
 `git clone https://github.com/superRaytin/N-MicroBlog.git`
 
