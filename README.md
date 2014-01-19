@@ -1,7 +1,7 @@
 #N-Microblog
 轻量的多用户微博系统
 
-## Used Modules
+## Architecture
 - Web框架 - [Express](https://github.com/visionmedia/express)
 - 数据库 - [MongoDB](http://www.mongodb.org/)
 - 数据库操作 - [Mongoose](https://github.com/LearnBoost/mongoose)
