@@ -113,7 +113,7 @@ function newTopic(req, res, next){
     }));
 }
 
-// 我的吐槽
+// 我的微博
 function myTopic(req, res, next){
     if( !util.checkUserStatus(res, '先登录啊亲 (╯_╰)') ) return;
 
@@ -138,7 +138,7 @@ function myTopic(req, res, next){
         });
     }).fail(next);
 
-    // 当前为评论时，获取吐槽主体用户信息
+    // 当前为评论时，获取微博主体用户信息
     ep.on('getReplyTopicInfo', function(topic, cur, emitName){
         userProxy.getOneUserInfo({_id: topic.author_id}, 'name nickName head', function(err, replyToUser){
             var nickName = replyToUser.nickName, time = topic.create_time;
@@ -152,7 +152,7 @@ function myTopic(req, res, next){
         });
     });
 
-    // 取得每个吐槽的用户信息
+    // 取得每个微博的用户信息
     ep.on('getEveryTopicInfo', function(cur){
         userProxy.getOneUserInfo({_id : cur.author_id}, 'name nickName head', ep.done(function(user){
             var nickName = user.nickName, time = cur.create_time;
@@ -172,7 +172,7 @@ function myTopic(req, res, next){
         }));
     });
 
-    // 取得用户吐槽列表
+    // 取得用户微博列表
     topicProxy.getTopicList({author_name: current_user}, opt, ep.done(function(topicList){
         // 获取当前主题的作者昵称与头像
         ep.after('toAll', topicList.length, function(){
@@ -265,7 +265,7 @@ function newComment(req, res, next){
         },
         newReply = new replyModel(replyParam);
 
-        // 更新吐槽数量
+        // 更新微博数量
         topic.replyCount++;
         topic.save(ep.done(function(){
             // 保存至评论表
@@ -281,7 +281,7 @@ function newComment(req, res, next){
     });
 
     ep.on('getTopic', function(){
-        // 更新吐槽信息
+        // 更新微博信息
         topicProxy.getOneTopicById(topicid, '', ep.done(function(topic){
             ep.emit('saveTopic', topic);
         }));
@@ -321,7 +321,7 @@ function newComment(req, res, next){
             ep.emit('msgPushed');
         }
 
-        // 更新用户吐槽数
+        // 更新用户微博数
         if(curUser.reply_count){
             curUser.reply_count++;
         }else{

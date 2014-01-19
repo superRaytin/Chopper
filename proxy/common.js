@@ -36,7 +36,7 @@ exports.getSidebarNeed = function(res, next, settings, callback){
         ep.emit('current_user', null);
     }
 
-    // 吐槽之星
+    // 微博之星
     userProxy.getUserListBy({}, 'name nickName head topic_count', {limit: 8, sort: [['topic_count', 'desc']]}, ep.done('userListByCount'));
 
     // 最新加入

@@ -14,8 +14,8 @@ var topicSchema = new Schema({
     author_name: {type: String},
 
     top: {type: Boolean, default: false}, // 是否置顶
-    //replys: [{}], // 吐槽的评论们
-    //replyTo: {type: ObjectId}, // 此为评论，指向评论发生的吐槽
+    //replys: [{}], // 微博的评论们
+    //replyTo: {type: ObjectId}, // 此为评论，指向评论发生的微博
     replyCount: {type: Number, default: 0}, // 评论数
     support: {type: Number, default: 0}, // 赞
     down: {type: Number, default: 0}, // 踩

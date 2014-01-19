@@ -203,7 +203,7 @@ function user_center(req, res, next){
         });
     }).fail(next);
 
-    // 当前为评论时，获取吐槽主体用户信息
+    // 当前为评论时，获取微博主体用户信息
     ep.on('getReplyTopicInfo', function(topic, cur, emitName){
         if(topic){
             userProxy.getOneUserInfo({_id: topic.author_id}, 'name nickName head', function(err, replyToUser){
@@ -221,7 +221,7 @@ function user_center(req, res, next){
         }
     });
 
-    // 取得每个吐槽的用户信息
+    // 取得每个微博的用户信息
     ep.on('getEveryTopicInfo', function(cur){
         userProxy.getOneUserInfo({_id : cur.author_id}, 'name nickName head', ep.done(function(user){
             var nickName = user.nickName, time = cur.create_time;
@@ -251,7 +251,7 @@ function user_center(req, res, next){
                     followIn = true;
                 }
             }
-            // 取得用户吐槽列表
+            // 取得用户微博列表
             topicProxy.getTopicList({author_name: userName}, opt, ep.done(function(topicList){
                 // 获取当前主题的作者昵称与头像
                 ep.after('toAll', topicList.length, function(){

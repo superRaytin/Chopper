@@ -157,9 +157,14 @@ define(['jquery', 'alertify'], function($, alertify){
                         setTimeout(function(){
                             newTopic.slideDown(800, function(){
                                 newTopic.removeClass('hide');
-                                // 有分页的情况，在发布成功时移动当页最后一条记录
+                                // 有分页的情况，在发布成功时移除当页最后一条记录
                                 if($('.pagination').length){
                                     topic_wrap.find('.topic-item').last().remove();
+                                }
+
+                                var noneInfor = $('#J-no-infor');
+                                if(noneInfor.length){
+                                    noneInfor.remove();
                                 }
                             });
                         },300);

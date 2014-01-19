@@ -6,7 +6,7 @@
                   <div class="push-mostDiscuss"><i class="icon-fire"></i> 目前有&nbsp;<i><%= categories[0].count %></i>&nbsp;人在讨论&nbsp;<a id="J-joinCategory" href="/category/<%= categories[0]._id %>" title="点击参与此话题讨论" data-category="<%= categories[0].name %>">#<%= categories[0].name %>#</a></div>
                   <% } %>
                   <textarea id="J-topic-content" rows="2" placeholder="说点儿什么..."></textarea>
-                  <div class="text-left"><input type="button" class="btn btn-large btn-success" id="J-fabu" value="一吐为快"> Ctrl+Enter快速发布 </div>
+                  <div class="text-left"><input type="button" class="btn btn-large btn-success" id="J-fabu" value="发 布"> Ctrl+Enter快速发布 </div>
               </div>
 
               <div id="J-topicItemTemplate" class="topic-item J-topic-item hide">
@@ -87,7 +87,7 @@
       <p>亲爱的 <span class="label label-success"><%= topInfo.nickName %></span>，根据你的人品指数，你获得系统随机送出的 <span class="badge badge-info"><%= gold %></span> 个金币~ <(￣︶￣)></p>
   </div>
   <div class="modal-footer">
-      <a id="J-howgetgold" title="" data-content="根据你的 粉丝数量、关注的人、吐槽数量 计算得出" data-placement="bottom" data-toggle="popover" class="btn" href="#" data-original-title="人品指数">什么是人品指数</a>
+      <a id="J-howgetgold" title="" data-content="根据你的 粉丝数量、关注的人、微博数量 计算得出" data-placement="bottom" data-toggle="popover" class="btn" href="#" data-original-title="人品指数">什么是人品指数</a>
       <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">知道了</button>
   </div>
 </div>

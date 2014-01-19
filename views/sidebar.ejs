@@ -21,7 +21,7 @@
                                 <a href="/user/<%= userInfo.name %>"><i class="theCurrentName"><% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %></i></a>
                             </h4>
                             <p class="theCurrentSign"><%= userInfo.sign %></p>
-                            <p>粉丝：<span class="badge badge-important"><%= userInfo.fans.length %></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;吐槽：<a href="/mine"><span class="badge badge-info" id="J-userInfor-topicCount"><%= userInfo.topic_count %></span></a></p>
+                            <p>粉丝：<span class="badge badge-important"><%= userInfo.fans.length %></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;微博：<a href="/mine"><span class="badge badge-info" id="J-userInfor-topicCount"><%= userInfo.topic_count %></span></a></p>
                             <p>金币：<span class="badge"><% if(userInfo.gold){ %><%= userInfo.gold %><% }else{ %>0<% } %></span><% if(locals.gold){ %><span class="user-infor-goldtip">登录奖励 +<%= gold %></span><% } %>
                             </p>
                         </div>
@@ -45,7 +45,7 @@
         </div>
         <% }else{ %>
         <div class="widget-list sidebar-login">
-            <p>与其在别处仰望，不如在这里吐槽 <(￣︶￣)><p>
+            <p>请登录以发表信息。<p>
             <form method="post" class="form-signin" action="/login">
                 <input type="text" placeholder="用户名或Email" name="username" class="input-block-level">
                 <input type="password" placeholder="密码" name="password" class="input-block-level">
@@ -72,14 +72,14 @@
             </div>
         </div>
         <div class="widget-list">
-            <h5 class="widget-head"><i class="icon-star"></i> 吐槽之星 | Star</h5>
+            <h5 class="widget-head"><i class="icon-star"></i> 微博之星 | Star</h5>
             <% if(locals.usersByCount && usersByCount.length){ %>
             <div class="list-users">
                 <ul class="clearfix">
                     <% for(var j = 0, len = usersByCount.length; j < len; j++){ %>
                     <% var currentStar = usersByCount[j] %>
                     <li>
-                        <a href='/user/<%= currentStar.name %>' title="<% if(currentStar.nickName){ %><%= currentStar.nickName %><% }else{ %><%= currentStar.name %><% } %>， <%= usersByCount[j].topic_count %>个吐槽"><img class="media-object img-rounded" src="<% if(currentStar.head){ %><%= currentStar.head %><% }else{ %>/img/nopic.jpg<% } %>" /></a>
+                        <a href='/user/<%= currentStar.name %>' title="<% if(currentStar.nickName){ %><%= currentStar.nickName %><% }else{ %><%= currentStar.name %><% } %>， <%= usersByCount[j].topic_count %>个微博"><img class="media-object img-rounded" src="<% if(currentStar.head){ %><%= currentStar.head %><% }else{ %>/img/nopic.jpg<% } %>" /></a>
                     </li>
                     <% } %>
                 </ul>

@@ -80,10 +80,19 @@ hr{
 .navbar .brand{
     color: #ffffff;
     text-shadow: 0 1px 0 #333;
+    font-size: 30px;
+    padding-top: 12px;
 }
 .brand .icon-home{
     margin-top: 6px;
     margin-right: 5px;
+}
+.brand sup{
+    font-size: 12px;
+    color: #888;
+    vertical-align: top;
+    padding-left: 5px;
+    line-height: 20px;
 }
 .navbar-version{
     color: #bbb;
@@ -368,7 +377,6 @@ hr{
 }
 .topic-item:hover{
     background: #F8F8F8;
-    box-shadow: 0px 0px 10px #dedede inset;
 }
 .topic-body{
     overflow: hidden;
@@ -427,6 +435,9 @@ hr{
 }
 .reply-push textarea{
     width: 80%;
+    max-width: 80%;
+    max-height: 100px;
+    min-height: 34px;
     margin-bottom: 0;
     font-size: 12px;
 }
@@ -555,4 +566,8 @@ hr{
 
 .modal-backdrop.fade.in{
     opacity: 0.2;
+}
+
+.copyright{
+    color: #666;
 }

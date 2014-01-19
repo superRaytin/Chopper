@@ -17,7 +17,7 @@ var userSchema = new Schema({
     reg_time: {type: String},
     lastLogin_time: {type: String, default: '0'}, // 最后登录时间
 
-    topic_count: {type: Number, default: 0}, // 吐槽数
+    topic_count: {type: Number, default: 0}, // 微博数
     reply_count: {type: Number, default: 0}, // 评论数
     collecting: [String], // 收藏
     followed: [String], // 关注

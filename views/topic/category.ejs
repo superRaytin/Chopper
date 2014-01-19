@@ -3,7 +3,7 @@
           <div class="span8">
               <div class="push clearfix">
                   <textarea id="J-topic-content" rows="2" placeholder="说点儿什么...">#<%= cate.name %># </textarea>
-                  <div class="text-left"><input type="button" class="btn btn-large btn-success" id="J-fabu" value="一吐为快"> Ctrl+Enter快速发布 </div>
+                  <div class="text-left"><input type="button" class="btn btn-large btn-success" id="J-fabu" value="发 布"> Ctrl+Enter快速发布 </div>
               </div>
 
               <div id="J-topicItemTemplate" class="topic-item J-topic-item hide">
@@ -32,7 +32,7 @@
                   </div>
               </div>
 
-              <h3 class="titleBar">与 #<%= cate.name %># 有关的吐槽 (<%= cate.count %>)</h3>
+              <h3 class="titleBar">与 #<%= cate.name %># 有关的微博 (<%= cate.count %>)</h3>
               <%- partial('topic/topicBlock', {topics: topics}) %>
               <!-- page start -->
               <%- partial('pagination', {pre: "category/"+ cate._id +"/", pagination: pagination}) %>

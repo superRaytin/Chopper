@@ -11,7 +11,7 @@ var models = require('../models'),
  * Callback:
  * - err, 数据库异常
  * - topics, 话题
- * @param {String} id 吐槽id
+ * @param {String} id 微博id
  * @param {Object} opt 过滤条件
  * @param {Function} callback 回调函数
  */
@@ -21,11 +21,11 @@ function getAllReplys(opt, callback){
 };
 
 /**
- * 获取指定吐槽下所有评论
+ * 获取指定微博下所有评论
  * Callback:
  * - err, 数据库异常
  * - topics, 话题
- * @param {String} id 吐槽id
+ * @param {String} id 微博id
  * @param {Object} opt 过滤条件
  * @param {Function} callback 回调函数
  */
