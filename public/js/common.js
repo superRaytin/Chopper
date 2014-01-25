@@ -155,21 +155,21 @@ define(['jquery', 'alertify'], function($, alertify){
 
                         topic_wrap.prepend(newTopic);
                         setTimeout(function(){
+                            var noneInfor = $('#J-no-infor');
+                            if(noneInfor.length){
+                                noneInfor.remove();
+                            }
+
                             newTopic.slideDown(800, function(){
                                 newTopic.removeClass('hide');
                                 // 有分页的情况，在发布成功时移除当页最后一条记录
                                 if($('.pagination').length){
                                     topic_wrap.find('.topic-item').last().remove();
                                 }
-
-                                var noneInfor = $('#J-no-infor');
-                                if(noneInfor.length){
-                                    noneInfor.remove();
-                                }
                             });
                         },300);
 
-                        // 清空吐槽框
+                        // 清空输入框
                         if(type === undefined){
                             con.val('');
                         }
