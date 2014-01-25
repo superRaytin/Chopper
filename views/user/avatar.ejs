@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="row">
+        <div class="span8">
+            <h3 class="titleBar">上传真像</h3>
+            <div class="coninner">
+                <form name="avatarForm" enctype="multipart/form-data" target="hideUpload" class="form-horizontal fn-mt20" method="post">
+                    <div class="control-group">
+                        <div class="controls"><img class="previewImg" src="<% if(userInfo.head){ %><%= userInfo.head %><% }else{ %>/img/nopic.jpg<% } %>"></div>
+                    </div>
+                    <div class="control-group">
+                        <label for="J-headPic" class="control-label">URL：</label>
+                        <div class="controls">
+                            <input type="file" id="J-headPic" name="headPic">
+                            <div class=""><i class="icon-exclamation-sign"></i>上传200K以内180x180高清无码照，接受gif|jpg|png格式。</div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <input id="J-save-avatar" class="btn btn-large btn-primary" type="submit" value="保 存">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>
+    </div>
+</div>
+<iframe name="hideUpload" src="" class="hide"></iframe>
+<script type="text/javascript">
+var uploadNotice;
+D.use(['jquery', 'alertify'], function($, alertify){
+    $(function(){
+        uploadNotice = function(rec){
+            alertify.alert(rec.data);
+            if(rec.success){
+                $('.previewImg, #J-user-infor-head').attr('src', rec.img +'?'+ new Date().getTime());
+            }
+        }
+    });
+});
+</script>

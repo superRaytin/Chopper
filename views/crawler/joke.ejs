@@ -1,0 +1,36 @@
+    <div class="container">
+    <!--<% for(var i = 0, len = data.length; i < len; i++){ %>
+        <div class="block"><%= data[i] %></div>
+    <% } %>
+
+    <% for(var key in data){
+        var item = data[key];
+    %>
+    <div class="block">
+        <p><%= item.time %> <% if(item.author){ %><%= item.author %><% } %></p>
+        <p><%= item.content %></p>
+        <% if(item.thumb){ %>
+        <p><img src="<%= item.thumb %>"></p>
+        <% } %>
+    </div>
+    <% } %>
+    -->
+        <%
+            data.each(function(i, item){
+            var cur = data.eq(i),
+                content = cur.find('content').text(),
+                time = cur.find('time').text(),
+                author = cur.find('author').text(),
+                thumb = cur.find('thumb').text();
+        %>
+        <div class="block">
+            <p class="author"><%= time %> <% if(author != 'null'){ %><%= author %><% } %></p>
+            <p><%= content %></p>
+            <% if(thumb != 'null'){ %>
+            <p><img src="<%= thumb %>"></p>
+            <% } %>
+        </div>
+
+        <% }) %>
+
+    </div>

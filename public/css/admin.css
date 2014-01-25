@@ -1,0 +1,70 @@
+body{
+    padding-top: 40px;
+    font-family: 'microsoft Yahei',simsun;
+    background: #eee;
+}
+li{
+    list-style: none;
+}
+hr{
+    border-color: #DDDDDD -moz-use-text-color #FFFFFF;
+}
+.fn-mt10{
+    margin-top: 10px;
+}
+.fn-mt20{
+    margin-top: 20px;
+}
+.fn-mt30{
+    margin-top: 30px;
+}
+.fn-ml10{
+    margin-left: 10px;
+}
+.fn-pl20{
+    padding-left: 20px;
+}
+.fn-posi-re{
+    position: relative;
+}
+.fn-posi-ab{
+    position: absolute;
+}
+
+.navbar .brand{
+    margin-left: 0px;
+}
+
+#wrapper{
+    min-height: 400px;
+}
+.content{
+    padding: 20px;
+}
+.blank{
+    width: 100%;
+}
+.table{
+    background: #fff;
+}
+.table th{
+    background: -moz-linear-gradient(top, #fff, #eee);
+    background:-webkit-linear-gradient(top, #fff, #eee);
+}
+.table td{
+    font-size: 12px
+}
+.table tr:hover{
+    background: #F8F8F8;
+    box-shadow: 0px 0px 10px #dedede inset;
+}
+.table tr.on{
+    background: #C3ECC0;
+    box-shadow: 0px 0px 10px #b0d4ad inset;
+}
+.replyTopicContent{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 200px;
+}

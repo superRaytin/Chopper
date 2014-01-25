@@ -8,6 +8,7 @@ var express = require('express'),
     http = require('http'),
     path = require('path'),
     flash = require('connect-flash'),
+    partials = require('express-partials'),
     MongoStore = require('connect-mongo')(express),
     config = require('./config').config;
 
@@ -20,7 +21,7 @@ app.configure(function(){
   app.use(flash());
   app.use(express.favicon());
   app.use(express.logger('dev'));
-  app.use(express.bodyParser());
+  app.use(express.bodyParser({uploadDir: config.uploadTempDir}));
   app.use(express.methodOverride());
   app.use(express.cookieParser(config.cookieSecret));
   app.use(express.session({
@@ -29,6 +30,11 @@ app.configure(function(){
           url: config.db
       })
   }));
+  app.use(partials());
+
+  // 检查当前用户状态
+  app.use(require('./controllers/sign').checkCurrentUser);
+
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
 });

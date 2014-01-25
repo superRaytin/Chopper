@@ -1,0 +1,55 @@
+<div class="container">
+      <div class="row">
+          <div class="span8">
+              <%
+              var myself = false;
+              if(locals.current_user && locals.current_user == userInfo.name){
+                myself = true;
+              }
+              %>
+              <div class="person-infor clearfix">
+                  <div class="person-infor-img">
+                      <img src="<% if(userInfo.head){ %><%= userInfo.head %><% }else{ %>/img/nopic.jpg<% } %>">
+                  </div>
+                  <div class="person-infor-data">
+                      <h4><% if(userInfo.nickName){ %><%= userInfo.nickName %><% }else{ %><%= userInfo.name %><% } %></h4>
+                      <p><a href="/user/<%= userInfo.name %>">http://<%= config.domain %>:<%= config.port %>/user/<%= userInfo.name %></a></p>
+                      <p>粉丝：<strong class="fn-color-F66F6F" id="J-personInfor-fans"><%= userInfo.fans.length %></strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;吐槽：<strong id="J-userInfor-topicCount"><%= userInfo.topic_count %></strong></p>
+                      <% if(!myself){ %>
+                      <p>
+                          <input type="button" class="btn btn-success" id="J-follow" value="<% if(followIn){ %>取消关注<% }else{ %>@ 关注<% } %>" data-user="<%= userInfo.name %>">
+                      </p>
+                      <% } %>
+                      <div><%= userInfo.sign %></div>
+                  </div>
+              </div>
+              <%
+                if(myself){
+                    var text = '我';
+                }else{
+                    var text = 'TA';
+                }
+              %>
+              <div class="navbar titles">
+                  <div class="navbar-inner">
+                      <ul class="nav">
+                          <li class="active"><a><%= text %>的吐槽</a></li>
+                          <li><a href="#"><%= text %>的评论</a></li>
+                      </ul>
+                  </div>
+              </div>
+              <%- partial('topic/topicBlock', {topics: topics}) %>
+              <!-- page start -->
+              <%- partial('pagination', {pre: "user/" + userInfo.name, pagination: pagination}) %>
+              <!-- page end -->
+          </div>
+          <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount, categories: categories}) %>
+      </div>
+  </div>
+<script type="text/javascript">
+    duckJS.use(['jquery', 'common'], function($, common){
+        $(function(){
+            common.myTopic.init();
+        });
+    });
+</script>

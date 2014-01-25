@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>action</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript">
+        function notice(a, b, c){
+            parent.uploadNotice({
+                success: a,
+                data: b,
+                img: c
+            })
+        }
+    </script>
+</head>
+<body>
+<script type="text/javascript">notice(<%= action.success %>, "<%= action.data %>", "<%= action.img %>")</script>
+</body>
+</html>

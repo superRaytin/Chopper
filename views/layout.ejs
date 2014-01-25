@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><% if(title){ %><%= title %><% }else{ %><%= config.name %><% } %></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon" />
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.css" rel="stylesheet" media="screen">
+    <link id="J-skin" href="/style/simple/base.css" rel="stylesheet" media="screen">
+    <script type="text/javascript" src="/js/duck.js"></script>
+    <script type="text/javascript">
+        duckJS.config({
+            alias : {
+                'jquery' : 'jquery-1.9.1.min.js',
+                'bootstrap' : 'bootstrap.min.js',
+                'alertify' : 'alertify.min.js',
+                'alertify-core' : '/css/alertify/alertify.core.css',
+                'alertify-default' : '/css/alertify/alertify.default.css',
+                'common' : 'common.js'
+            }
+        });
+
+        duckJS.use(['alertify-core', 'alertify-default']);
+        duckJS.use('bootstrap');
+    </script>
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="/"><%= config.name %><sup><%= config.version %></sup></a><span class="navbar-dec pull-left"><%= config.description %></span>
+            <div class="nav-collapse collapse">
+                <div class="navbar-text pull-right dropdown">
+                    <% if(locals.current_user){ %>
+                    欢迎你，<span class="theCurrentName label label-success"><%= topInfo.nickName %></span>
+                    <% if(topInfo.msgCount != 0){ %> <a href="/message" title="新的消息"><span class="label label-warning"><i class="icon-envelope icon-white"></i> 消息(<%= topInfo.msgCount %>)</span></a> <% } %>
+                    <% if(topInfo.lastLogin_time != '0'){ %>上次登录：<%= topInfo.lastLogin_time %><% }else{ %>新人登录，速报三围~<% } %> <a class="dropdown-toggle" data-toggle="dropdown" role="button" href="#"><i class=" icon-wrench icon-white"></i> 设置<b class="caret"></b></a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/account">基本资料</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/avatar">修改头像</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/pass">修改密码</a></li>
+                        <li role="presentation" class="divider"></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="/logout">登出</a></li>
+                    </ul>
+                    <% }else{ %>
+                    <a href="/login" class="navbar-link">登录</a><a href="/reg" class="navbar-link fn-ml10">注册</a>
+                    <% } %>
+                </div>
+                <!--<ul class="nav">
+                    <li class="active">
+                        <a href="#this">首页</a>
+                    </li>
+                    <li>
+                        <a href="#this">吐槽</a>
+                    </li>
+                </ul>-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- navbar end -->
+<div class="mod-topinfo hide">
+    <div class="container">
+        <h1 class="site-name"><%= config.name %></h1>
+        <p class="fn-mt20"><%= config.description %></p>
+    </div>
+</div>
+<!--[if lt IE 9]>
+<div class="container alert alert-block">
+    <button data-dismiss="alert" class="close" type="button">×</button>
+    <h4>你Out啦！</h4>
+    还在使用 <strong>老掉牙</strong> 的 IE 吗，为了避免你在使用过程中，<b>突然发生</b> 诸如 “凤姐向你表白”、“贞子爬满屏幕” 等等可能的灵异事件<br>
+    请换用 <strong>chrome</strong> 或 <strong>Firefox</strong> 等现代浏览器，感受更畅快的使用体验。此通知仅出现一次，一次一年。<br>
+</div>
+<![endif]-->
+<%- body %>
+<div class="container copyright fn-mt10 fn-pb20">
+    <p>&copy; <%= config.name %> 201X <a href="https://github.com/superRaytin/nodeApp/tree/develop" target="_blank">Github</a> Nodejs强力驱动</p>
+</div>
+</body>
+</html>

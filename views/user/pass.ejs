@@ -1,0 +1,49 @@
+<div class="container">
+    <div class="row">
+        <div class="span8">
+            <h3 class="titleBar">修改密码</h3>
+            <div class="coninner">
+                <form class="form-horizontal fn-mt20">
+                    <div class="control-group">
+                        <label for="J-userName" class="control-label">用户名：</label>
+                        <div class="controls">
+                            <input type="text" id="J-userName" name="userName" value="<%= locals.current_user %>" disabled>
+                        </div>
+                    </div>
+                    <div class="control-group" id="J-pass-wrap">
+                        <label for="J-pass" class="control-label"><i class="redStar">*</i>原密码：</label>
+                        <div class="controls">
+                            <input type="password" id="J-pass" name="pass">
+                            <span class="help-inline hide"></span>
+                        </div>
+                    </div>
+                    <div class="control-group" id="J-newPass-wrap">
+                        <label for="J-newPass" class="control-label"><i class="redStar">*</i>新密码：</label>
+                        <div class="controls">
+                            <input type="password" id="J-newPass" name="newPass">
+                            <span class="help-inline hide"></span>
+                        </div>
+                    </div>
+                    <div class="control-group" id="J-newPassOnce-wrap">
+                        <label for="J-newPassOnce" class="control-label"><i class="redStar">*</i>确认新密码：</label>
+                        <div class="controls">
+                            <input type="password" id="J-newPassOnce" name="newPassOnce">
+                            <span class="help-inline hide"></span>
+                        </div>
+                    </div>
+                </form>
+                <div class="form-actions">
+                    <button id="J-save-pass" class="btn btn-large btn-primary" type="button">保 存</button>
+                </div>
+            </div>
+        </div>
+        <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>
+    </div>
+</div>
+<script type="text/javascript">
+    duckJS.use(['jquery', 'common'], function($, common){
+        $(function(){
+            common.account.init();
+        });
+    });
+</script>

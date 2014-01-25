@@ -1,17 +1,105 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= config.name %></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Bootstrap -->
-    <link href="css/base.css" rel="stylesheet" media="screen">
-    <link href="css/bootstrap.css" rel="stylesheet" media="screen">
-  </head>
-  <body>
-    <h1><%= title %> <%= config.version %></h1>
-    <% if(locals.user){ %>
-    <p><%= locals.user %>，欢迎你。</p>
-    <% } %>
-    <p><%= config.description %></p>
-  </body>
-</html>
+  <div class="container">
+      <div class="row">
+          <div class="span8">
+              <div class="push clearfix">
+                  <% if(locals.categories && categories.length){ %>
+                  <div class="push-mostDiscuss"><i class="icon-fire"></i> 目前有&nbsp;<i><%= categories[0].count %></i>&nbsp;人在讨论&nbsp;<a id="J-joinCategory" href="/category/<%= categories[0]._id %>" title="点击参与此话题讨论" data-category="<%= categories[0].name %>">#<%= categories[0].name %>#</a></div>
+                  <% } %>
+                  <textarea id="J-topic-content" rows="2" placeholder="说点儿什么..."></textarea>
+                  <div class="text-left"><input type="button" class="btn btn-large btn-success" id="J-fabu" value="发 布"> Ctrl+Enter快速发布 </div>
+              </div>
+
+              <div id="J-topicItemTemplate" class="topic-item J-topic-item hide">
+                  <div class="topic-left">
+                      <img src="/img/nopic.jpg" class="media-object J-topic-img img50" alt="" title="">
+                  </div>
+                  <div class="topic-body">
+                      <div class="topic-content">
+                          <a href="" class="topic-user J-topic-authorName J-userLink" title=""></a>&nbsp;&nbsp;<span class="J-topic-content"></span>
+                      </div>
+                      <div class="topic-updown clearfix">
+                          <span class="pull-left topic-time J-topic-time"></span>
+                              <span class="pull-right J-topic-updown">
+                                  <a class="topic-up J-topic-up" data-topicid="" data-user="" data-type="support"><i class="icon-thumbs-up"></i> 赞 <span class="J-topic-upNum"></span></a>&nbsp;
+                                  <a class="topic-down J-topic-down" data-topicid="" data-user="" data-type="down"><i class="icon-thumbs-down"></i> 踩 <span class="J-topic-downNum"></span></a>&nbsp;
+                                  <a class="topic-showreply J-topic-showreply" data-topicid="" data-user=""><i class="icon-user"></i> 评论 <span class="J-topic-replyNum"></span></a>
+                              </span>
+                      </div>
+                      <div class="J-reply-wrapper hide">
+                          <div class="reply-border"></div>
+                          <div class="reply-push">
+                              <textarea rows="1"></textarea>
+                              <div class="text-right pull-right"><input type="button" value="发 布" class="btn btn-large btn-inverse J-reply-fabu" data-topicid="" data-user=""></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="topic-item hide">
+                  <div class="topic-left">
+                      <img src="img/nopic.jpg" class="media-object J-topic-img img50">
+                  </div>
+                  <div class="topic-body">
+                      <div class="topic-content">
+                          <a href="#this" class="topic-user">我是神货</a>&nbsp;你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂的的
+                      </div>
+                      <div class="topic-updown clearfix">
+                          <span class="pull-left topic-time">04月11日 22:04</span>
+                          <span class="pull-right">
+                              <a class="topic-up J-topic-up"><i class="icon-thumbs-up"></i> 赞 (12)</a>&nbsp;
+                              <a class="topic-down J-topic-down"><i class="icon-thumbs-down"></i> 踩 (19)</a>&nbsp;
+                              <a class="topic-showreply J-topic-showreply"><i class="icon-user"></i> 评论 (9)</a>
+                          </span>
+                      </div>
+                      <div class="J-reply-wrapper">
+                          <div class="reply-border"></div>
+                          <div class="reply-push J-reply-push">
+                              <textarea rows="1"></textarea>
+                              <div class="text-right"><input type="button" value="发 布" class="btn btn-primary"></div>
+                          </div>
+                          <div class="J-replyRepeat topic-reply clearfix">
+                              <div class="reply-body">
+                                  <a class="reply-head pull-left">
+                                      <img src="img/nopic.jpg" class="media-object img30 J-reply-head">
+                                  </a>
+                                  <a href="#this" class="J-topic-user topic-user">如果只是</a>&nbsp;&nbsp;<span class="J-reply-con">你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂你懂</span>
+                              </div>
+                              <div class="reply-at"><a class="J-reply-at">回复</a></div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <%- partial('topic/topicBlock', {topics: topics}) %>
+              <!-- page start -->
+              <%- partial('pagination', {pre: "", pagination: pagination}) %>
+              <!-- page end -->
+          </div>
+          <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount, categories: categories, gold: gold}) %>
+      </div>
+  </div>
+<% if(gold){ %>
+<div id="J-timeMachine" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">每天登录奖励</h3>
+  </div>
+  <div class="modal-body">
+      <p>亲爱的 <span class="label label-success"><%= topInfo.nickName %></span>，根据你的人品指数，你获得系统随机送出的 <span class="badge badge-info"><%= gold %></span> 个金币~ <(￣︶￣)></p>
+  </div>
+  <div class="modal-footer">
+      <a id="J-howgetgold" title="" data-content="根据你的 粉丝数量、关注的人、微博数量 计算得出" data-placement="bottom" data-toggle="popover" class="btn" href="#" data-original-title="人品指数">什么是人品指数</a>
+      <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">知道了</button>
+  </div>
+</div>
+<% } %>
+<script type="text/javascript">
+  duckJS.use(['jquery', 'common'], function($, common){
+      $(function(){
+          common.indexObj.init();
+      });
+      <% if(gold){ %>
+          $('#J-timeMachine').modal('toggle');
+          $('#J-howgetgold').popover();
+      <% } %>
+  });
+</script>

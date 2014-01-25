@@ -1,0 +1,95 @@
+todoList：
+========================
+model ***
+用户密码加密存储 ***
+发布内容模块 ***
+分页组件 *** 分页限制页数范围 ***
+我的吐槽分页 ***
+站内通知 *** 清空收件箱功能 ***
+我关注的人功能 ***
+注册验证用户名  密码至少三位 ***
+上传头像成功同步右侧头像 ***
+我的吐槽显示自己和关注的人的吐槽 *
+IE9以下提示 ***
+
+封装站内信功能 ***
+封装分页功能 ***
+个人主页功能 ///
+昵称唯一性验证 ***
+回复，顶 ***
+评论后通知用户 ***
+不能赞或踩自己主题 ***
+不能重复赞或踩 ***
+封装主题块 ***
+每天登录随机送金币 ***
+话题功能 ***
+
+改造路由规则
+数据库改造（多表查询改为嵌入文档，将评论存入comment表，comment内嵌在topic; category同）
+回到顶部
+前端交互（评论、头像）
+用户分级
+发起活动功能
+主题管理 ，用户管理（删除，更改）
+批量灌水功能
+一键数据校准
+缓存评论请求与hover请求
+后台缓存
+评论增加图片功能
+我的粉丝
+私信
+找一个第三方数据接口，自动发布
+应用中心 做一个【测工资~测测明年工资能涨多少】
+后期将proxy controller层优化
+聊天室功能？
+
+
+常用方法与属性：
+========================
+<%- partial('posts', {posts:posts}) %>  引进子模板并传入对象
+req.body   对象，客户端POST过来的
+req.params 数组，匹配请求URL正则模式
+req.query 对象，请求参数
+res.redirect 跳转
+res.locals 往模板塞变量
+req.files 获取提交的文件列表
+User.find({ name: { $in: names } }, callback)  批量查数据 names为数组
+
+
+系统设计：
+========================
+站内通知
+[
+    'fansIn|time|nickName|username', // 有人关注了你
+    'fansOut|time|nickName|username', // 取消关注
+    'support|time|nickName|username|topic', // 有人赞了你
+    'down|time|nickName|username|topic', // 有人踩了你
+    'comment|time|nickName|username|topic' // 有人评论
+    'newuser|time|username' // 新用户
+]
+关注：
+time  XXX 关注了你
+
+取消关注：
+time  XXX 取消了对你的关注
+
+赞：
+time  你的吐槽 topic 太精彩了，被 XXX 激动地赞了一下
+
+踩：
+time  你的吐槽 topic 引起 XXX 不爽，被无情地踩了一脚
+
+评论：
+time  你的吐槽 topic 被 XXX 点评了
+
+time 你人品爆发，获得10个系统随机赠送的金币
+
+========================
+初探文件上传
+node利器—事件代理模块eventproxy
+
+========================
+node needle
+node cheerio
+node async
+node request

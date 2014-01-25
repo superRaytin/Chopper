@@ -1,0 +1,65 @@
+    <style type="text/css">
+        .radio-tab{
+            width: 120px;
+        }
+        .radio-tab ul{
+            margin: 0;
+        }
+        .radio-tab li{
+            padding: 5px 0 5px 8px;
+            background: #eee;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        .radio-tab li.on, .radio-tab li:hover{
+            background: #666;
+            color: #fff;
+        }
+        .radio-wrap{
+            width: 815px;
+        }
+        .radio-frame{
+            border: none;
+            width: 100%;
+            height: 510px;
+            overflow: hidden;
+        }
+        .container{
+            width: 980px;
+        }
+        .block{
+            padding-right: 0px;
+        }
+        .footer{
+            margin-bottom: 20px;
+            border-top: 1px dashed #000000;
+            padding-top: 10px;
+        }
+    </style>
+    <div class="container">
+        <div class="block clearfix">
+            <div class="pull-left radio-tab" id="J-radio-tab">
+                <ul>
+                    <li rel="http://app.duomiyy.com/webradio/baidu/index.html?bd_user=2131413451&amp;" data-hei="510" class="on">多米电台</li>
+                    <li rel="http://douban.fm/partner/baidu/doubanradio?bd_user=2131413451&amp;" data-hei="380">豆瓣电台</li>
+                    <li rel="http://player.kuwo.cn/webmusic/webdiantai/kuwoBaiduPlay.jsp?bd_user=2131413451&amp;" data-wid="540" data-hei="290">酷我电台</li>
+                    <li rel="http://music.renren.com/baidufm_app.html?from=baiduapp2&amp;" data-hei="380">人人电台</li>
+                    <li rel="http://topic.kugou.com/radio/baiduNew.htm?bd_user=2131413451&amp;" data-hei="380">酷狗电台</li>
+                    <li rel="http://www.yinyuetai.com/baidu/index?bd_user=2131413451&amp;" data-hei="450">音悦台</li>
+                    <li rel="http://fm.baidu.com/?embed=ps&amp;bd_user=2131413451&amp;" data-hei="440">百度随心听</li>
+                    <li rel="http://open.5sing.com/baidu/tindex.aspx?fid=28&amp;bd_user=2131413451&amp;" data-hei="380">听古风</li>
+                    <!--<li rel="http://www.xiami.com/song/play?ids=/song/playlist/id/1769509867/object_name/default/object_id/0" data-wid="750" data-hei="557">虾米电台</li>-->
+                    <li rel="http://app.makejoy.net/radio?bd_user=2131413451&amp;" data-hei="380">米悦故事电台</li>
+                </ul>
+            </div>
+            <div class="pull-left radio-wrap fn-ml10">
+                <iframe src="http://app.duomiyy.com/webradio/baidu/index.html?bd_user=2131413451&amp;" class="radio-frame" id="J-radio-frame"></iframe>
+            </div>
+        </div>
+        <div class="footer">X 聚所有资源均来源于网络 ：）</div>
+    </div>
+    <script type="text/javascript">
+        duckJS.use('ju', function(ju){
+            ju.radio.init();
+        });
+    </script>

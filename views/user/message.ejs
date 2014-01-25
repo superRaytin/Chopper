@@ -1,0 +1,64 @@
+<div class="container">
+    <div class="row">
+        <div class="span8">
+            <h3 class="titleBar">
+                <% if(message){ %>
+                <span class="pull-right doThisEmpty" id="J-doThisEmpty" title="消息超过20条时，系统将自动删除最早的10条"><i class="icon-trash"></i> 清空</span>
+                <% } %>
+                消息中心 (<% if(message){ %><%= message.length %><% }else{ %>0<% } %>)
+            </h3>
+            <div class="message-body" id="J-message-body">
+                <% if(message){ %>
+                    <% for(var i = message.length - 1; i >= 0; i--){ %>
+                        <%
+                        var cur = message[i], type = cur.msgType, showCon;
+                        if(type == 'fansIn'){
+                        %>
+                        <div class="message-item<% if(cur.readed === false){ %> message-item-new<%}%>">
+                            <span class="topic-time"><i class="icon-envelope"></i> <%=cur.time%></span><br>
+                            你的魅力破表，<a href="/user/<%=cur.name%>" title="<%=cur.nickName%>"><span class="label label-info"><%=cur.nickName%></span></a> 关注了你
+                        </div>
+                        <% }else if(type == 'fansOut'){ %>
+                        <div class="message-item<% if(cur.readed === false){ %> message-item-new<%}%>">
+                            <span class="topic-time"><i class="icon-envelope"></i> <%=cur.time%></span><br>
+                            <a href="/user/<%=cur.name%>" title="<%=cur.nickName%>"><span class="label label-info"><%=cur.nickName%></span></a> 偷偷地取消了对你的关注
+                        </div>
+                        <% }else if(type == 'support'){ %>
+                        <div class="message-item<% if(cur.readed === false){ %> message-item-new<%}%>">
+                            <span class="topic-time"><i class="icon-envelope"></i> <%=cur.time%></span><br>
+                            你的微博 <span class="message-topic"><%=cur.topic%></span> 太精彩了，被 <a href="/user/<%=cur.name%>"><span class="label label-info"><%=cur.nickName%></span></a> 激动地赞了一下
+                        </div>
+                        <% }else if(type == 'down'){ %>
+                        <div class="message-item<% if(cur.readed === false){ %> message-item-new<%}%>">
+                            <span class="topic-time"><i class="icon-envelope"></i> <%=cur.time%></span><br>
+                            你的微博 <span class="message-topic"><%=cur.topic%></span> 引起 <a href="/user/<%=cur.name%>"><span class="label label-info"><%=cur.nickName%></span></a> 不爽，TA抬起香港脚一顿狂踩
+                        </div>
+                        <% }else if(type == 'comment'){ %>
+                        <div class="message-item<% if(cur.readed === false){ %> message-item-new<%}%>">
+                            <span class="topic-time"><i class="icon-envelope"></i> <%=cur.time%></span><br>
+                            你的微博 <span class="message-topic"><%=cur.topic%></span> 被 <a href="/user/<%=cur.name%>"><span class="label label-info"><%=cur.nickName%></span></a> 点评了，快去看看
+                        </div>
+                        <% }else if(type == 'newuser'){ %>
+                        <div class="message-item<% if(cur.readed === false){ %> message-item-new<%}%>">
+                            <span class="topic-time"><i class="icon-envelope"></i> <%=cur.time%></span><br>
+                            亲爱的 <a href="/user/<%=cur.name%>"><span class="label label-info"><%=cur.name%></span></a> ，欢迎来到扯吧，请放下节操，踊跃发言攒人品。<br>已赠送 <span class="badge badge-info">10</span> 金币，每天登录，系统将根据你的人品随机送金币哦 <(￣︶￣)>
+                        </div>
+                        <% } %>
+                    <% } %>
+                <% }else{ %>
+                    <div class="message-item">
+                    没有新的消息。
+                    </div>
+                <% } %>
+            </div>
+        </div>
+        <%- partial('sidebar', {userInfo: userInfo, users: users, usersByCount: usersByCount}) %>
+    </div>
+</div>
+<script type="text/javascript">
+    duckJS.use(['jquery', 'common'], function($, common){
+        $(function(){
+            common.message.init();
+        });
+    });
+</script>

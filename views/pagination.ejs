@@ -1,0 +1,62 @@
+<%
+    if(pagination.totalPage > 1){
+        var currentPage = pagination.currentPage,
+            totalPage = pagination.totalPage,
+            pageRange = pagination.pageRange;
+
+        var first = currentPage - pageRange;
+        var last = currentPage + pageRange;
+        var firstPoint = first > 1, lastPoint = last < totalPage;
+        if(firstPoint){
+            if( last > totalPage ){
+                last = totalPage;
+                first = totalPage - pageRange * 2;
+                first = first < 1 ? 1 : first;
+            }
+        }
+        else{
+            first = 1;
+            last = pagination.last;
+            lastPoint = last < totalPage;
+        }
+%>
+<div class="pagination pagination-centered">
+    <ul>
+        <% if(currentPage == 1){ %>
+        <li class="disabled"><a>&laquo;</a></li>
+        <% }else{ %>
+        <li><a href="/<%= pre %>?page=<%= currentPage-1 %>">&laquo;</a></li>
+        <% } %>
+
+        <% if(first > 2){ %>
+        <li><a href="/<%= pre %>?page=1">1</a></li>
+        <% } %>
+
+        <% if(firstPoint && first != 1){ %>
+        <li class="disabled"><a>...</a></li>
+        <% } %>
+
+        <% for(i = first; i <= last; i++){ %>
+        <% if(i == currentPage){ %>
+        <li class="active"><a><%= i %></a></li>
+        <% }else{ %>
+        <li><a href="/<%= pre %>?page=<%= i %>"><%= i %></a></li>
+        <% } %>
+        <% } %>
+
+        <% if(lastPoint){ %>
+        <li class="disabled"><a>...</a></li>
+        <% } %>
+
+        <% if(last <= totalPage - 2){ %>
+        <li><a href="/<%= pre %>?page=<%= totalPage %>"><%= totalPage %></a></li>
+        <% } %>
+
+        <% if(currentPage == totalPage){ %>
+        <li class="disabled"><a>»</a></li>
+        <% }else{ %>
+        <li><a href="/<%= pre %>?page=<%= currentPage+1 %>">»</a></li>
+        <% } %>
+    </ul>
+</div>
+<% } %>

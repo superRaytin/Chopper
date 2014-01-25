@@ -1,7 +1,10 @@
 /**
- * 代理业务处理代码.
+ * 代理业务处理代码（胶水层）
  * User: raytin
  * Date: 13-3-27
- * Time: 下午6:19
  */
 exports.User = require('./user');
+exports.Topic = require('./topic');
+exports.Category = require('./category');
+exports.Reply = require('./reply');
+exports.common = require('./common');
