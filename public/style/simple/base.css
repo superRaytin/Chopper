@@ -82,6 +82,8 @@ hr{
     text-shadow: 0 1px 0 #333;
     font-size: 30px;
     padding-top: 12px;
+    padding-left: 40px;
+    background: url('/img/whatisjc.png') 0 8px no-repeat;
 }
 .brand .icon-home{
     margin-top: 6px;

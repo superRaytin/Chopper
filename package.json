@@ -1,10 +1,10 @@
 {
   "author": "raytin <superRaytin@163.com> (http://www.jsfor.com)",
-  "name": "xiaoweitucao",
-  "description": "my first node app",
+  "name": "Chopper",
+  "description": "A Lightly Microblog System.",
     "repository": {
         "type": "git",
-        "url": "git://github.com/superRaytin/nodeApp.git"
+        "url": "git://github.com/superRaytin/Chopper.git"
     },
   "version": "0.0.1",
   "private": true,
